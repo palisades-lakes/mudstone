@@ -4,7 +4,9 @@ import static java.lang.Math.*;
 
 import java.util.Arrays;
 
+import mudstone.java.AffineFunctional;
 import mudstone.java.Function;
+import mudstone.java.Vektor;
 
 //==========================================================
 /** A common cost function used to test optimization code.<br>
@@ -17,7 +19,7 @@ import mudstone.java.Function;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-02
+ * @version 2018-09-01
  */
 
 //strictfp 
@@ -125,25 +127,32 @@ public final class TrigonometricFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double[] x) {
+  public final double doubleValue (final Vektor x) {
     final int n = domainDimension();
-    assert n == x.length;
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
     double y = 0.0;
     for (int i=0;i<n;i++) {
-      final double fi = f(x,i);
+      final double fi = f(xx,i);
       y += fi*fi; }
     return y; }
 
   //--------------------------------------------------------------
 
   @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
+  public final Vektor gradient (final Vektor x) {
     final int n = domainDimension();
-    assert n == x.length;
-    assert n == g.length;
-    Arrays.fill(g,Double.NaN);
-    for (int i=0;i<n;i++) { g[i] = df(x,i); } }
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[n];
+    for (int i=0;i<n;i++) { g[i] = df(xx,i); }
+    return Vektor.unsafeMake(g); }
+
+  //--------------------------------------------------------------
+
+  @Override
+  public final Function tangent (final Vektor x) {
+    return AffineFunctional.make(gradient(x),doubleValue(x)); }
 
   //--------------------------------------------------------------
   // construction

@@ -138,6 +138,15 @@ public final class Vektor {
 
   //--------------------------------------------------------------
 
+  public final Vektor add (final Vektor that) {
+    final double[] y = that.x;
+    final int n = x.length;
+    final double[] z = new double[n];
+    for (int i=0;i<n;i++) { z[i] = x[i]+y[i]; }
+    return unsafeMake(z); }
+
+  //--------------------------------------------------------------
+
   public final Vektor subtract (final Vektor that) {
     final double[] y = that.x;
     final int n = x.length;
@@ -241,6 +250,16 @@ public final class Vektor {
 
   public static final Vektor make (final double[] coordinates) {
     return new Vektor(coordinates.clone()); }
+
+  // TODO: more compact representation, Vektor interface?
+  /** Return a vector of dimension <code>n</code>, whose
+   * coordinates are all <code>xi</code>.
+   */
+  public static final Vektor constantVektor (final int n,
+                                             final double xi) {
+    final double[] x = new double[n];
+    Arrays.fill(x,xi);
+    return new Vektor(x); }
 
   //--------------------------------------------------------------
 }

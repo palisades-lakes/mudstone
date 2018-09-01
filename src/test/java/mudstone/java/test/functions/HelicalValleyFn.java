@@ -1,10 +1,12 @@
 package mudstone.java.test.functions;
 
-import static java.lang.Math.*;
+import static java.lang.Math.PI;
+import static java.lang.Math.atan2;
+import static java.lang.Math.sqrt;
 
-import java.util.Arrays;
-
+import mudstone.java.AffineFunctional;
 import mudstone.java.Function;
+import mudstone.java.Vektor;
 
 //==========================================================
 /** A common cost function used to test optimization code.<br>
@@ -17,7 +19,7 @@ import mudstone.java.Function;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-02
+ * @version 2018-09-01
  */
 
 //strictfp 
@@ -121,27 +123,34 @@ public final class HelicalValleyFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double[] x) {
-    assert DIMENSION == x.length;
-    final double y0 = f0(x);
-    final double y1 = f1(x);
-    final double y2 = f2(x);
+  public final double doubleValue (final Vektor x) {
+    assert DIMENSION == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double y0 = f0(xx);
+    final double y1 = f1(xx);
+    final double y2 = f2(xx);
     return (y0*y0) + (y1*y1) + (y2*y2); }
 
   //--------------------------------------------------------------
 
   @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
-    assert DIMENSION == x.length;
-    assert DIMENSION == g.length;
-    Arrays.fill(g,Double.NaN);
-    final double y0 = f0(x);
-    final double y1 = f1(x);
-    final double y2 = f2(x);
-    g[0] = 2.0*((y0*df00(x)) + (y1*df10(x)));
-    g[1] = 2.0*((y0*df01(x)) + (y1*df11(x)));
-    g[2] = 2.0*((y0*10.0) + y2); }
+  public final Vektor gradient (final Vektor x) {
+    assert DIMENSION == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[DIMENSION];
+    final double y0 = f0(xx);
+    final double y1 = f1(xx);
+    final double y2 = f2(xx);
+    g[0] = 2.0*((y0*df00(xx)) + (y1*df10(xx)));
+    g[1] = 2.0*((y0*df01(xx)) + (y1*df11(xx)));
+    g[2] = 2.0*((y0*10.0) + y2); 
+    return Vektor.unsafeMake(g); }
+
+  //--------------------------------------------------------------
+
+  @Override
+  public final Function tangent (final Vektor x) {
+    return AffineFunctional.make(gradient(x),doubleValue(x)); }
 
   //--------------------------------------------------------------
   // construction

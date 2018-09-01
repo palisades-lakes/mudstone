@@ -6,14 +6,16 @@ import static java.lang.Math.sqrt;
 
 import java.util.Arrays;
 
+import mudstone.java.AffineFunctional;
 import mudstone.java.Function;
+import mudstone.java.Vektor;
 
 /** See driverX.c in CG_DESCENT-C-6.8.
  *
  * Note: immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-05
+ * @version 2018-09-01
  */
 
 public final class DriverFunction implements Function {
@@ -90,48 +92,50 @@ public final class DriverFunction implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double[] x) {
+  public final double doubleValue (final Vektor x) {
     final int n = domainDimension();
-    assert n == x.length;
-    double f = 0.0;
+    assert n == x.dimension();
+    double y = 0.0;
+    final double[] xx = x.unsafeCoordinates();
     for (int i=0;i<n;i++) {
       final double t0 = i+1;
-      final double t1 = - sqrt(t0);
-      final double xi = x[i];
+      final double t1 = -sqrt(t0);
+      final double xi = xx[i];
       final double exi = mexp(xi);
-      f +=  fma(t1,xi,exi);  }
-    return f; }
+      y +=  fma(t1,xi,exi);  }
+    return y; }
 
   @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
+  public final Vektor gradient (final Vektor x) {
     final int n = domainDimension();
-    assert n == g.length;
-    assert n == x.length;
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[n];
     for (int i=0;i<n;i++) {
       final double t0 = i+1;
       final double t1 = - sqrt(t0);
-      final double xi = x[i];
+      final double xi = xx[i];
       final double exi = mexp(xi);
-      g[i] = exi + t1; } }
+      g[i] = exi + t1; } 
+    return Vektor.unsafeMake(g); }
 
   @Override
-  public final double valueAndGradient (final double[] x,
-                                        final double[] g) {
+  public final Function tangent (final Vektor x) {
     final int n = domainDimension();
-    assert n == g.length;
-    assert n == x.length;
-    double f = 0.0;
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[n];
+    double y = 0.0;
     for (int i=0;i<n;i++) {
       final double t0 = i+1;
       final double t1 = - sqrt(t0);
-      final double xi = x[i];
+      final double xi = xx[i];
       final double exi = mexp(xi);
       final double fi =  fma(t1,xi,exi);
-      f +=  fi;
+      y +=  fi;
       final double gi = exi + t1;
       g[i] = gi;  }
-    return f; }
+    return AffineFunctional.make(Vektor.unsafeMake(g),y); }
 
   //--------------------------------------------------------------
   // construction

@@ -2,7 +2,9 @@ package mudstone.java.test.functions;
 
 import java.util.Arrays;
 
+import mudstone.java.AffineFunctional;
 import mudstone.java.Function;
+import mudstone.java.Vektor;
 
 //==========================================================
 /** A common cost function used to test optimization code.<br>
@@ -15,7 +17,7 @@ import mudstone.java.Function;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-02
+ * @version 2018-09-01
  */
 
 strictfp public final class WoodFn implements Function {
@@ -150,24 +152,32 @@ strictfp public final class WoodFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double[] x) {
-    assert DIMENSION == x.length;
-    return f0(x) + f1(x) + f2(x) + f3(x) + f4(x) + f5(x); }
+  public final double doubleValue (final Vektor x) {
+    assert DIMENSION == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+   return f0(xx) + f1(xx) + f2(xx) + f3(xx) + f4(xx) + f5(xx); }
 
   //--------------------------------------------------------------
 
   @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
-    assert DIMENSION == x.length;
-    assert DIMENSION == g.length;
+  public final Vektor gradient (final Vektor x) {
+    assert DIMENSION == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[DIMENSION];
     Arrays.fill(g,0.0);
-    df0(g,x);
-    df1(g,x);
-    df2(g,x);
-    df3(g,x);
-    df4(g,x);
-    df5(g,x); }
+    df0(g,xx);
+    df1(g,xx);
+    df2(g,xx);
+    df3(g,xx);
+    df4(g,xx);
+    df5(g,xx);  
+    return Vektor.unsafeMake(g); }
+
+  //--------------------------------------------------------------
+
+  @Override
+  public final Function tangent (final Vektor x) {
+    return AffineFunctional.make(gradient(x),doubleValue(x)); }
 
   //--------------------------------------------------------------
   // construction

@@ -6,7 +6,7 @@ package mudstone.java;
  * <em>WARNING:</em> not `thread safe!
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-10
+ * @version 2018-09-01
  */
 
 public final class FunctionalCounter implements Function {
@@ -48,20 +48,6 @@ public final class FunctionalCounter implements Function {
   @Override
   public final Function tangent (final Vektor x) {
     _nf++; _ng++; return _inner.tangent(x); }
-
-  @Override
-  public final double doubleValue (final double[] x) {
-    _nf++; return _inner.doubleValue(x); }
-
-  @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
-    _ng++; _inner.gradient(x,g); }
-
-  @Override
-  public double valueAndGradient (final double[] x,
-                                  final double[] g) {
-    _nf++; _ng++; return _inner.valueAndGradient(x,g); }
 
   //--------------------------------------------------------------
   // construction

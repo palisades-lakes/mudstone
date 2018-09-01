@@ -2,7 +2,9 @@ package mudstone.java.test.functions;
 
 import java.util.Arrays;
 
+import mudstone.java.AffineFunctional;
 import mudstone.java.Function;
+import mudstone.java.Vektor;
 
 //----------------------------------------------------------------
 /** Test exceptions with constant functionalN.
@@ -12,15 +14,14 @@ import mudstone.java.Function;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-02
+ * @version 2018-09-01
  */
 
 public strictfp final class ConstantFn implements Function {
 
   private final int _dimension;
-
   private final double _value;
-  private final double _gi;
+  private final Vektor _g;
 
   //--------------------------------------------------------------
   // methods
@@ -49,32 +50,27 @@ public strictfp final class ConstantFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double[] x) {
+  public final double doubleValue (final Vektor x) {
     final int n = domainDimension();
-    assert n == x.length;
+    assert n == x.dimension();
     return _value; }
 
   //--------------------------------------------------------------
 
   @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
+  public final Vektor gradient (final Vektor x) {
     final int n = domainDimension();
-    assert n == g.length;
-    assert n == x.length;
-    Arrays.fill(g,_gi); }
+    assert n == x.dimension();
+    return _g; }
   
   //--------------------------------------------------------------
 
   @Override
-  public final double valueAndGradient (final double[] x,
-                                        final double[] g) {
+  public final Function tangent (final Vektor x) {
     final int n = domainDimension();
-    assert n == g.length;
-    assert n == x.length;
-    Arrays.fill(g,_gi);
-    return _value; }
-
+    assert n == x.dimension();
+    return AffineFunctional.make(_g,_value); }
+  
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
@@ -85,17 +81,29 @@ public strictfp final class ConstantFn implements Function {
     super();
     _dimension = dimension;
     _value = v;
-    _gi = gi; }
+    _g = Vektor.constantVektor(dimension,gi); }
 
   //--------------------------------------------------------------
   /** Return a {@link ConstantFn} test function of the given
-   ** <code>dimension</code> (which is forced to be even).
-   **/
+   * <code>dimension</code>.
+   * Correct gradient is zero vektor; passing in
+   * <code>gi</code> allows creating an
+   * invalid function for testing.
+   */
 
   public static final ConstantFn get (final int dimension,
                                       final double v,
                                       final double gi) {
     return new ConstantFn(dimension,v,gi); }
+
+  //--------------------------------------------------------------
+  /** Return a {@link ConstantFn} test function of the given
+   * <code>dimension</code>.
+   */
+
+  public static final ConstantFn get (final int dimension,
+                                      final double v) {
+    return new ConstantFn(dimension,v,0.0); }
 
   //--------------------------------------------------------------
 } // end class

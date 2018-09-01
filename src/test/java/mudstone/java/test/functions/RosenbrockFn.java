@@ -3,7 +3,9 @@ package mudstone.java.test.functions;
 import static java.lang.Math.fma;
 import java.util.Arrays;
 
+import mudstone.java.AffineFunctional;
 import mudstone.java.Function;
+import mudstone.java.Vektor;
 
 //==========================================================
 /** A common cost function used to test optimization code.<br>
@@ -19,7 +21,7 @@ import mudstone.java.Function;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-08
+ * @version 2018-09-01
  */
 
 //strictfp 
@@ -85,13 +87,14 @@ public final class RosenbrockFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double[] x) {
+  public final double doubleValue (final Vektor x) {
     final int n = domainDimension();
-    assert n == x.length;
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
     double y = 0.0;
     for (int j=0;j<n;) {
-      final double x2im1 = x[j++];
-      final double x2i   = x[j++];
+      final double x2im1 = xx[j++];
+      final double x2i   = xx[j++];
       final double f2im1 = 10.0*(x2i - (x2im1*x2im1));
       final double f2i   = 1.0 - x2im1;
       y = fma(f2im1,f2im1,y);
@@ -101,38 +104,37 @@ public final class RosenbrockFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
+  public final Vektor gradient (final Vektor x) {
     final int n = domainDimension();
-    assert n == g.length;
-    assert n == x.length;
-    //Arrays.fill(g,Double.NaN);
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[n];
     for (int j=0;j<n;j+=2) {
-      final double x2im1 = x[j];
+      final double x2im1 = xx[j];
       final int j1 = j+1;
-      final double x2i   = x[j1];
+      final double x2i   = xx[j1];
 
       final double f2im1 = 10.0*(x2i - (x2im1*x2im1));
       final double f2i   = 1.0 - x2im1;
 
       final double df2im1_dx2im1 = -20.0*x2im1;
       g[j] = 2.0*fma(f2im1,df2im1_dx2im1,-f2i);
-      g[j1] = 20.0*f2im1; } }
+      g[j1] = 20.0*f2im1; }
+    return Vektor.unsafeMake(g); }
 
   //--------------------------------------------------------------
 
   @Override
-  public final double valueAndGradient (final double[] x,
-                                        final double[] g) {
+  public final Function tangent (final Vektor x) {
     final int n = domainDimension();
-    assert n == g.length;
-    assert n == x.length;
-    //Arrays.fill(g,Double.NaN);
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[n];
     double y = 0.0;
     for (int j=0;j<n;j+=2) {
-      final double x2im1 = x[j];
+      final double x2im1 = xx[j];
       final int j1 = j+1;
-      final double x2i   = x[j1];
+      final double x2i   = xx[j1];
 
       final double f2im1 = 10.0*(x2i-(x2im1*x2im1));
       final double f2i   = 1.0 - x2im1;
@@ -143,7 +145,7 @@ public final class RosenbrockFn implements Function {
       y = fma(f2im1,f2im1,y);
       y = fma(f2i,f2i,y); }
 
-    return y; }
+    return AffineFunctional.make(Vektor.unsafeMake(g),y); }
 
   //--------------------------------------------------------------
   // construction

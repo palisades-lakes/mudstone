@@ -4,7 +4,9 @@ import static java.lang.StrictMath.fma;
 
 import java.util.Arrays;
 
+import mudstone.java.AffineFunctional;
 import mudstone.java.Function;
+import mudstone.java.Vektor;
 
 //==========================================================
 /** A common cost function used to test optimization code.<br>
@@ -19,7 +21,7 @@ import mudstone.java.Function;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-08
+ * @version 2018-09-01
  */
 
 //strictfp 
@@ -75,9 +77,10 @@ public final class PowellSingularFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double[] x) {
+  public final double doubleValue (final Vektor x) {
     final int n = domainDimension();
-    assert n == x.length;
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
     double y = 0.0;
     // note changes from dennis-schnabel for zero-based indexing
     for (int i=0;i<(n/4);i++) {
@@ -85,10 +88,10 @@ public final class PowellSingularFn implements Function {
       final int j1 = j0 + 1;
       final int j2 = j1 + 1;
       final int j3 = j2 + 1;
-      final double x0 = x[j0];
-      final double x1 = x[j1];
-      final double x2 = x[j2];
-      final double x3 = x[j3];
+      final double x0 = xx[j0];
+      final double x1 = xx[j1];
+      final double x2 = xx[j2];
+      final double x3 = xx[j3];
       final double x03 = x0 - x3;
       final double x12 = fma(-2.0,x2,x1);
       final double y01 = fma(10.0,x1,x0);
@@ -107,22 +110,21 @@ public final class PowellSingularFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final void gradient (final double[] x,
-                              final double[] g) {
+  public final Vektor gradient (final Vektor x) {
     final int n = domainDimension();
-    assert n == x.length;
-    assert n == g.length;
-    //Arrays.fill(g,Double.NaN);
+    assert n == x.dimension();
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[n];
     // note changes from dennis-schnabel for zero-based indexing
     for (int i=0;i<(n/4);i++) {
       final int j0 = 4*i;
       final int j1 = j0 + 1;
       final int j2 = j1 + 1;
       final int j3 = j2 + 1;
-      final double x0 = x[j0];
-      final double x1 = x[j1];
-      final double x2 = x[j2];
-      final double x3 = x[j3];
+      final double x0 = xx[j0];
+      final double x1 = xx[j1];
+      final double x2 = xx[j2];
+      final double x3 = xx[j3];
       final double x03 = x0 - x3;
       final double x12 = fma(-2.0,x2,x1);
       final double y01 = fma(10.0,x1,x0);
@@ -132,17 +134,16 @@ public final class PowellSingularFn implements Function {
       final double x123 = x12*x12*x12;
       g[j1] = fma(20.0,y01,4.0*x123);
       g[j2] = fma(-8.0,x123,10.0*x23);
-      g[j3] = fma(-10.0,x23,-x333); } }
+      g[j3] = fma(-10.0,x23,-x333); }
+    return Vektor.unsafeMake(g); }
 
   //--------------------------------------------------------------
 
   @Override
-  public final double valueAndGradient (final double[] x,
-                                        final double[] g) {
+  public final Function tangent (final Vektor x) {
     final int n = domainDimension();
-    assert n == g.length;
-    assert n == x.length;
-    //Arrays.fill(g,Double.NaN);
+    final double[] xx = x.unsafeCoordinates();
+    final double[] g = new double[n];
     double y = 0.0;
     // note changes from dennis-schnabel for zero-based indexing
     for (int i=0;i<(n/4);i++) {
@@ -150,10 +151,10 @@ public final class PowellSingularFn implements Function {
       final int j1 = j0 + 1;
       final int j2 = j1 + 1;
       final int j3 = j2 + 1;
-      final double x0 = x[j0];
-      final double x1 = x[j1];
-      final double x2 = x[j2];
-      final double x3 = x[j3];
+      final double x0 = xx[j0];
+      final double x1 = xx[j1];
+      final double x2 = xx[j2];
+      final double x3 = xx[j3];
       final double x03 = x0 - x3;
       final double x12 = fma(-2.0,x2,x1);
       final double y01 = fma(10.0,x1,x0);
@@ -171,7 +172,7 @@ public final class PowellSingularFn implements Function {
       g[j1] = fma(20.0,y01,4.0*x123);
       g[j2] = fma(-8.0,x123,10.0*x23);
       g[j3] = fma(-10.0,x23,-x333); }
-    return y; }
+    return AffineFunctional.make(Vektor.unsafeMake(g),y); }
 
   //--------------------------------------------------------------
   // construction
