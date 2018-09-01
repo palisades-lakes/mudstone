@@ -69,6 +69,38 @@ public interface Function {
     return AffineFunction.make(derivativeAt(x),value(x));}
 
   //--------------------------------------------------------------
+  // 1d domain methods
+  //--------------------------------------------------------------
+  /** Return <code>f(x)</code>
+   */
+
+  @SuppressWarnings("unused")
+  public default Vektor value (final double x) {
+    assert 1 == domainDimension();
+    throw new UnsupportedOperationException(
+      "No value(double) method for " + getClass()); }
+
+  //--------------------------------------------------------------
+  /** Return the linear function that is the derivative of this 
+   * at <code>x</code>.
+   */
+
+  @SuppressWarnings("unused")
+  public default Function derivativeAt (final double x) {
+    assert 1 == domainDimension();
+    throw new UnsupportedOperationException(
+      "No derivativeAt(Vektor) method for " + getClass()); }
+
+  //--------------------------------------------------------------
+  /** Return the affine function that is the tangent of this 
+   * at <code>x</code>.
+   */
+
+  public default Function tangent (final double x) {
+    assert 1 == domainDimension();
+    return AffineFunction.make(derivativeAt(x),value(x));}
+
+  //--------------------------------------------------------------
   // 1d codomain methods
   //--------------------------------------------------------------
   /** Return the value of the function at <code>x</code>.

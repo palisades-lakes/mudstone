@@ -9,7 +9,7 @@ import static java.lang.Math.ulp;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-16
+ * @version 2018-09-01
  */
 
 public final class Doubles {
@@ -48,6 +48,14 @@ public final class Doubles {
 
   //--------------------------------------------------------------
   // vector ops
+  //--------------------------------------------------------------
+  
+  public static final boolean strictlyIncreasing (final double[] x) {
+    final int n = x.length;
+    for (int i=1;i<n;i++) { 
+      if (x[i-1] >= x[i]) { return false; } }
+    return true; }
+  
   //--------------------------------------------------------------
   /** Are corresponding elements within <code>ulps</code> ulps
    * of each other?
