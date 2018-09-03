@@ -1,15 +1,17 @@
 package mudstone.java;
 
-/** * Interface for minimizers..
+/** Interface for iterative search algorithms.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-31
+ * @version 2018-09-02
  */
 
-public interface Minimizer  {
-
-
-  public Status minimize (final Vektor start);
+public interface Minimizer {
+  /** 
+  * @throws ClassCastException if the start class can't be handled.
+  */
+  
+  public Object minimize (final Object start);
   
   // --------------------------------------------------------------
 } // end interface
