@@ -12,7 +12,7 @@ package mudstone.java;
  * @version 2018-08-02
  */
 
-public final class Bracketed3  implements StopTest {
+public final class Bracketed3 implements StopTest {
 
   @Override
   public final boolean stop (final Function f,
