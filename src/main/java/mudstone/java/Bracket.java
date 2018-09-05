@@ -9,11 +9,9 @@ import static java.lang.Math.*;
  * To simplify history bookkeeping It is left to the 
  * <code>objective</code> function to determine whether to re-compute,
  * or cache <code>f.doubleValue(x)</code>.
- * <p>
- * See Press, Teu
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-03
+ * @version 2018-09-03
  */
 
 public final class Bracket {
