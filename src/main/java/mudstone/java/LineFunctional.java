@@ -9,10 +9,10 @@ package mudstone.java;
  * Functionals should be immutable (but this class isn't!).
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-31
+ * @version 2018-09-06
  */
 
-public final class LineFunctional implements Function {
+public final class LineFunctional extends ScalarFunctional {
 
   //--------------------------------------------------------------
   // fields
@@ -29,14 +29,6 @@ public final class LineFunctional implements Function {
 
   //--------------------------------------------------------------
   // Function methods
-  //--------------------------------------------------------------
-
-  @Override
-  public final int domainDimension () { return 1; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
-
   //--------------------------------------------------------------
   // WARNING: using mutable args to Function.doubleValue(), etc.,
   // means we can't memoize it.
@@ -69,7 +61,7 @@ public final class LineFunctional implements Function {
     b.append(
       String.format("%-4s %-22s %-22s %-22s %-22s\n",
         "i","gradient","position","direction","origin"));
-    final int n = _f.domainDimension();
+    final int n = _f.domain().dimension();
     for (int i=0;i<n;i++) {
       b.append(String.format(fmt,
         Integer.valueOf(i),
@@ -94,8 +86,8 @@ public final class LineFunctional implements Function {
   make (final Function f,
         final Vektor origin,
         final Vektor direction) {
-    assert f.inDomain(origin);
-    assert f.inDomain(direction);
+    assert f.domain().contains(origin);
+    assert f.domain().contains(direction);
     return new LineFunctional(f,origin,direction); }
 
   //--------------------------------------------------------------

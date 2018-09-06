@@ -19,75 +19,75 @@ import com.carrotsearch.hppc.cursors.DoubleCursor;
  * <b>WARNING:</b> !!!mutable!!! !!!Not thread safe!!!
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-15
+ * @version 2018-09-06
  */
 
 public final class LBFGSUpdate implements Function {
 
-  /** (Co)Domain dimension. */
-  private final int dimension;
+  /** (Co)Domain. */
+  private final Dn _domain;
 
   /** Maximum history length. */
-  private final int maxHistory;
+  private final int _maxHistory;
 
   // Note: dx, dg and dxdg need to be updated together.
   
   /** Changes in sample position. */
-  private final Deque<Vektor> dx;
+  private final Deque<Vektor> _dx;
 
   /** Changes in gradient. */
-  private final Deque<Vektor> dg;
+  private final Deque<Vektor> _dg;
 
   /** cache dot products between corresponding gradient and
    * position change vectors.
    */
 
-  private final DoubleDeque dxdg;
+  private final DoubleDeque _dxdg;
 
-  private final double[] tmp; 
+  private final double[] _tmp; 
 
-  public double scale;
+  public double _scale;
 
   /** Current history length. */
-  private final int history () { return dg.size(); }
+  private final int history () { return _dg.size(); }
 
   //--------------------------------------------------------------
   // methods
   //--------------------------------------------------------------
 
   public final boolean isFull () {
-    return history() >= domainDimension(); }
+    return history() >= domain().dimension(); }
 
   public final void clear () {
-    dg.clear(); dx.clear(); dxdg.clear(); scale = 1.0; }
+    _dg.clear(); _dx.clear(); _dxdg.clear(); _scale = 1.0; }
 
   public final void update (final Vektor dxi,
                             final Vektor dgi,
                             // dot product often already computed
                             final double dxdgi) {
-    assert history() <= maxHistory;
-    if (history() == maxHistory) { 
-      dx.removeFirst(); 
-      dg.removeFirst(); 
-      dxdg.removeFirst(); }
+    assert history() <= _maxHistory;
+    if (history() == _maxHistory) { 
+      _dx.removeFirst(); 
+      _dg.removeFirst(); 
+      _dxdg.removeFirst(); }
 
-    dx.addLast(dxi);
-    dg.addLast(dgi);
-    dxdg.addLast(dxdgi); 
+    _dx.addLast(dxi);
+    _dg.addLast(dgi);
+    _dxdg.addLast(dxdgi); 
     
-    final double dg2last = dg.getLast().l2norm2();
+    final double dg2last = _dg.getLast().l2norm2();
     // dg2last == 0 implies no change in gradient?
-    if (dg2last > 0.0) { scale = dxdg.getLast()/dg2last; } }
+    if (dg2last > 0.0) { _scale = _dxdg.getLast()/dg2last; } }
 
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
 
   @Override
-  public int domainDimension () { return dimension; }
+  public final Domain domain() { return _domain; }
 
   @Override
-  public int codomainDimension () { return dimension; }
+  public final Domain codomain () { return _domain; }
 
   // Note: should not change state of this Function
   // changes tmp array, which could be allocated here...
@@ -97,27 +97,28 @@ public final class LBFGSUpdate implements Function {
     if (0 == m) { return g; }
 
     final double[] dc = g.coordinates();
-    final Iterator<Vektor> skDown = dx.descendingIterator();
-    final Iterator<Vektor> ykDown = dg.descendingIterator();
-    final Iterator<DoubleCursor> skykDown = dxdg.descendingIterator();
+    final Iterator<Vektor> skDown = _dx.descendingIterator();
+    final Iterator<Vektor> ykDown = _dg.descendingIterator();
+    final Iterator<DoubleCursor> skykDown = 
+      _dxdg.descendingIterator();
     for (int j=m-1;j>=0;j--) {
       final Vektor skj = skDown.next();
       final Vektor ykj = ykDown.next();
       final double skykj = skykDown.next().value;
       final double t = skj.dot(dc) / skykj;
-      tmp[j] = t;
+      _tmp[j] = t;
       ykj.axpy(-t,dc); }
 
-    Doubles.scale1(-scale,dc); 
+    Doubles.scale1(-_scale,dc); 
 
-    final Iterator<Vektor> skUp = dx.iterator();
-    final Iterator<Vektor> ykUp = dg.iterator();
-    final Iterator<DoubleCursor> skykUp = dxdg.iterator();
+    final Iterator<Vektor> skUp = _dx.iterator();
+    final Iterator<Vektor> ykUp = _dg.iterator();
+    final Iterator<DoubleCursor> skykUp = _dxdg.iterator();
     for (int j=0;j<m;j++) {
       final Vektor skj = skUp.next();
       final Vektor ykj = ykUp.next();
       final double skykj = skykUp.next().value;
-      final double tauj = tmp[j];
+      final double tauj = _tmp[j];
       final double t = ykj.dot(dc) / skykj;
       skj.axpy(-t-tauj,dc); }
 
@@ -129,13 +130,13 @@ public final class LBFGSUpdate implements Function {
 
   private LBFGSUpdate (final int dim,
                        final int mem) {
-    this.dimension = dim;
-    this.maxHistory = mem;
-    this.dg = new ArrayDeque<Vektor>(mem);
-    this.dx = new ArrayDeque<Vektor>(mem); 
-    this.dxdg = new DoubleArrayDeque(mem); 
-    this.scale = 1.0;
-    this.tmp = new double[mem]; }
+    this._domain = Dn.get(dim);
+    this._maxHistory = mem;
+    this._dg = new ArrayDeque<Vektor>(mem);
+    this._dx = new ArrayDeque<Vektor>(mem); 
+    this._dxdg = new DoubleArrayDeque(mem); 
+    this._scale = 1.0;
+    this._tmp = new double[mem]; }
 
   //--------------------------------------------------------------
 

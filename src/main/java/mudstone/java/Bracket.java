@@ -11,7 +11,7 @@ import static java.lang.Math.*;
  * or cache <code>f.doubleValue(x)</code>.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-03
+ * @version 2018-09-06
  */
 
 public final class Bracket {
@@ -32,8 +32,8 @@ public final class Bracket {
   public static final DoubleBracket nr (final Function f,
                                         final double xmin,
                                         final double xmax) {
-    assert 1 == f.domainDimension();
-    assert 1 == f.codomainDimension();
+    assert Dn.D1 == f.domain();
+    assert Dn.D1 == f.codomain();
     assert xmin < xmax;
     
     double x0 = xmin;

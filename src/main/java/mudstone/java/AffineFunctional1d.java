@@ -3,10 +3,10 @@ package mudstone.java;
 /** An affine function from <b>R</b> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
-public final class AffineFunctional1d implements Function {
+public final class AffineFunctional1d extends ScalarFunctional {
 
   //--------------------------------------------------------------
   // fields
@@ -18,16 +18,6 @@ public final class AffineFunctional1d implements Function {
 
   private final double _translation;
   public final double translation () { return _translation; }
-
-  //--------------------------------------------------------------
-  // Function methods
-  //--------------------------------------------------------------
-
-  @Override
-  public final int domainDimension () { return 1; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
 
   //--------------------------------------------------------------
   // Function methods

@@ -6,7 +6,7 @@ package mudstone.java;
  * <em>WARNING:</em> not `thread safe!
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
 public final class FunctionalCounter implements Function {
@@ -18,9 +18,6 @@ public final class FunctionalCounter implements Function {
   private final Function _inner;
   public final Function inner () { return _inner; }
 
-  // profiling seems to show domainDimension() taking a long time?
-  private final int _dd;
-  
   private int _nf = 0;
   public final int nf () { return _nf; }
 
@@ -32,10 +29,10 @@ public final class FunctionalCounter implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return _dd; }
+  public final Domain domain () { return inner().domain(); }
 
   @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain codomain () { return Dn.D1; }
 
   @Override
   public final double doubleValue (final Vektor x) {
@@ -55,12 +52,11 @@ public final class FunctionalCounter implements Function {
 
   private FunctionalCounter (final Function inner) {
     super();
-    _inner = inner;
-    _dd = inner.domainDimension(); }
+    _inner = inner; }
 
   public static final FunctionalCounter 
   wrap (final Function inner) {
-    // assert 1 == inner.domainDimension();
+    // assert 1 == inner.domain().dimension();
     return new FunctionalCounter(inner); }
 
   //--------------------------------------------------------------

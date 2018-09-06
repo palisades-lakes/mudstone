@@ -6,12 +6,14 @@ package mudstone.java;
  * @version 2018-08-05
  */
 
-public final class LinearFunctional implements Function {
+public final class LinearFunctional extends Functional {
 
   //--------------------------------------------------------------
   // fields
   //--------------------------------------------------------------
 
+  private final Domain _domain;
+  
   private final Vektor _dual;
   public final Vektor dual () { return _dual; }
 
@@ -20,11 +22,7 @@ public final class LinearFunctional implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { 
-    return _dual.dimension(); }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return _domain; }
 
   //--------------------------------------------------------------
   // Function methods
@@ -62,6 +60,7 @@ public final class LinearFunctional implements Function {
   //--------------------------------------------------------------
 
   private LinearFunctional (final Vektor dual) {
+    _domain = Dn.get(dual.dimension());
     _dual = dual; }
 
   public static final LinearFunctional make (final Vektor dual) {

@@ -3,7 +3,10 @@ package mudstone.java.test.functions;
 import java.util.Arrays;
 
 import mudstone.java.AffineFunctional;
+import mudstone.java.Dn;
+import mudstone.java.Domain;
 import mudstone.java.Function;
+import mudstone.java.Functional;
 import mudstone.java.Vektor;
 
 //----------------------------------------------------------------
@@ -14,12 +17,12 @@ import mudstone.java.Vektor;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
-public strictfp final class ConstantFn implements Function {
+public strictfp final class ConstantFn extends Functional {
 
-  private final int _dimension;
+  private final Domain _domain;
   private final double _value;
   private final Vektor _g;
 
@@ -28,12 +31,12 @@ public strictfp final class ConstantFn implements Function {
   //--------------------------------------------------------------
 
   public final double[] start (final double xi) {
-    final double[] x = new double[domainDimension()];
+    final double[] x = new double[domain().dimension()];
     Arrays.fill(x,xi);
     return x; }
 
   public final double[] trueMinimizer (final double xi) {
-    final double[] x = new double[domainDimension()];
+    final double[] x = new double[domain().dimension()];
     Arrays.fill(x,xi);
     return x; }
 
@@ -42,16 +45,13 @@ public strictfp final class ConstantFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return _dimension; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return _domain; }
 
   //--------------------------------------------------------------
 
   @Override
   public final double doubleValue (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     return _value; }
 
@@ -59,7 +59,7 @@ public strictfp final class ConstantFn implements Function {
 
   @Override
   public final Vektor gradient (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     return _g; }
   
@@ -67,7 +67,7 @@ public strictfp final class ConstantFn implements Function {
 
   @Override
   public final Function tangent (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     return AffineFunctional.make(_g,_value); }
   
@@ -79,7 +79,7 @@ public strictfp final class ConstantFn implements Function {
                       final double v,
                       final double gi) {
     super();
-    _dimension = dimension;
+    _domain = Dn.get(dimension);
     _value = v;
     _g = Vektor.constantVektor(dimension,gi); }
 

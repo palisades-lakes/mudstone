@@ -5,7 +5,10 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.sqrt;
 
 import mudstone.java.AffineFunctional;
+import mudstone.java.Dn;
+import mudstone.java.Domain;
 import mudstone.java.Function;
+import mudstone.java.Functional;
 import mudstone.java.Vektor;
 
 //==========================================================
@@ -19,13 +22,14 @@ import mudstone.java.Vektor;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
 //strictfp 
-public final class HelicalValleyFn implements Function {
+public final class HelicalValleyFn  extends Functional {
 
   public static final int DIMENSION = 3;
+  private static final Domain DOMAIN = Dn.get(DIMENSION);
 
   //--------------------------------------------------------------
   // methods
@@ -115,10 +119,7 @@ public final class HelicalValleyFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return DIMENSION; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return DOMAIN; }
 
   //--------------------------------------------------------------
 

@@ -4,7 +4,7 @@ package mudstone.java;
  * <b>R</b><sup>m</sup>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
 public final class AffineFunction implements Function {
@@ -26,12 +26,12 @@ public final class AffineFunction implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { 
-    return _linear.domainDimension(); }
+  public final Domain domain () { 
+    return _linear.domain(); }
 
   @Override
-  public final int codomainDimension () { 
-    return _linear.codomainDimension(); }
+  public final Domain codomain () { 
+    return _linear.codomain(); }
 
   //--------------------------------------------------------------
 

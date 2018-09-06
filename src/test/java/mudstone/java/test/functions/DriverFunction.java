@@ -7,7 +7,10 @@ import static java.lang.Math.sqrt;
 import java.util.Arrays;
 
 import mudstone.java.AffineFunctional;
+import mudstone.java.Dn;
+import mudstone.java.Domain;
 import mudstone.java.Function;
+import mudstone.java.Functional;
 import mudstone.java.Vektor;
 
 /** See driverX.c in CG_DESCENT-C-6.8.
@@ -15,12 +18,13 @@ import mudstone.java.Vektor;
  * Note: immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
-public final class DriverFunction implements Function {
+public final class DriverFunction extends Functional {
 
   private static final int N = 100;
+  private static final Domain DOMAIN = Dn.get(N);
   private static final double YMIN = -6.530786727330618E+02;
   private static final double[] XMIN =
     new double[]
@@ -76,10 +80,7 @@ public final class DriverFunction implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return N; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return DOMAIN; }
 
   //--------------------------------------------------------------
 
@@ -93,7 +94,7 @@ public final class DriverFunction implements Function {
 
   @Override
   public final double doubleValue (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     double y = 0.0;
     final double[] xx = x.unsafeCoordinates();
@@ -107,7 +108,7 @@ public final class DriverFunction implements Function {
 
   @Override
   public final Vektor gradient (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];
@@ -121,7 +122,7 @@ public final class DriverFunction implements Function {
 
   @Override
   public final Function tangent (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];

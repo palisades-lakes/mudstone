@@ -4,7 +4,10 @@ import static java.lang.Math.fma;
 import java.util.Arrays;
 
 import mudstone.java.AffineFunctional;
+import mudstone.java.Dn;
+import mudstone.java.Domain;
 import mudstone.java.Function;
+import mudstone.java.Functional;
 import mudstone.java.Vektor;
 
 //==========================================================
@@ -21,13 +24,13 @@ import mudstone.java.Vektor;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
 //strictfp 
-public final class RosenbrockFn implements Function {
+public final class RosenbrockFn extends Functional {
 
-  private final int _dimension;
+  private final Domain _domain;
 
   //--------------------------------------------------------------
   // methods
@@ -38,7 +41,7 @@ public final class RosenbrockFn implements Function {
 
   public final double[] trueMinimizer () {
 
-    final double[] xmin = new double[domainDimension()];
+    final double[] xmin = new double[domain().dimension()];
     Arrays.fill(xmin,1.0);
     return xmin; }
 
@@ -49,8 +52,8 @@ public final class RosenbrockFn implements Function {
 
   public final double[] start0 () {
 
-    final double[] p = new double[domainDimension()];
-    final int n = domainDimension()/2;
+    final double[] p = new double[domain().dimension()];
+    final int n = domain().dimension()/2;
     for (int i=0;i<n;i++) {
       final int j= 2*i;
       p[j] = -1.2;
@@ -65,8 +68,8 @@ public final class RosenbrockFn implements Function {
 
   public final double[] start1 () {
 
-    final double[] p = new double[domainDimension()];
-    final int n = domainDimension()/2;
+    final double[] p = new double[domain().dimension()];
+    final int n = domain().dimension()/2;
     for (int i=0;i<n;i++) {
       final int j= 2*i;
       p[j] = 6.390;
@@ -79,16 +82,13 @@ public final class RosenbrockFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return _dimension; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return _domain; }
 
   //--------------------------------------------------------------
 
   @Override
   public final double doubleValue (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     double y = 0.0;
@@ -105,7 +105,7 @@ public final class RosenbrockFn implements Function {
 
   @Override
   public final Vektor gradient (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];
@@ -126,7 +126,7 @@ public final class RosenbrockFn implements Function {
 
   @Override
   public final Function tangent (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];
@@ -154,7 +154,7 @@ public final class RosenbrockFn implements Function {
   private RosenbrockFn (final int dimension) {
     super();
     assert (dimension % 2) == 0;
-    _dimension = dimension; }
+    _domain = Dn.get(dimension); }
 
   //--------------------------------------------------------------
   /** Return a {@link RosenbrockFn} test function of the given

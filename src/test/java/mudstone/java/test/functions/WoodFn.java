@@ -3,7 +3,10 @@ package mudstone.java.test.functions;
 import java.util.Arrays;
 
 import mudstone.java.AffineFunctional;
+import mudstone.java.Dn;
+import mudstone.java.Domain;
 import mudstone.java.Function;
+import mudstone.java.Functional;
 import mudstone.java.Vektor;
 
 //==========================================================
@@ -17,12 +20,13 @@ import mudstone.java.Vektor;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
-strictfp public final class WoodFn implements Function {
+strictfp public final class WoodFn extends Functional {
 
   public static final int DIMENSION = 4;
+  private static final Domain D4 = Dn.get(DIMENSION);
 
   //--------------------------------------------------------------
   // methods
@@ -47,10 +51,7 @@ strictfp public final class WoodFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return DIMENSION; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return D4; }
 
   //--------------------------------------------------------------
 

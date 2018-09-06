@@ -3,14 +3,17 @@ package mudstone.java;
 /** A linear function from <b>R</b><sup>n</sup> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-05
+ * @version 2018-09-06
  */
 
-public final class AffineFunctional implements Function {
+public final class AffineFunctional extends Functional {
 
   //--------------------------------------------------------------
   // fields
   //--------------------------------------------------------------
+  
+  private final Dn _domain;
+
   // TODO: wrap a LinearFunctional?
 
   private final Vektor _dual;
@@ -24,11 +27,8 @@ public final class AffineFunctional implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { 
-    return _dual.dimension(); }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { 
+    return _domain; }
 
   //--------------------------------------------------------------
   // Function methods
@@ -67,6 +67,7 @@ public final class AffineFunctional implements Function {
 
   private AffineFunctional (final Vektor dual,
                             final double translation) {
+    _domain = Dn.get(dual.dimension());
     _dual = dual; 
     _translation = translation; }
 

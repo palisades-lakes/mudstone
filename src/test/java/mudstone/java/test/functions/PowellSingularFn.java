@@ -5,7 +5,10 @@ import static java.lang.StrictMath.fma;
 import java.util.Arrays;
 
 import mudstone.java.AffineFunctional;
+import mudstone.java.Dn;
+import mudstone.java.Domain;
 import mudstone.java.Function;
+import mudstone.java.Functional;
 import mudstone.java.Vektor;
 
 //==========================================================
@@ -21,13 +24,13 @@ import mudstone.java.Vektor;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
 //strictfp 
-public final class PowellSingularFn implements Function {
+public final class PowellSingularFn extends Functional {
 
-  private final int _dimension;
+  private final Domain _domain;
 
   //--------------------------------------------------------------
   // methods
@@ -38,7 +41,7 @@ public final class PowellSingularFn implements Function {
 
   public final double[] trueMinimizer () {
 
-    final double[] xmin = new double[domainDimension()];
+    final double[] xmin = new double[domain().dimension()];
     Arrays.fill(xmin,0.0);
     return xmin; }
 
@@ -49,8 +52,8 @@ public final class PowellSingularFn implements Function {
 
   public final double[] start () {
 
-    final double[] x = new double[domainDimension()];
-    final int n4 = domainDimension()/4;
+    final double[] x = new double[domain().dimension()];
+    final int n4 = domain().dimension()/4;
     for (int i=0;i<n4;i++) {
       final int j= 4*i;
       x[j] = 3.0;
@@ -64,10 +67,7 @@ public final class PowellSingularFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return _dimension; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return _domain; }
 
   //--------------------------------------------------------------
 
@@ -78,7 +78,7 @@ public final class PowellSingularFn implements Function {
 
   @Override
   public final double doubleValue (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     double y = 0.0;
@@ -111,7 +111,7 @@ public final class PowellSingularFn implements Function {
 
   @Override
   public final Vektor gradient (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];
@@ -141,7 +141,7 @@ public final class PowellSingularFn implements Function {
 
   @Override
   public final Function tangent (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];
     double y = 0.0;
@@ -182,7 +182,7 @@ public final class PowellSingularFn implements Function {
     super();
     assert 0 == (dimension % 4) :
       "dimension (" + dimension +") must be a multiple of 4.";
-    _dimension = dimension; }
+    _domain = Dn.get(dimension); }
 
   //--------------------------------------------------------------
   /** Return a {@link PowellSingularFn} test function of the given

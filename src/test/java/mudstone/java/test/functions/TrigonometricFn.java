@@ -5,7 +5,10 @@ import static java.lang.Math.*;
 import java.util.Arrays;
 
 import mudstone.java.AffineFunctional;
+import mudstone.java.Dn;
+import mudstone.java.Domain;
 import mudstone.java.Function;
+import mudstone.java.Functional;
 import mudstone.java.Vektor;
 
 //==========================================================
@@ -19,13 +22,13 @@ import mudstone.java.Vektor;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
 //strictfp 
-public final class TrigonometricFn implements Function {
+public final class TrigonometricFn extends Functional {
 
-  private final int _dimension;
+  private final Domain _domain;
 
   //--------------------------------------------------------------
   // methods
@@ -35,7 +38,7 @@ public final class TrigonometricFn implements Function {
    */
 
   public final double[] trueMinimizer () {
-    switch(domainDimension()) {
+    switch(domain().dimension()) {
     case 2 :
       return new double[]
         { -0.3000256910524835, 1.197980361439049 };
@@ -53,7 +56,7 @@ public final class TrigonometricFn implements Function {
       //throw new IllegalArgumentException(
       System.out.println(
         "don't have 'true' minimizer for dimension "
-          + domainDimension()); }
+          + domain().dimension()); }
     return new double[0]; }
 
   //--------------------------------------------------------------
@@ -63,7 +66,7 @@ public final class TrigonometricFn implements Function {
 
   public final double[] start () {
 
-    final int n = domainDimension();
+    final int n = domain().dimension();
     final double[] x = new double[n];
     Arrays.fill(x,1.0/n);
     return x; }
@@ -73,10 +76,7 @@ public final class TrigonometricFn implements Function {
   //--------------------------------------------------------------
 
   @Override
-  public final int domainDimension () { return _dimension; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
+  public final Domain domain () { return _domain; }
 
   //--------------------------------------------------------------
 
@@ -85,7 +85,7 @@ public final class TrigonometricFn implements Function {
     // note changes from dennis-schnabel for zero-based indexing
     // note: association of expressions different from
     // Dennis-Schnabel
-    final int n = domainDimension();
+    final int n = domain().dimension();
     double sum = 0.0;
     for (int j=0;j<n;j++) { sum += cos(x[j]); }
     final double xi = x[i];
@@ -104,7 +104,7 @@ public final class TrigonometricFn implements Function {
     // note changes from dennis-schnabel for zero-based indexing
     // note: association of expressions different from
     // Dennis-Schnabel
-    final int n = domainDimension();
+    final int n = domain().dimension();
     final double xk = x[k];
     final double d = sin(xk);
     if (i!=k) { return d; }
@@ -119,7 +119,7 @@ public final class TrigonometricFn implements Function {
                            final int k) {
     // note: association of expressions different from
     // Dennis-Schnabel
-    final int n = domainDimension();
+    final int n = domain().dimension();
     double d = 0.0;
     for (int i=0;i<n;i++) { d += f(x,i)*df(x,i,k); }
     return 2.0*d; }
@@ -128,7 +128,7 @@ public final class TrigonometricFn implements Function {
 
   @Override
   public final double doubleValue (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     double y = 0.0;
@@ -141,7 +141,7 @@ public final class TrigonometricFn implements Function {
 
   @Override
   public final Vektor gradient (final Vektor x) {
-    final int n = domainDimension();
+    final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];
@@ -160,7 +160,7 @@ public final class TrigonometricFn implements Function {
 
   private TrigonometricFn (final int dimension) {
     super();
-    _dimension = dimension; }
+    _domain = Dn.get(dimension); }
 
   //--------------------------------------------------------------
   /** Return a {@link TrigonometricFn} test function of the given

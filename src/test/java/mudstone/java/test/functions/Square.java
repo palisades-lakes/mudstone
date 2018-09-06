@@ -2,27 +2,20 @@ package mudstone.java.test.functions;
 
 import mudstone.java.AffineFunctional1d;
 import mudstone.java.Function;
+import mudstone.java.ScalarFunctional;
 
 //----------------------------------------------------------------
 /** Test function for 1d minimization.
  * <p>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-06
  */
 
-public final class Square implements Function {
+public final class Square extends ScalarFunctional {
 
   //--------------------------------------------------------------
   // Function methods
-  //--------------------------------------------------------------
-
-  @Override
-  public final int domainDimension () { return 1; }
-
-  @Override
-  public final int codomainDimension () { return 1; }
-
   //--------------------------------------------------------------
 
   @Override

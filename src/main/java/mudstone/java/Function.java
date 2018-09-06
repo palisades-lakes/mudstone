@@ -1,42 +1,93 @@
 package mudstone.java;
 
+import mudstone.java.exceptions.Exceptions;
+
 /** A (optionally differentiable) function between linear spaces,
  * from <b>R</b><sup>n</sup> (domain)
  * to <b>R</b><sup>m</sup> (codomain). 
+ * May expand to cover other spaces in the future.
  * <p>
- * Note: Elements of <b>R</b><sup>n</sup> are represented by
- * mutable instances of <code>double[]</code> of the right length.
+ * Special case methods are provided for three cases related to 
+ * identifying <b>R</b> and <b>R<b><sup>1</sup>, using 
+ * <code>double</code> for inputs and outputs:
+ * <ul>
+ * <li> Codomain is <b>R</b> (= <b>R<b><sup>1</sup>). 
+ * Such functions are often called 'functionals'. Note that I 
+ * use 'functional' to mean any real-valued function, rather than 
+ * just linear real-valued functions, which is another common 
+ * usage.
+ * <li> Domain is <b>R</b>. A parameterized curve in 
+ * <b>R<b><sup>n</sup>.
+ * <li> Both <b>R</b>. I call these scalar functionals.
+ * </ul>
+ * (I am open to a better naming scheme.)
  * <p>
- * Optional interface methods are provided for the common cases of
- * real (<code>double</code>) valued codomains and real 
- * (<code>double</code>) valued domains and codomains.
- * <p>
- * TODO: may consider an immutable representation for elements of
- *  <b>R</b><sup>n</sup>.
+ * <b>Design note:</b> 
+ * This is a loose interface, with (almost) all operations are
+ * optional, like the Java Collection classes.
+ * There are 2 main reasons:
+ * <ul>
+ * <li> Over-use of static, compile-time type constraints leads to
+ * brittle, complex code that simply fails in the application
+ * areas of interest here (see below).
+ * Dynamic (runtime) validation and tests are preferred.
+ * <li> Suppose we moved, for example, <code>doubleValue()</code>
+ * and <code>gradient()</code> 
+ * to a Functional interface. An important operation on functions
+ * is composition. Whether the composed function is a functional,
+ * or a scalar functional, etc.,
+ * depends on the two terms. Which means 
+ * we need at least 3 implementation classes for the output of
+ * <code>compose</code>.
+ * THe same will be true of any other property of a function that
+ * might or might not be true of a composition, or a sum, leading 
+ * to a * combinatorial explosion of implementation classes.
+ * </ul>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01`
+ * @version 2018-09-06
  */
 public interface Function {
 
-  // TODO: move to Domain objects
-  public default boolean inDomain (final Vektor x) {
-    return domainDimension() == x.dimension(); }
-
-  public default boolean inCodomain (final Vektor y) {
-    return codomainDimension() == y.dimension(); }
-
-  /** Which <b>R</b><sup>n</sup> is the domain of this */
-  int domainDimension ();
-
-  /** Which <b>R</b><sup>m</sup> is the codomain of this */
-  int codomainDimension ();
+  /** Valid inputs to the function belong to the domain.
+   */
   
-  public default boolean inDomain (final double[] x) {
-    return domainDimension() == x.length; }
+  public Domain domain ();
+  
+  /** Values of the function are elements of the 
+   * <code>codomain</code>, which is expected to be a 'complete'
+   * space in some sense. The image of the domain will NOT in
+   * general cover the codomain.
+   * <p>
+   * Common use is to check if 2 functions can be composed.
+   */
+  public Domain codomain ();
+  
+  /** An 'interesting' subset of the domain, in some sense.
+   * Typically where the function is not zero, or null, infinite,
+   * NaN, etc. 
+   * <p>
+   * Often null, meaning unspecified.
+   * <p>
+   * TODO: is this too vague to be useful?
+   */
+  
+  public default Domain support () {
+    return null; }
+//    throw Exceptions.unsupportedOperation(this,"support"); }
+  
+  /** The image of the domain. 
+   * <p>
+   * Often null, meaning unspecified/unknown rather than empty.
+   * In general, it is difficult to determine if an 
+   * arbitrary object, especially with <code>double</code> 
+   * coordinates, is in the range, or just a
+   * floating point approximation to an element of the range, etc.
+   */
+  public default Domain range () {
+    return null; }
+//    throw Exceptions.unsupportedOperation(this,"range"); }
 
-  public default boolean inCodomain (final double[] y) {
-    return codomainDimension() == y.length; }
 
   //--------------------------------------------------------------
   // general methods
@@ -45,9 +96,8 @@ public interface Function {
    */
 
   public default Vektor value (final Vektor x) {
-    assert inDomain(x);
-    throw new UnsupportedOperationException(
-      "No value(Vektor) method for " + getClass()); }
+    assert domain().contains(x);
+    throw Exceptions.unsupportedOperation(this,"value",x); }
 
   //--------------------------------------------------------------
   /** Return the linear function that is the derivative of this 
@@ -55,9 +105,9 @@ public interface Function {
    */
 
   public default Function derivativeAt (final Vektor x) {
-    assert inDomain(x);
-    throw new UnsupportedOperationException(
-      "No derivativeAt(Vektor) method for " + getClass()); }
+    assert domain().contains(x);
+    throw Exceptions.unsupportedOperation(
+      this,"derivativeAt",x); }
 
   //--------------------------------------------------------------
   /** Return the affine function that is the tangent of this 
@@ -65,7 +115,7 @@ public interface Function {
    */
 
   public default Function tangent (final Vektor x) {
-    assert inDomain(x);
+    assert domain().contains(x);
     return AffineFunction.make(derivativeAt(x),value(x));}
 
   //--------------------------------------------------------------
@@ -76,9 +126,9 @@ public interface Function {
 
   @SuppressWarnings("unused")
   public default Vektor value (final double x) {
-    assert 1 == domainDimension();
-    throw new UnsupportedOperationException(
-      "No value(double) method for " + getClass()); }
+    assert 1 == domain().dimension();
+    throw Exceptions.unsupportedOperation(
+      getClass(),"value",Double.TYPE); }
 
   //--------------------------------------------------------------
   /** Return the linear function that is the derivative of this 
@@ -87,9 +137,9 @@ public interface Function {
 
   @SuppressWarnings("unused")
   public default Function derivativeAt (final double x) {
-    assert 1 == domainDimension();
-    throw new UnsupportedOperationException(
-      "No derivativeAt(Vektor) method for " + getClass()); }
+    assert 1 == domain().dimension();
+    throw Exceptions.unsupportedOperation(
+      getClass(),"derivativeAt",Double.TYPE); }
 
   //--------------------------------------------------------------
   /** Return the affine function that is the tangent of this 
@@ -97,7 +147,7 @@ public interface Function {
    */
 
   public default Function tangent (final double x) {
-    assert 1 == domainDimension();
+    assert 1 == domain().dimension();
     return AffineFunction.make(derivativeAt(x),value(x));}
 
   //--------------------------------------------------------------
@@ -107,20 +157,20 @@ public interface Function {
    */
 
   public default double doubleValue (final Vektor x) {
-    assert inDomain(x);
-    assert 1 == codomainDimension();
-    throw new UnsupportedOperationException(
-      "No doubleValue(Vektor) method for " + getClass()); }
+    assert domain().contains(x);
+    assert 1 == codomain().dimension();
+    throw Exceptions.unsupportedOperation(
+      this,"doubleValue",x); }
 
   //--------------------------------------------------------------
   /** Return the gradient of the function at <code>x</code>.
    */
 
   public default Vektor gradient (final Vektor x) {
-    assert inDomain(x);
-    assert 1 == codomainDimension();
-    throw new UnsupportedOperationException(
-      "No gradient(Vektor) method for " + getClass()); }
+    assert domain().contains(x);
+    assert 1 == codomain().dimension();
+    throw Exceptions.unsupportedOperation(
+      this,"gradient",x); }
 
   //--------------------------------------------------------------
   // 1d domain and codomain methods
@@ -130,20 +180,20 @@ public interface Function {
    */
   @SuppressWarnings("unused")
   public default double doubleValue (final double x) {
-    assert 1 == domainDimension();
-    assert 1 == codomainDimension();
-    throw new UnsupportedOperationException(
-      "No doubleValue(double) method for " + getClass()); }
+    assert 1 == domain().dimension();
+    assert 1 == codomain().dimension();
+    throw Exceptions.unsupportedOperation(
+      getClass(),"doubleValue",Double.TYPE); }
 
   /** Return the slope of the function at <code>x</code>
    * (1d domain case).
    */
   @SuppressWarnings("unused")
   public default double slope (final double x) {
-    assert 1 == domainDimension();
-    assert 1 == codomainDimension();
-    throw new UnsupportedOperationException(
-      "No slope(double) method for " + getClass()); }
+    assert 1 == domain().dimension();
+    assert 1 == codomain().dimension();
+    throw Exceptions.unsupportedOperation(
+      getClass(),"slope",Double.TYPE); }
 
   //--------------------------------------------------------------
 }
