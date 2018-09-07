@@ -1,47 +1,54 @@
-package mudstone.java;
+package mudstone.java.functions;
 
-/** A linear function from <b>R</b><sup>n</sup> to <b>R</b>.
+/** An affine function from <b>R</b><sup>n</sup> to 
+ * <b>R</b><sup>m</sup>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-05
+ * @version 2018-09-06
  */
 
-public final class LinearFunctional extends Functional {
+public final class AffineFunction implements Function {
 
   //--------------------------------------------------------------
   // fields
   //--------------------------------------------------------------
 
-  private final Domain _domain;
-  
-  private final Vektor _dual;
-  public final Vektor dual () { return _dual; }
+  // Assuming the linear part is immutable!
+
+  private final Function _linear;
+  public final Function linear () { return _linear; }
+
+  private final Vektor _translation;
+  public final Vektor translation () { return _translation; }
 
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
 
   @Override
-  public final Domain domain () { return _domain; }
+  public final Domain domain () { 
+    return _linear.domain(); }
 
-  //--------------------------------------------------------------
-  // Function methods
+  @Override
+  public final Domain codomain () { 
+    return _linear.codomain(); }
+
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final Vektor x) {
-    return _dual.dot(x); }
-  
+  public final Vektor value (final Vektor x) {
+    return _translation.add(_linear.value(x)); }
+
   @Override
   @SuppressWarnings("unused")
-  public final Vektor gradient (final Vektor x) {
-    return _dual; }
-  
+  public final Function derivativeAt (final Vektor x) {
+    return _linear; }
+
   @Override
   @SuppressWarnings("unused")
   public final Function tangent (final Vektor x) {
     return this; }
-  
+
   //--------------------------------------------------------------
   // Object methods
   //--------------------------------------------------------------
@@ -52,19 +59,24 @@ public final class LinearFunctional extends Functional {
     final StringBuilder b = new StringBuilder();
     b.append(getClass().getSimpleName());
     b.append(":\n");
-    b.append(_dual.toString());
+    b.append(_linear.toString());
+    b.append(":\n");
+    b.append(_translation.toString());
     return b.toString(); }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
 
-  private LinearFunctional (final Vektor dual) {
-    _domain = Dn.get(dual.dimension());
-    _dual = dual; }
+  private AffineFunction (final Function linear,
+                          final Vektor translation) {
+    _linear =  linear; 
+    _translation = translation; }
 
-  public static final LinearFunctional make (final Vektor dual) {
-    return new LinearFunctional(dual); }
+  public static final AffineFunction 
+  make (final Function linear,
+        final Vektor translation) {
+    return new AffineFunction(linear,translation); }
 
   //--------------------------------------------------------------
 }

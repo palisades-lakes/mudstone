@@ -1,4 +1,4 @@
-package mudstone.java;
+package mudstone.java.functions;
 
 /** Three strictly increasing <code>double</code>s. Immutable.
  *

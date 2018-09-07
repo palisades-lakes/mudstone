@@ -1,25 +1,25 @@
-package mudstone.java;
+package mudstone.java.functions;
 
-/** Base class for real valued functions on <b>R</b>.
+/** Base class for real valued functions.
  *
  * @author palisades dot lakes at gmail dot com
  * @version 2018-09-06
  */
 
-public abstract class ScalarFunctional extends Functional {
+public abstract class Functional implements Function {
 
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
 
   @Override
-  public final Domain domain () { return Dn.D1; }
+  public final Domain codomain () { return Dn.D1; }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
 
-  public ScalarFunctional () { }
+  public Functional () { }
 
   //--------------------------------------------------------------
 }

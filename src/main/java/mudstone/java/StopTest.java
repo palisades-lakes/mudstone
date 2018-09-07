@@ -1,5 +1,7 @@
 package mudstone.java;
 
+import mudstone.java.functions.Function;
+
 /** General 'convergence' test for iterative searches.
  * Permits comparing the effect of differing termination rules with 
  * the same search logic.

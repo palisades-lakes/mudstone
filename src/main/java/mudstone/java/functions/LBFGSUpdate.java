@@ -1,4 +1,4 @@
-package mudstone.java;
+package mudstone.java.functions;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

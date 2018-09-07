@@ -1,5 +1,8 @@
 package mudstone.java;
 
+import mudstone.java.functions.DoubleBracket;
+import mudstone.java.functions.Function;
+
 /** Stop a 1d search if the history contains 3 <code>double</code>
  * domain values, <code>x0 < x1 < x2</code>, such that
  * <code>f(x0) > f(x1) < f(x2)</code>.

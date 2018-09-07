@@ -1,4 +1,4 @@
-package mudstone.java;
+package mudstone.java.functions;
 
 /** A function from <b>R</b> to <b>R</b> constructed from
  * a function from <b>R</b><sup>n</sup> to <b>R</b> and a line

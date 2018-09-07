@@ -1,5 +1,8 @@
 package mudstone.java;
 
+import mudstone.java.functions.DoubleInterval;
+import mudstone.java.functions.Function;
+
 /** Stop a 1d search if the history contains 2 <code>double</code>
  * domain values, <code>x0 < x1</code>,  such that
  * <code>f.slope(x0) < 0.0 < f.slope(x1)</code>.

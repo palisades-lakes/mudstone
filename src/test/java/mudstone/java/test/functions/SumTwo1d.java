@@ -1,8 +1,8 @@
 package mudstone.java.test.functions;
 
-import mudstone.java.AffineFunctional1d;
-import mudstone.java.Function;
-import mudstone.java.ScalarFunctional;
+import mudstone.java.functions.AffineFunctional1d;
+import mudstone.java.functions.Function;
+import mudstone.java.functions.ScalarFunctional;
 
 //----------------------------------------------------------------
 /** Test function for 1d minimization.

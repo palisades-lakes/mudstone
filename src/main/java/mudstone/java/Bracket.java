@@ -2,6 +2,10 @@ package mudstone.java;
 
 import static java.lang.Math.*;
 
+import mudstone.java.functions.Dn;
+import mudstone.java.functions.DoubleBracket;
+import mudstone.java.functions.Function;
+
 /** Find 3 <code>double</code>
  * domain values, <code>x0 < x1 < x2</code>, such that
  * <code>f(x0) > f(x1) < f(x2)</code>.

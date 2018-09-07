@@ -1,5 +1,8 @@
 package mudstone.java;
 
+import mudstone.java.functions.Doubles;
+import mudstone.java.functions.Vektor;
+
 /** Minimization results.
  *
  * <em>Immutable.</em>

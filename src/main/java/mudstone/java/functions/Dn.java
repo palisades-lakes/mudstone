@@ -1,4 +1,4 @@
-package mudstone.java;
+package mudstone.java.functions;
 
 import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;

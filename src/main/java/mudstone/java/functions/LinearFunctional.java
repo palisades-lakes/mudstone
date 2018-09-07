@@ -1,34 +1,28 @@
-package mudstone.java;
+package mudstone.java.functions;
 
 /** A linear function from <b>R</b><sup>n</sup> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-08-05
  */
 
-public final class AffineFunctional extends Functional {
+public final class LinearFunctional extends Functional {
 
   //--------------------------------------------------------------
   // fields
   //--------------------------------------------------------------
+
+  private final Domain _domain;
   
-  private final Dn _domain;
-
-  // TODO: wrap a LinearFunctional?
-
   private final Vektor _dual;
   public final Vektor dual () { return _dual; }
-
-  private final double _translation;
-  public final double translation () { return _translation; }
 
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
 
   @Override
-  public final Domain domain () { 
-    return _domain; }
+  public final Domain domain () { return _domain; }
 
   //--------------------------------------------------------------
   // Function methods
@@ -36,18 +30,18 @@ public final class AffineFunctional extends Functional {
 
   @Override
   public final double doubleValue (final Vektor x) {
-    return _dual.dot(x) + _translation; }
-
+    return _dual.dot(x); }
+  
   @Override
   @SuppressWarnings("unused")
   public final Vektor gradient (final Vektor x) {
     return _dual; }
-
+  
   @Override
   @SuppressWarnings("unused")
   public final Function tangent (final Vektor x) {
     return this; }
-
+  
   //--------------------------------------------------------------
   // Object methods
   //--------------------------------------------------------------
@@ -65,16 +59,12 @@ public final class AffineFunctional extends Functional {
   // construction
   //--------------------------------------------------------------
 
-  private AffineFunctional (final Vektor dual,
-                            final double translation) {
+  private LinearFunctional (final Vektor dual) {
     _domain = Dn.get(dual.dimension());
-    _dual = dual; 
-    _translation = translation; }
+    _dual = dual; }
 
-  public static final AffineFunctional 
-  make (final Vektor dual,
-        final double translation) {
-    return new AffineFunctional(dual,translation); }
+  public static final LinearFunctional make (final Vektor dual) {
+    return new LinearFunctional(dual); }
 
   //--------------------------------------------------------------
 }

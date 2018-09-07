@@ -1,20 +1,23 @@
-package mudstone.java;
+package mudstone.java.functions;
 
-/** An affine function from <b>R</b> to <b>R</b>.
+/** A linear function from <b>R</b><sup>n</sup> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
  * @version 2018-09-06
  */
 
-public final class AffineFunctional1d extends ScalarFunctional {
+public final class AffineFunctional extends Functional {
 
   //--------------------------------------------------------------
   // fields
   //--------------------------------------------------------------
+  
+  private final Dn _domain;
+
   // TODO: wrap a LinearFunctional?
 
-  private final double _slope;
-  public final double slope () { return _slope; }
+  private final Vektor _dual;
+  public final Vektor dual () { return _dual; }
 
   private final double _translation;
   public final double translation () { return _translation; }
@@ -24,16 +27,26 @@ public final class AffineFunctional1d extends ScalarFunctional {
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double x) {
-    return _slope*x + _translation; }
+  public final Domain domain () { 
+    return _domain; }
+
+  //--------------------------------------------------------------
+  // Function methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final double doubleValue (final Vektor x) {
+    return _dual.dot(x) + _translation; }
 
   @Override
   @SuppressWarnings("unused")
-  public final double slope (final double x) { return _slope; }
+  public final Vektor gradient (final Vektor x) {
+    return _dual; }
 
   @Override
   @SuppressWarnings("unused")
-  public final Function tangent (final Vektor x) { return this; }
+  public final Function tangent (final Vektor x) {
+    return this; }
 
   //--------------------------------------------------------------
   // Object methods
@@ -45,24 +58,23 @@ public final class AffineFunctional1d extends ScalarFunctional {
     final StringBuilder b = new StringBuilder();
     b.append(getClass().getSimpleName());
     b.append(":\n");
-    b.append(_slope);
-    b.append("*x + ");
-    b.append(_translation);
+    b.append(_dual.toString());
     return b.toString(); }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
 
-  private AffineFunctional1d (final double slope,
+  private AffineFunctional (final Vektor dual,
                             final double translation) {
-    _slope = slope; 
+    _domain = Dn.get(dual.dimension());
+    _dual = dual; 
     _translation = translation; }
 
-  public static final AffineFunctional1d 
-  make (final double slope,
+  public static final AffineFunctional 
+  make (final Vektor dual,
         final double translation) {
-    return new AffineFunctional1d(slope,translation); }
+    return new AffineFunctional(dual,translation); }
 
   //--------------------------------------------------------------
 }

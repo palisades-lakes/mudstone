@@ -1,4 +1,4 @@
-package mudstone.java;
+package mudstone.java.functions;
 
 import mudstone.java.exceptions.Exceptions;
 

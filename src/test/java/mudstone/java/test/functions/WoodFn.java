@@ -2,12 +2,12 @@ package mudstone.java.test.functions;
 
 import java.util.Arrays;
 
-import mudstone.java.AffineFunctional;
-import mudstone.java.Dn;
-import mudstone.java.Domain;
-import mudstone.java.Function;
-import mudstone.java.Functional;
-import mudstone.java.Vektor;
+import mudstone.java.functions.AffineFunctional;
+import mudstone.java.functions.Dn;
+import mudstone.java.functions.Domain;
+import mudstone.java.functions.Function;
+import mudstone.java.functions.Functional;
+import mudstone.java.functions.Vektor;
 
 //==========================================================
 /** A common cost function used to test optimization code.<br>

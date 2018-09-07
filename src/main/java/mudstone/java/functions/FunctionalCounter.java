@@ -1,4 +1,4 @@
-package mudstone.java;
+package mudstone.java.functions;
 
 /** Wrapper that counts function and gradient evaluations,
  * and caches last position, value, and gradient.
