@@ -7,7 +7,7 @@ import mudstone.java.functions.Function;
  * the same search logic.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-02
+ * @version 2018-09-07
  */
 
 public interface StopTest  {

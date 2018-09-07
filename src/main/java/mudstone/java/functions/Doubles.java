@@ -9,7 +9,7 @@ import static java.lang.Math.ulp;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-01
+ * @version 2018-09-07
  */
 
 public final class Doubles {

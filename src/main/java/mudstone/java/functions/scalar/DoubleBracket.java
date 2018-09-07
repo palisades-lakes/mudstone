@@ -1,11 +1,11 @@
-package mudstone.java.functions;
+package mudstone.java.functions.scalar;
 
-/** Two strictly increasing <code>double</code>s. Immutable.
+/** Three strictly increasing <code>double</code>s. Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-02
+ * @version 2018-09-07
  */
-public final class DoubleInterval  {
+public final class DoubleBracket  {
 
   //--------------------------------------------------------------
   // fields
@@ -16,6 +16,9 @@ public final class DoubleInterval  {
 
   private final double _x1;
   public final double x1 () { return _x1; }
+
+  private final double _x2;
+  public final double x2 () { return _x2; }
 
   //--------------------------------------------------------------
   // Object methods
@@ -33,42 +36,54 @@ public final class DoubleInterval  {
     final int c1 = (int) (l1 ^ (l1 >>> 32));
     c = (31*c) + c1;
 
+    final long l2  = Double.doubleToLongBits(_x2);
+    final int c2 = (int) (l2 ^ (l2 >>> 32));
+    c = (31*c) + c2;
+
     return c; }
 
   @Override
   public final boolean equals (final Object that) {
-    if (! (that instanceof DoubleInterval)) { return false; }
-    final DoubleInterval di = (DoubleInterval) that;
+    if (! (that instanceof DoubleBracket)) { return false; }
+    final DoubleBracket db = (DoubleBracket) that;
     return
-      (_x0 == di._x0) && (_x1 == di._x1); }
+      (_x0 == db._x0) && (_x1 == db._x1) && (_x2 == db._x2); }
 
   @Override
   public final String toString () {
     return
       String.format(
-        "DoubleInterval(%E,%E)",
+        "DoubleBracket(%E,%E,%E)",
         Double.valueOf(_x0), 
-        Double.valueOf(_x1)); }
+        Double.valueOf(_x1), 
+        Double.valueOf(_x2)); }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
 
-  private DoubleInterval (final double x0,
-                          final double x1) {
+  private DoubleBracket (final double x0,
+                     final double x1,
+                     final double x2) {
     super(); 
-    assert (x0 < x1);
-    _x0 = x0; _x1 = x1; }
+    assert (x0 < x1) && (x1 < x2);
+    _x0 = x0; _x1 = x1; _x2 = x2; }
 
   /** <code>a</code>, <code>b>/code>, and <code>c</code> must be 
    * distinct. 
    */
-  public static final DoubleInterval make (final double x0,
-                                           final double x1) {
-    assert (x0 != x1);
-
-    if (x0 < x1) { return new DoubleInterval(x0,x1); }
-    return new DoubleInterval(x1,x0); }
+  public static final DoubleBracket make (final double a,
+                                      final double b,
+                                      final double c) {
+    assert (a != b) && (b != c) && (c != a);
+    
+    if (a < b) {
+      if (b < c) { return new DoubleBracket(a,b,c); }
+      if (a < c) { return new DoubleBracket(a,c,b); }
+      return new DoubleBracket(c,a,b); }
+    if (a < c) { return new DoubleBracket(b,a,c); }
+    if (b < c) { return new DoubleBracket(b,c,a); }
+    return new DoubleBracket(c,b,a); }
 
   //--------------------------------------------------------------
 } // end class

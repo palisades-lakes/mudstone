@@ -17,7 +17,7 @@ import mudstone.java.functions.Vektor;
  * TODO: add translation to test other optima
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public strictfp final class ConstantFn extends Functional {

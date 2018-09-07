@@ -1,30 +1,30 @@
-package mudstone.java;
+package mudstone.java.functions.scalar;
 
-import mudstone.java.functions.DoubleInterval;
+import mudstone.java.StopTest;
 import mudstone.java.functions.Function;
 
-/** Stop a 1d search if the history contains 2 <code>double</code>
- * domain values, <code>x0 < x1</code>,  such that
- * <code>f.slope(x0) < 0.0 < f.slope(x1)</code>.
+/** Stop a 1d search if the history contains 3 <code>double</code>
+ * domain values, <code>x0 < x1 < x2</code>, such that
+ * <code>f(x0) > f(x1) < f(x2)</code>.
  * <p>
  * To simplify history bookkeeping It is left to the 
  * <code>objective</code> function to determine whether to re-compute,
- * or cache <code>df/dx(x0), df/dx(x1), f(x2)</code>.
+ * or cache <code>f(x0), f(x1), f(x2)</code>.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-02
+ * @version 2018-09-07
  */
 
-public final class BracketedD2  implements StopTest {
+public final class Bracketed3 implements StopTest {
 
   @Override
   public final boolean stop (final Function f,
                              final Object history) {
-    final DoubleInterval t = (DoubleInterval) history;
+    final DoubleBracket t = (DoubleBracket) history;
     return 
-      (f.slope(t.x0()) < 0.0)
+      (f.doubleValue(t.x0()) > f.doubleValue(t.x1()))
       &&
-      (0.0 < f.slope(t.x1())); }
+      (f.doubleValue(t.x1()) < f.doubleValue(t.x2())); }
   
   // --------------------------------------------------------------
 } // end interface

@@ -1,4 +1,7 @@
-package mudstone.java.functions;
+package mudstone.java.functions.scalar;
+
+import mudstone.java.functions.Function;
+import mudstone.java.functions.Vektor;
 
 /** A function from <b>R</b> to <b>R</b> constructed from
  * a function from <b>R</b><sup>n</sup> to <b>R</b> and a line
@@ -9,7 +12,7 @@ package mudstone.java.functions;
  * Functionals should be immutable (but this class isn't!).
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public final class LineFunctional extends ScalarFunctional {

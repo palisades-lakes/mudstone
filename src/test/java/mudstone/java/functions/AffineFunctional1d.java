@@ -1,9 +1,11 @@
 package mudstone.java.functions;
 
+import mudstone.java.functions.scalar.ScalarFunctional;
+
 /** An affine function from <b>R</b> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public final class AffineFunctional1d extends ScalarFunctional {

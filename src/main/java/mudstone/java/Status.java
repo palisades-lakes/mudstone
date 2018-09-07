@@ -8,7 +8,7 @@ import mudstone.java.functions.Vektor;
  * <em>Immutable.</em>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-31
+ * @version 2018-09-07
 */
 
 public final class Status {

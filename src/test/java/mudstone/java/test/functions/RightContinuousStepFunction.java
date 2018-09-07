@@ -5,7 +5,7 @@ import java.util.Arrays;
 import mudstone.java.functions.AffineFunctional1d;
 import mudstone.java.functions.Doubles;
 import mudstone.java.functions.Function;
-import mudstone.java.functions.ScalarFunctional;
+import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
 /** Test function for 1d minimization (see 
@@ -16,7 +16,7 @@ import mudstone.java.functions.ScalarFunctional;
  * <code>Double.NEGATIVE_INFINITY</code>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public final class RightContinuousStepFunction extends ScalarFunctional {

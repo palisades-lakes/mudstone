@@ -4,7 +4,7 @@ package mudstone.java.functions;
  * <b>R</b><sup>m</sup>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public final class AffineFunction implements Function {

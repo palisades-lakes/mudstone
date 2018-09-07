@@ -2,14 +2,14 @@ package mudstone.java.test.functions;
 
 import mudstone.java.functions.AffineFunctional1d;
 import mudstone.java.functions.Function;
-import mudstone.java.functions.ScalarFunctional;
+import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
 /** Test function for 1d minimization.
  * <p>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public final class Sin extends ScalarFunctional {

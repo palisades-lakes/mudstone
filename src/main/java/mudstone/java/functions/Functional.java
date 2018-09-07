@@ -3,7 +3,7 @@ package mudstone.java.functions;
 /** Base class for real valued functions.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public abstract class Functional implements Function {

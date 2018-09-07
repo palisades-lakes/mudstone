@@ -10,8 +10,8 @@ import mudstone.java.exceptions.Exceptions;
  * TODO: Special case D1, D2, D3, D4...?
  * 
  * @author palisades dot lakes at gmail dot com
- * @since 2018-09-06
- * @version 2018-09-06
+ * @since 2018-09-07
+ * @version 2018-09-07
  */
 @SuppressWarnings("unchecked")
 public final class Dn implements Domain {

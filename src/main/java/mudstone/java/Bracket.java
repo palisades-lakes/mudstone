@@ -3,8 +3,8 @@ package mudstone.java;
 import static java.lang.Math.*;
 
 import mudstone.java.functions.Dn;
-import mudstone.java.functions.DoubleBracket;
 import mudstone.java.functions.Function;
+import mudstone.java.functions.scalar.DoubleBracket;
 
 /** Find 3 <code>double</code>
  * domain values, <code>x0 < x1 < x2</code>, such that
@@ -15,7 +15,7 @@ import mudstone.java.functions.Function;
  * or cache <code>f.doubleValue(x)</code>.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public final class Bracket {

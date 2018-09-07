@@ -3,7 +3,7 @@ package mudstone.java;
 /** Interface for iterative search algorithms.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-02
+ * @version 2018-09-07
  */
 
 public interface Minimizer {

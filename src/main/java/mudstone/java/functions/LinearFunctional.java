@@ -3,7 +3,7 @@ package mudstone.java.functions;
 /** A linear function from <b>R</b><sup>n</sup> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-08-05
+ * @version 2018-09-07
  */
 
 public final class LinearFunctional extends Functional {
