@@ -1,10 +1,10 @@
-package mudstone.java.test.functions;
+package mudstone.java.test.functions.scalar;
 
 import java.util.Arrays;
 
-import mudstone.java.functions.AffineFunctional1d;
 import mudstone.java.functions.Doubles;
 import mudstone.java.functions.Function;
+import mudstone.java.functions.scalar.AffineFunctional1d;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------

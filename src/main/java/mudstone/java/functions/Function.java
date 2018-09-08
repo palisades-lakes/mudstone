@@ -173,7 +173,7 @@ public interface Function {
       this,"gradient",x); }
 
   //--------------------------------------------------------------
-  // 1d domain and codomain methods
+  // 1d domain and codomain (scalar) methods
   //--------------------------------------------------------------
   /** Return the value of the function at <code>x</code>
    * (1d domain case).
@@ -194,6 +194,18 @@ public interface Function {
     assert 1 == codomain().dimension();
     throw Exceptions.unsupportedOperation(
       getClass(),"slope",Double.TYPE); }
+
+  /** Return a domain value at which the function
+   * has a local minimum.
+   * Only intended to be implemented where this can be calculated
+   * efficiently, in something like closed form.
+   */
+  @SuppressWarnings("unused")
+  public default double doubleArgmin () {
+    assert 1 == domain().dimension();
+    assert 1 == codomain().dimension();
+    throw Exceptions.unsupportedOperation(
+      getClass(),"doubleArgmin",Double.TYPE); }
 
   //--------------------------------------------------------------
 }

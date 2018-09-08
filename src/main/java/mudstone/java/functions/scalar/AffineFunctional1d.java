@@ -1,13 +1,12 @@
 package mudstone.java.functions.scalar;
 
-import mudstone.java.Function;
-import mudstone.java.ScalarFunctional;
-import mudstone.java.Vektor;
+import mudstone.java.functions.Function;
+import mudstone.java.functions.Vektor;
 
 /** An affine function from <b>R</b> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-06
+ * @version 2018-09-07
  */
 
 public final class AffineFunctional1d extends ScalarFunctional {
