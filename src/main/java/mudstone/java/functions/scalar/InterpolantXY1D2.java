@@ -2,14 +2,22 @@ package mudstone.java.functions.scalar;
 
 import mudstone.java.functions.scalar.ScalarFunctional;
 
-/** An quadratic function from <b>R</b> to <b>R</b> interpolating
- * 3 (x,y) pairs (quadratic Lagrange interpolant).
+/** A quadratic function from <b>R</b> to <b>R</b> interpolating
+ * (x0,y0=f(x0),d0=df(x0)) and (x1,d1=df(x1).
+ * The argmin of this parabola is at the zero of its derivative,
+ * and is what's usually called the 'secant' step. 
+ * <p>
+ * An alternative might be to match:
+ * (x0,d0=df(x0)), (xmid=(x0+x1)/2,ymid=(f(x0)+f(x1))/2), 
+ * (x1,d1=df(x1)). Because this is primarily used for its
+ * critical point (the zero of the derivative) the exact y values 
+ * don't usually matter.
  *
  * @author palisades dot lakes at gmail dot com
  * @version 2018-09-10
  */
 
-public final class InterpolantXY3 extends ScalarFunctional {
+public final class InterpolantXY1D2 extends ScalarFunctional {
 
   //--------------------------------------------------------------
   // fields
@@ -17,15 +25,13 @@ public final class InterpolantXY3 extends ScalarFunctional {
 
   private final double _x0;
   private final double _x1;
-  private final double _x2;
 
   private final double _dx01;
-  private final double _dx12;
-  private final double _dx20;
 
   private final double _y0;
-  private final double _y1;
-  private final double _y2;
+
+  private final double _d0;
+  private final double _d1;
 
   private final double _xmin;
 
@@ -37,7 +43,6 @@ public final class InterpolantXY3 extends ScalarFunctional {
   public final double doubleValue (final double x) {
     final double dx0 = x-_x0;
     final double dx1 = x-_x1;
-    final double dx2 = x-_x2;
     return 
       -((dx1*dx2*_y0)/(_dx01*_dx20) +
         (dx2*dx0*_y1)/(_dx12*_dx01) +
@@ -65,9 +70,8 @@ public final class InterpolantXY3 extends ScalarFunctional {
   public final String toString () {
     return
       getClass().getSimpleName() + "[" + 
-      _x0 + "," + _y0 + ";" +
-      _x1 + "," + _y1 + ";" +
-      _x2 + "," + _y2 + ";" +
+      _x0 + "," + _y0 +"," + _d0 + ";" +
+      _x1 + "," + _d1 + ";" +
       _xmin + "]"; }
 
   //--------------------------------------------------------------
@@ -101,7 +105,7 @@ public final class InterpolantXY3 extends ScalarFunctional {
   //    _xmin = x1 - numer/denom; }
 
   // symmetric argmin formula
-  private InterpolantXY3 (final double x0, final double y0,
+  private InterpolantXY1D2 (final double x0, final double y0,
                           final double x1, final double y1,
                           final double x2, final double y2) {
     assert x0 < x1 && x1 < x2 : 
@@ -127,26 +131,26 @@ public final class InterpolantXY3 extends ScalarFunctional {
 
       _xmin = numer/(2.0*(b-a)); } }
 
-  public static final InterpolantXY3 
+  public static final InterpolantXY1D2 
   make (final double x0, final double y0,
         final double x1, final double y1,
         final double x2, final double y2) {
 
     if (x0 < x1) {
       if (x1 < x2) {
-        return new InterpolantXY3(x0,y0,x1,y1,x2,y2); }
+        return new InterpolantXY1D2(x0,y0,x1,y1,x2,y2); }
       if (x0 < x2) {
-        return new InterpolantXY3(x0,y0,x2,y2,x1,y1); } 
+        return new InterpolantXY1D2(x0,y0,x2,y2,x1,y1); } 
       if (x2 < x0) {
-        return new InterpolantXY3(x2,y2,x0,y0,x1,y1); } }
+        return new InterpolantXY1D2(x2,y2,x0,y0,x1,y1); } }
 
     if (x1 < x0) {
       if (x0 < x2) {
-        return new InterpolantXY3(x1,y1,x0,y0,x2,y2); }
+        return new InterpolantXY1D2(x1,y1,x0,y0,x2,y2); }
       if (x1 < x2) {
-        return new InterpolantXY3(x1,y1,x2,y2,x0,y0); } 
+        return new InterpolantXY1D2(x1,y1,x2,y2,x0,y0); } 
       if (x2 < x1) {
-        return new InterpolantXY3(x2,y2,x1,y1,x0,y0); } }
+        return new InterpolantXY1D2(x2,y2,x1,y1,x0,y0); } }
 
     throw new IllegalArgumentException(
       "Not distinct: " + x0 + ", " + x1 + ", " + x2); }
