@@ -6,7 +6,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * 3 (x,y) pairs (quadratic Lagrange interpolant).
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-10
+ * @version 2018-09-11
  */
 
 public final class InterpolantXY3 extends ScalarFunctional {
@@ -59,7 +59,6 @@ public final class InterpolantXY3 extends ScalarFunctional {
   //--------------------------------------------------------------
   // Object methods
   //--------------------------------------------------------------
-  // TODO: too long for toString..
 
   @Override
   public final String toString () {
