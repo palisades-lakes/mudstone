@@ -43,8 +43,8 @@ public final class FunctionalCounter implements Function {
     _ng++; return _inner.gradient(x); }
 
   @Override
-  public final Function tangent (final Vektor x) {
-    _nf++; _ng++; return _inner.tangent(x); }
+  public final Function tangentAt (final Vektor x) {
+    _nf++; _ng++; return _inner.tangentAt(x); }
 
   //--------------------------------------------------------------
   // construction

@@ -66,7 +66,7 @@ public strictfp final class ConstantFn extends Functional {
   //--------------------------------------------------------------
 
   @Override
-  public final Function tangent (final Vektor x) {
+  public final Function tangentAt (final Vektor x) {
     final int n = domain().dimension();
     assert n == x.dimension();
     return AffineFunctional.make(_g,_value); }

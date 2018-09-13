@@ -84,7 +84,7 @@ public final class InterpolantXY3 extends ScalarFunctional {
       -2.0*(
         (y0/(dx01*dx20)) + 
         (y1/(dx01*dx12)) +
-        (y2/dx20*dx12)); }
+        (y2/(dx20*dx12))); }
 
   // Commons Math 3 formula for argmin
   //  private InterpolantXY3 (final double x0, final double y0,
@@ -115,7 +115,7 @@ public final class InterpolantXY3 extends ScalarFunctional {
     _y1 = y1;
     _y2 = y2;
     // TODO: within epsilon test?
-    if (0.0 >= secondDerivative(_dx01,_dx12,_dx20,y0,y1,y2)) {
+    if (0.0 > secondDerivative(_dx01,_dx12,_dx20,y0,y1,y2)) {
       // critical point is a maximum, xmin at either +/- infinity
       _xmin = Double.POSITIVE_INFINITY; }
     else {

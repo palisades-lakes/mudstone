@@ -45,7 +45,7 @@ public final class AffineFunctional extends Functional {
 
   @Override
   @SuppressWarnings("unused")
-  public final Function tangent (final Vektor x) {
+  public final Function tangentAt (final Vektor x) {
     return this; }
 
   //--------------------------------------------------------------

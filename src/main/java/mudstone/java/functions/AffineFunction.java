@@ -4,7 +4,7 @@ package mudstone.java.functions;
  * <b>R</b><sup>m</sup>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-13
  */
 
 public final class AffineFunction implements Function {
@@ -46,7 +46,7 @@ public final class AffineFunction implements Function {
 
   @Override
   @SuppressWarnings("unused")
-  public final Function tangent (final Vektor x) {
+  public final Function tangentAt (final Vektor x) {
     return this; }
 
   //--------------------------------------------------------------

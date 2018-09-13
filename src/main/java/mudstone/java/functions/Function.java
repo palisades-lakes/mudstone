@@ -45,7 +45,7 @@ import mudstone.java.exceptions.Exceptions;
  * </ul>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-13
  */
 public interface Function {
 
@@ -100,6 +100,33 @@ public interface Function {
     throw Exceptions.unsupportedOperation(this,"value",x); }
 
   //--------------------------------------------------------------
+  /** General case: Return a function on the domain whose values  
+   * are linear functions from the domain to the codomain.
+   * <p>
+   * <code>derivative().value(x) = derivativeAt(x)</code>.
+   * <p>
+   * Scalar case: Return a function whose value is the slope of 
+   * this function.
+   * <p>
+   * <code>derivative().doubleValue(x) = slopeAt(x)</code>.
+   */
+
+  public default Function derivative () {
+    throw Exceptions.unsupportedOperation(
+      getClass(),"derivative"); }
+
+  //--------------------------------------------------------------
+  /** General case: Return a function on the domain whose values  
+   * are affine functions from the domain to the codomain.
+   * <p>
+   * <code>tangent().value(x) = tangentAt(x)</code>.
+   */
+
+  public default Function tangent () {
+    throw Exceptions.unsupportedOperation(
+      getClass(),"tangent"); }
+
+  //--------------------------------------------------------------
   /** Return the linear function that is the derivative of this 
    * at <code>x</code>.
    */
@@ -114,7 +141,7 @@ public interface Function {
    * at <code>x</code>.
    */
 
-  public default Function tangent (final Vektor x) {
+  public default Function tangentAt (final Vektor x) {
     assert domain().contains(x);
     return AffineFunction.make(derivativeAt(x),value(x));}
 
@@ -146,7 +173,7 @@ public interface Function {
    * at <code>x</code>.
    */
 
-  public default Function tangent (final double x) {
+  public default Function tangentAt (final double x) {
     assert 1 == domain().dimension();
     return AffineFunction.make(derivativeAt(x),value(x));}
 

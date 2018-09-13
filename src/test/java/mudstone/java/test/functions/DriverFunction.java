@@ -121,7 +121,7 @@ public final class DriverFunction extends Functional {
     return Vektor.unsafeMake(g); }
 
   @Override
-  public final Function tangent (final Vektor x) {
+  public final Function tangentAt (final Vektor x) {
     final int n = domain().dimension();
     assert n == x.dimension();
     final double[] xx = x.unsafeCoordinates();

@@ -34,7 +34,7 @@ public final class SumTwo1d extends ScalarFunctional {
   //--------------------------------------------------------------
 
   @Override
-  public final Function tangent (final double x) {
+  public final Function tangentAt (final double x) {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
 
   //--------------------------------------------------------------

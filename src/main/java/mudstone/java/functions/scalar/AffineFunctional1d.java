@@ -36,7 +36,7 @@ public final class AffineFunctional1d extends ScalarFunctional {
 
   @Override
   @SuppressWarnings("unused")
-  public final Function tangent (final Vektor x) { return this; }
+  public final Function tangentAt (final Vektor x) { return this; }
 
   //--------------------------------------------------------------
   // Object methods

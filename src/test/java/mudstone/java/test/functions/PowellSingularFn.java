@@ -140,7 +140,7 @@ public final class PowellSingularFn extends Functional {
   //--------------------------------------------------------------
 
   @Override
-  public final Function tangent (final Vektor x) {
+  public final Function tangentAt (final Vektor x) {
     final int n = domain().dimension();
     final double[] xx = x.unsafeCoordinates();
     final double[] g = new double[n];

@@ -151,7 +151,7 @@ public final class TrigonometricFn extends Functional {
   //--------------------------------------------------------------
 
   @Override
-  public final Function tangent (final Vektor x) {
+  public final Function tangentAt (final Vektor x) {
     return AffineFunctional.make(gradient(x),doubleValue(x)); }
 
   //--------------------------------------------------------------
