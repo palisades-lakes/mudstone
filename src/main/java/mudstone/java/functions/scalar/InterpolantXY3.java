@@ -1,12 +1,13 @@
 package mudstone.java.functions.scalar;
 
+import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 /** An quadratic function from <b>R</b> to <b>R</b> interpolating
  * 3 (x,y) pairs (quadratic Lagrange interpolant).
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-11
+ * @version 2018-09-15
  */
 
 public final class InterpolantXY3 extends ScalarFunctional {
@@ -17,15 +18,11 @@ public final class InterpolantXY3 extends ScalarFunctional {
 
   private final double _x0;
   private final double _x1;
-  private final double _x2;
+  private final double _x2; 
 
-  private final double _dx01;
-  private final double _dx12;
-  private final double _dx20;
-
-  private final double _y0;
-  private final double _y1;
-  private final double _y2;
+  private final double _b0;
+  private final double _b1;
+  private final double _b2;
 
   private final double _xmin;
 
@@ -38,20 +35,14 @@ public final class InterpolantXY3 extends ScalarFunctional {
     final double dx0 = x-_x0;
     final double dx1 = x-_x1;
     final double dx2 = x-_x2;
-    return 
-      -((dx1*dx2*_y0)/(_dx01*_dx20) +
-        (dx2*dx0*_y1)/(_dx12*_dx01) +
-        (dx0*dx1*_y2)/(_dx20*_dx12)); }
+    return (_b0*dx1*dx2) + (_b1*dx2*dx0) + (_b2*dx0*dx1); }
 
   @Override
   public final double slope (final double x) {
     final double dx0 = x-_x0;
     final double dx1 = x-_x1;
     final double dx2 = x-_x2;
-    return 
-      -(((dx1+dx2)*_y0)/(_dx01*_dx20) +
-        ((dx2*dx0)*_y1)/(_dx12*_dx01) +
-        ((dx0+dx1)*_y2)/(_dx20*_dx12)); }
+    return _b0*(dx1+dx2) + _b1*(dx2+dx0) + _b2*(dx0+dx1); }
 
   @Override
   public final double doubleArgmin () { return _xmin; }
@@ -64,27 +55,13 @@ public final class InterpolantXY3 extends ScalarFunctional {
   public final String toString () {
     return
       getClass().getSimpleName() + "[" + 
-      _x0 + "," + _y0 + ";" +
-      _x1 + "," + _y1 + ";" +
-      _x2 + "," + _y2 + ";" +
+      _x0 + "," + _x1 + "," + _x2 + ";" +
+      _b0 + "," + _b1 + "," + _b2 + ";" +
       _xmin + "]"; }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
-  /** used to check if critical point is a min or max */
-
-  private static final double secondDerivative (final double dx01,
-                                                final double dx12,
-                                                final double dx20,
-                                                final double y0,
-                                                final double y1,
-                                                final double y2) {
-    return 
-      -2.0*(
-        (y0/(dx01*dx20)) + 
-        (y1/(dx01*dx12)) +
-        (y2/(dx20*dx12))); }
 
   // Commons Math 3 formula for argmin
   //  private InterpolantXY3 (final double x0, final double y0,
@@ -108,22 +85,18 @@ public final class InterpolantXY3 extends ScalarFunctional {
     _x0 = x0;
     _x1 = x1;
     _x2 = x2;
-    _dx01 = x0-x1;
-    _dx12 = x1-x2;
-    _dx20 = x2-x1;
-    _y0 = y0;
-    _y1 = y1;
-    _y2 = y2;
+    _b0 = y0/((x0-x1)*(x0-x2));
+    _b1 = y1/((x1-x2)*(x1-x0));
+    _b2 = y2/((x2-x0)*(x2-x1));
     // TODO: within epsilon test?
-    if (0.0 > secondDerivative(_dx01,_dx12,_dx20,y0,y1,y2)) {
+    if (0.0 > (_b0 + _b1 + _b2)) { // 1/2 2nd derivative
       // critical point is a maximum, xmin at either +/- infinity
       _xmin = Double.POSITIVE_INFINITY; }
     else {
       // may still be +/- infinity if parabola degenerates to a line.
-      final double a = _dx12*(y0-y1);
-      final double b = _dx01*(y1-y2);
+      final double a = (x1-x2)*(y0-y1);
+      final double b = (x0-x1)*(y1-y2);
       final double numer = ((x1+x0)*b)-((x1+x2)*a); 
-
       _xmin = numer/(2.0*(b-a)); } }
 
   public static final InterpolantXY3 
@@ -150,6 +123,15 @@ public final class InterpolantXY3 extends ScalarFunctional {
     throw new IllegalArgumentException(
       "Not distinct: " + x0 + ", " + x1 + ", " + x2); }
 
+  public static final InterpolantXY3 
+  make (final Function f, 
+        final double x0, 
+        final double x1, 
+        final double x2) {
+    return make(
+      x0,f.doubleValue(x0),
+      x1,f.doubleValue(x1),
+      x2,f.doubleValue(x2));}
 
   //--------------------------------------------------------------
 }

@@ -26,7 +26,7 @@ public final class QQuadratic extends ScalarFunctional {
   private final BigFraction _a0;
   private final BigFraction _a1;
   private final BigFraction _a2;
-  
+
   private final double _xmin;
 
   //--------------------------------------------------------------
@@ -51,22 +51,61 @@ public final class QQuadratic extends ScalarFunctional {
       .doubleValue(); }
 
   // TODO: ScalarFunctional parent class?
-  
+
   @Override
   public final Function tangentAt (final double x) {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
-  
+
   @Override
   public final double doubleArgmin () { return _xmin; }
+
+
+  //--------------------------------------------------------------
+  // Object methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final int hashCode () {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + _a0.hashCode();
+    result = prime * result + _a1.hashCode();
+    result = prime * result + _a2.hashCode();
+    final long temp = Double.doubleToLongBits(_xmin);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result; }
+
+  @Override
+  public final boolean equals (Object obj) {
+    if (this == obj) { return true; }
+    if (obj == null) { return false; }
+    if (!(obj instanceof QQuadratic)) { return false; }
+    final QQuadratic other = (QQuadratic) obj;
+    if (!_a0.equals(other._a0)) { return false; }
+    if (!_a1.equals(other._a1)) { return false; }
+    if (!_a2.equals(other._a2)) { return false; }
+    // handles NaN
+    if (Double.doubleToLongBits(_xmin) != 
+      Double.doubleToLongBits(other._xmin)) { 
+      return false; }
+    return true; }
+
+  @Override
+  public String toString () {
+    return 
+      "Q[" + _a0 + " + " + _a1 + "*x + "
+      + _a2 + "*x^2; " + _xmin + "]"; }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
 
   private static final BigFraction MINUS2 = TWO.negate();
-  
-  private static final double argmin (final BigFraction a1,
-                                      final BigFraction a2) {
+
+  // TODO: used by QCubic, should be elsewhere?
+
+  public static final double argmin (final BigFraction a1,
+                                     final BigFraction a2) {
     switch (ZERO.compareTo(a2)) {
     case -1 : return a1.divide(MINUS2.multiply(a2)).doubleValue(); 
     case 1 : return Double.POSITIVE_INFINITY;
@@ -75,10 +114,10 @@ public final class QQuadratic extends ScalarFunctional {
       case -1 : return Double.NEGATIVE_INFINITY;
       case 1 : return Double.POSITIVE_INFINITY;
       default : return Double.NaN; } } }
-  
+
   private QQuadratic (final BigFraction a0,
-                  final BigFraction a1,
-                  final BigFraction a2) { 
+                      final BigFraction a1,
+                      final BigFraction a2) { 
     super(); 
     _a0 = a0; _a1 = a1; _a2 = a2; 
     _xmin =argmin(a1,a2); }
@@ -86,13 +125,13 @@ public final class QQuadratic extends ScalarFunctional {
   //--------------------------------------------------------------
 
   public static final QQuadratic get (final BigFraction a0,
-                                  final BigFraction a1,
-                                  final BigFraction a2) { 
+                                      final BigFraction a1,
+                                      final BigFraction a2) { 
     return new QQuadratic(a0,a1,a2); }
-  
-  public static final QQuadratic get (final double a0,
-                                  final double a1,
-                                  final double a2) { 
+
+  public static final QQuadratic make (final double a0,
+                                       final double a1,
+                                       final double a2) { 
     return new QQuadratic(
       new BigFraction(a0),
       new BigFraction(a1),

@@ -66,6 +66,43 @@ public final class QCubic extends ScalarFunctional {
   public final double doubleArgmin () { return _xmin; }
 
   //--------------------------------------------------------------
+  // Object methods
+  //--------------------------------------------------------------
+  
+  @Override
+  public int hashCode () {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + _a0.hashCode();
+    result = prime * result + _a1.hashCode();
+    result = prime * result + _a2.hashCode();
+    result = prime * result + _a3.hashCode();
+    final long temp = Double.doubleToLongBits(_xmin);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result; }
+
+  @Override
+  public final boolean equals (Object obj) {
+    if (this == obj) { return true; }
+    if (obj == null) { return false; }
+    if (!(obj instanceof QCubic)) { return false; }
+    final QCubic other = (QCubic) obj;
+    if (!_a0.equals(other._a0)) { return false; }
+    if (!_a1.equals(other._a1)) { return false; }
+    if (!_a2.equals(other._a2)) { return false; }
+    if (!_a3.equals(other._a3)) { return false; }
+    if (Double.doubleToLongBits(_xmin) != Double
+      .doubleToLongBits(other._xmin)) { return false; }
+    return true; }
+
+  @Override
+  public final String toString () {
+    return 
+      "Q[" + _a0 + " + " + _a1 + "*x + "
+      + _a2 + "*x^2 + " + _a3 + "*x^3; " 
+      + _xmin + "]"; }
+
+  //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
   
@@ -82,6 +119,9 @@ public final class QCubic extends ScalarFunctional {
   private static final double argmin (final BigFraction a1,
                                       final BigFraction a2,
                                       final BigFraction a3) {
+    
+    if (ZERO.equals(a3)) { return QQuadratic.argmin(a1,a2); }
+    
     final BigFraction threea3 = a3.multiply(3);
     final BigFraction b2m4ac =
       a2.multiply(a2).subtract(a1.multiply(threea3));
@@ -126,7 +166,7 @@ public final class QCubic extends ScalarFunctional {
                                   final BigFraction a3) { 
     return new QCubic(a0,a1,a2,a3); }
 
-  public static final QCubic get (final double a0,
+  public static final QCubic make (final double a0,
                                   final double a1,
                                   final double a2,
                                   final double a3) { 

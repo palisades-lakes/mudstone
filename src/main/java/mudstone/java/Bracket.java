@@ -1,7 +1,5 @@
 package mudstone.java;
 
-import static java.lang.Math.*;
-
 import mudstone.java.functions.Dn;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.DoubleBracket;
@@ -23,7 +21,7 @@ public final class Bracket {
   //--------------------------------------------------------------
 
   private static final double GOLDEN_RATIO = 0.5*(1.0+Math.sqrt(5.0));
-  private static final double MAXIMUM_MAGNIFICATION = 100.0;
+  public static final double MAXIMUM_MAGNIFICATION = 100.0;
 
   // roughly 1.0e-20
   private static final double EPSILON = Math.ulp(1.0e-4);
@@ -58,7 +56,7 @@ public final class Bracket {
       final double dx12 = x1-x2;
       final double dy10 = y1-y0;
       final double dy12 = y1-y2;
-      final double ulim = x1 - MAXIMUM_MAGNIFICATION*dx12;
+//      final double ulim = x1 - MAXIMUM_MAGNIFICATION*dx12;
       
       final double r = dx10*dy12;
       final double q = dx12*dy10;
@@ -69,7 +67,7 @@ public final class Bracket {
       else if (dqr >= 0.0) { denom = EPSILON; }
       else  { denom = -EPSILON; }
       final double u = x1 - numer/(2.0*denom);
-      final double fu = f.doubleValue(u);
+  //    final double fu = f.doubleValue(u);
       
       if (0.0 < ((x1-u)*(u-x2))) {
         }
