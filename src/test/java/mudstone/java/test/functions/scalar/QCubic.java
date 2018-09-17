@@ -1,5 +1,11 @@
 package mudstone.java.test.functions.scalar;
 
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.NaN;
+import static java.lang.Double.POSITIVE_INFINITY;
+import static java.lang.Double.doubleToLongBits;
+import static java.lang.Double.isFinite;
+import static java.lang.Double.isNaN;
 import static java.lang.StrictMath.sqrt;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -17,7 +23,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-14
+ * @version 2018-09-17
  */
 
 strictfp
@@ -33,7 +39,13 @@ public final class QCubic extends ScalarFunctional {
   private final BigFraction _a2;
   private final BigFraction _a3;
 
+  // TODO: space vs re-computing cost?
   private final double _xmin;
+
+  private final double _positiveLimitValue;
+  private final double _negativeLimitValue;
+  private final double _positiveLimitSlope;
+  private final double _negativeLimitSlope;
 
   //--------------------------------------------------------------
   // Function methods
@@ -41,69 +53,29 @@ public final class QCubic extends ScalarFunctional {
 
   @Override
   public final double doubleValue (final double x) {
-
-    if (Double.isFinite(x)) {
+    if (isFinite(x)) {
       final BigFraction q = new BigFraction(x); 
       return 
         _a3.multiply(q).add(_a2)
         .multiply(q).add(_a1)
         .multiply(q).add(_a0)
         .doubleValue(); } 
+    if (isNaN(x)) { return NaN; }
+    if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
+    return _negativeLimitValue; }
 
-    // TODO: could throw an exception...
-    if (Double.isNaN(x)) { return Double.NaN; }
-    
-    // otherwise x is +/- infinity; sign of value depends on a3
-    switch (ZERO.compareTo(_a3)) {
-    case -1 : return x; 
-    case 1 : return -x; 
-    case 0 : // quadratic, so look at a2:
-      switch (ZERO.compareTo(_a2)) {
-      case -1 : return Double.POSITIVE_INFINITY; 
-      case 1 : return Double.NEGATIVE_INFINITY; 
-      case 0 : // affine, look at a1
-        switch (ZERO.compareTo(_a1)) {
-        case -1 : return Double.POSITIVE_INFINITY; 
-        case 1 : return Double.NEGATIVE_INFINITY; 
-        case 0 : // constant
-          return _a0.doubleValue();
-        default : 
-          throw new IllegalStateException("can't get here"); } 
-      default : 
-        throw new IllegalStateException("can't get here"); } 
-    default : 
-      throw new IllegalStateException("can't get here"); } }
 
   @Override
   public final double slope (final double x) {
-    if (Double.isFinite(x)) {
+    if (isFinite(x)) {
       final BigFraction q = new BigFraction(x); 
       return 
         _a3.multiply(3).multiply(q).add(_a2.multiply(2))
         .multiply(q).add(_a1)
         .doubleValue(); } 
-    
-    // TODO: could throw an exception...
-    if (Double.isNaN(x)) { return Double.NaN; }
-
-    // otherwise x is +/- infinity; sign of value depends on a3
-    switch (ZERO.compareTo(_a3)) {
-    case -1 : return Double.POSITIVE_INFINITY; 
-    case 1 : return Double.NEGATIVE_INFINITY; 
-    case 0 : // quadratic, so look at a2:
-      switch (ZERO.compareTo(_a2)) {
-      case -1 : return x; 
-      case 1 : return -x; 
-      case 0 : // affine
-        return _a1.doubleValue();
-      default : 
-        throw new IllegalStateException("can't get here"); } 
-    default : 
-      throw new IllegalStateException("can't get here"); } }
-
-
-
-  // TODO: ScalarFunctional parent class?
+    if (isNaN(x)) { return NaN; }
+    if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
+    return _negativeLimitSlope; }
 
   @Override
   public final Function tangentAt (final double x) {
@@ -124,7 +96,7 @@ public final class QCubic extends ScalarFunctional {
     result = prime * result + _a1.hashCode();
     result = prime * result + _a2.hashCode();
     result = prime * result + _a3.hashCode();
-    final long temp = Double.doubleToLongBits(_xmin);
+    final long temp = doubleToLongBits(_xmin);
     result = prime * result + (int) (temp ^ (temp >>> 32));
     return result; }
 
@@ -138,7 +110,7 @@ public final class QCubic extends ScalarFunctional {
     if (!_a1.equals(other._a1)) { return false; }
     if (!_a2.equals(other._a2)) { return false; }
     if (!_a3.equals(other._a3)) { return false; }
-    if (Double.doubleToLongBits(_xmin) != Double
+    if (doubleToLongBits(_xmin) != Double
       .doubleToLongBits(other._xmin)) { return false; }
     return true; }
 
@@ -175,8 +147,8 @@ public final class QCubic extends ScalarFunctional {
     // complex roots, no critical points
     if (1 == ZERO.compareTo(b2m4ac)) {
       if (1 == ZERO.compareTo(a3)) {
-        return Double.POSITIVE_INFINITY; }
-      return Double.NEGATIVE_INFINITY; }
+        return POSITIVE_INFINITY; }
+      return NEGATIVE_INFINITY; }
 
     final BigFraction ma2 = a2.negate();
     // !!!WARNING!!! not exact any more!
@@ -185,6 +157,7 @@ public final class QCubic extends ScalarFunctional {
       new BigFraction(sqrt(b2m4ac.doubleValue()));
     final BigFraction q0 = 
       ma2.subtract(sqrtb2m4ac).divide(threea3);
+    // TODO: don't rely on compareTo returning -1,0,1.
     if (-1 == ZERO.compareTo(secondDerivative(a2,a3,q0))) {
       return q0.doubleValue(); }
     final BigFraction q1 = 
@@ -192,8 +165,8 @@ public final class QCubic extends ScalarFunctional {
     if (-1 == ZERO.compareTo(secondDerivative(a2,a3,q1))) {
       return q1.doubleValue(); }
     if (1 == ZERO.compareTo(a3)) {
-      return Double.POSITIVE_INFINITY; }
-    return Double.NEGATIVE_INFINITY; }
+      return POSITIVE_INFINITY; }
+    return NEGATIVE_INFINITY; }
 
   //--------------------------------------------------------------
 
@@ -203,7 +176,49 @@ public final class QCubic extends ScalarFunctional {
                   final BigFraction a3) { 
     super(); 
     _a0 = a0; _a1 = a1; _a2 = a2; _a3 = a3; 
-    _xmin = argmin(a1,a2,a3); }
+    _xmin = argmin(a1,a2,a3); 
+    // limiting values:
+    // sign of limit depends on a3
+    final int a3sign = a3.compareTo(ZERO);
+    if (0 < a3sign) {
+      _positiveLimitValue = POSITIVE_INFINITY; 
+      _negativeLimitValue = NEGATIVE_INFINITY; 
+      _positiveLimitSlope = POSITIVE_INFINITY; 
+      _negativeLimitSlope = NEGATIVE_INFINITY; }
+    else if (0 > a3sign) {
+      _positiveLimitValue = NEGATIVE_INFINITY; 
+      _negativeLimitValue = POSITIVE_INFINITY; 
+      _positiveLimitSlope = NEGATIVE_INFINITY; 
+      _negativeLimitSlope = POSITIVE_INFINITY;  }
+    else { // quadratic, so look at a2:
+      final int a2sign = a2.compareTo(ZERO);
+      if (0 < a2sign) {
+        _positiveLimitValue = POSITIVE_INFINITY; 
+        _negativeLimitValue = POSITIVE_INFINITY; 
+        _positiveLimitSlope = POSITIVE_INFINITY; 
+        _negativeLimitSlope = NEGATIVE_INFINITY; }
+      else if (0 < a2sign) {
+        _positiveLimitValue = NEGATIVE_INFINITY; 
+        _negativeLimitValue = NEGATIVE_INFINITY; 
+        _positiveLimitSlope = NEGATIVE_INFINITY; 
+        _negativeLimitSlope = POSITIVE_INFINITY; }
+      else {// affine, look at a1
+        final int a1sign = a1.compareTo(ZERO);
+        if (0 < a1sign) {
+          _positiveLimitValue = POSITIVE_INFINITY; 
+          _negativeLimitValue = NEGATIVE_INFINITY; 
+          _positiveLimitSlope = a1.doubleValue(); 
+          _negativeLimitSlope = a1.doubleValue(); }
+        else if (0 < a1sign) {
+          _positiveLimitValue = NEGATIVE_INFINITY; 
+          _negativeLimitValue = POSITIVE_INFINITY; 
+          _positiveLimitSlope = a1.doubleValue(); 
+          _negativeLimitSlope = a1.doubleValue(); }
+        else { // constant
+          _positiveLimitValue = a0.doubleValue(); 
+          _negativeLimitValue = a0.doubleValue(); 
+          _positiveLimitSlope = 0.0; 
+          _negativeLimitSlope = 0.0; } } } } 
 
   //--------------------------------------------------------------
 

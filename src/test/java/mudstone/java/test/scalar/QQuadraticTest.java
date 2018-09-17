@@ -9,7 +9,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
 /** Test 'exact' (BigFraction) cubic polynomial. 
  * <p>
  * <pre>
- * mvn -Dtest=palisades/lakes/cghzj/test/MathTest test > Math.txt
+ * mvn -Dtest=mudstone/java/test/scalar/QQuadraticTest test > QQuadratic.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com

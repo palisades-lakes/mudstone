@@ -6,14 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import mudstone.java.functions.scalar.InterpolantXY3;
+import mudstone.java.functions.scalar.InterpolantXD2XY1;
 import mudstone.java.test.functions.scalar.QQuadratic;
 
 //----------------------------------------------------------------
-/** Test 3 point quadratic interpolation. 
+/** Test 'secant' quadratic interpolation. 
  * <p>
  * <pre>
- * mvn -Dtest=mudstone/java/test/scalar/InterpolantXY3Test test > InterpolantXY3Test.txt
+ * mvn -Dtest=mudstone/java/test/scalar/InterpolantXD2XY1Test test > InterpolantXD2XY1.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
@@ -21,7 +21,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
  */
 
 strictfp
-public final class InterpolantXY3Test {
+public final class InterpolantXD2XY1Test {
 
   private static final double GOLDEN_RATIO = 
     0.5*(1.0+Math.sqrt(5.0));
@@ -34,13 +34,13 @@ public final class InterpolantXY3Test {
                                       final double x2,
                                       final double ulps) {
     final QQuadratic f = QQuadratic.make(a0,a1,a2);
-    Common.checkArgmin(f,1.0e0);
     //System.out.println(f);
-    final InterpolantXY3 g = InterpolantXY3.make(f,x0,x1,x2);
-    Common.checkArgmin(g,4.0e0);
-   //System.out.println(g);
+    final InterpolantXD2XY1 g = InterpolantXD2XY1.make(f,x0,x1,x2);
+    //System.out.println(g);
 
     assertEquals(f.doubleArgmin(),g.doubleArgmin());
+    Common.checkArgmin(f,1.0e0);
+    Common.checkArgmin(g,4.0e0);
 
     final double[] xx = 
       new double[] { x0, x1, x2,
@@ -75,7 +75,7 @@ public final class InterpolantXY3Test {
         ulps*ulp(1.0+(Double.isNaN(beta) ? 0.0 : beta));
       assertEquals(dfi,dgi,epsilon,
         () -> { return abs(dfi-dgi) + ">" + epsilon + 
-            " by " + abs(dfi-dgi)/epsilon + "\n"; });
+          " by " + abs(dfi-dgi)/epsilon + "\n"; });
     } } 
 
   //--------------------------------------------------------------
@@ -84,6 +84,8 @@ public final class InterpolantXY3Test {
   @Test
   public final void q111 () {
     quadratic(1.0,-1.0,1.0,-1.0,0.0,1.0,1.0e0);
+    quadratic(1.0,-1.0,1.0,0.0,1.0,0.0,1.0e0);
+    quadratic(1.0,-1.0,1.0,0.0,1.0,1.0,1.0e0);
     quadratic(1.0,-1.0,1.0,0.0,1.0,GOLDEN_RATIO,1.0e1);
     quadratic(1.0,-1.0,1.0,0.0,1.0,1.01,5.0e1); 
     quadratic(1.0,-1.0,1.0,0.49,0.50,0.51,2.0e3); 

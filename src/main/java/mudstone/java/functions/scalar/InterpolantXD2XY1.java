@@ -1,7 +1,9 @@
 package mudstone.java.functions.scalar;
 
+import static java.lang.Double.*;
 import static java.lang.Math.fma;
 
+import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 /** A quadratic function from <b>R</b> to <b>R</b> interpolating
@@ -14,9 +16,19 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * (x1,d1=df(x1)). Because this is primarily used for its
  * critical point (the zero of the derivative) the exact y values 
  * don't usually matter.
+ * <p>
+ * This is almost certainly overkill. It's intended to be used to 
+ * calculate the secant step in scalar function minimization
+ * (almost always in a line search), so there's a lot of mechanism
+ * that's unlikely to ever be used. My excuse is that, by making 
+ * the * various model functions explicit, the ideas underlying 
+ * various 1d minimization algorithms should be more clearly 
+ * expressed in the code.
+ * The ideal here is that the code should be as easy to understand
+ * as the descriptions in typical textbooks.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-14
+ * @version 2018-09-17
  */
 
 public final class InterpolantXD2XY1 extends ScalarFunctional {
@@ -33,7 +45,13 @@ public final class InterpolantXD2XY1 extends ScalarFunctional {
   private final double _a2;
   private final double _x2;
 
+  // TODO: space vs re-computing cost?
   private final double _xmin;
+
+  private final double _positiveLimitValue;
+  private final double _negativeLimitValue;
+  private final double _positiveLimitSlope;
+  private final double _negativeLimitSlope;
 
   //--------------------------------------------------------------
   // Function methods
@@ -41,13 +59,21 @@ public final class InterpolantXD2XY1 extends ScalarFunctional {
 
   @Override
   public final double doubleValue (final double x) {
-    final double z = x-_x2;
-    return fma(z,fma(z,_a2,_a1),_a0);  }
+    if (isFinite(x)) {
+      final double z = x-_x2;
+      return fma(z,fma(z,_a2,_a1),_a0);  }
+    if (isNaN(x)) { return NaN; }
+    if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
+    return _negativeLimitValue; }
 
   @Override
   public final double slope (final double x) {
-    final double z = x-_x2;
-    return fma(z,2.0*_a2,_a1);  }
+    if (isFinite(x)) {
+      final double z = x-_x2;
+      return fma(z,2.0*_a2,_a1);  }
+    if (isNaN(x)) { return NaN; }
+    if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
+    return _negativeLimitSlope; }
 
   @Override
   public final double doubleArgmin () { return _xmin; }
@@ -62,12 +88,27 @@ public final class InterpolantXD2XY1 extends ScalarFunctional {
     return
       getClass().getSimpleName() + "[" + 
       _a0 + " + " + _a1 +"*(x-" + _x2 + ") + " +
-      //      _a2 + +"*(x-" + _x2 + ")^2;
+      _a2 + "*(x-" + _x2 + ")^2; " +
       _xmin + "]"; }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
+
+  public static final double argmin (final double x0,
+                                     final double d0,
+                                     final double x1,
+                                     final double d1) {
+    final double dd = d1-d0;
+    if (0.0 == dd) { // no critical point
+      if (d0 > 0.0) { return NEGATIVE_INFINITY; }
+      if (d0 < 0.0) { return POSITIVE_INFINITY; }
+      // constant, no argmin
+      return Double.NaN; }
+    if (0.0<dd/(x1-x0)) {
+      return (d1*x0 - d0*x1)/dd; }
+    // else critical point a local maximum
+    return Double.POSITIVE_INFINITY; }
 
   private InterpolantXD2XY1 (final double x0, 
                              final double d0,
@@ -86,13 +127,34 @@ public final class InterpolantXD2XY1 extends ScalarFunctional {
     final double dd = d1-d0;
     _a1 = (d0*z1-d1*z0)/dz;
     _a2 = 0.5*dd/dz;
-    // TODO: epsilon tests here?
-    if (0.0<_a2) {
-      _xmin = _a1 + x2; }
-    else if ((0.0==_a2) && (0.0 < _a1)) {
-      _xmin = Double.NEGATIVE_INFINITY; }
-    else { // 2 minima, pick one
-      _xmin = Double.POSITIVE_INFINITY; } }
+    _xmin = argmin(x0,d0,x1,d1);
+    // limiting values:
+    if (0.0 < _a2) {
+      _positiveLimitValue = POSITIVE_INFINITY; 
+      _negativeLimitValue = POSITIVE_INFINITY; 
+      _positiveLimitSlope = POSITIVE_INFINITY; 
+      _negativeLimitSlope = NEGATIVE_INFINITY; }
+    else if (0.0 < _a2) {
+      _positiveLimitValue = NEGATIVE_INFINITY; 
+      _negativeLimitValue = NEGATIVE_INFINITY; 
+      _positiveLimitSlope = NEGATIVE_INFINITY; 
+      _negativeLimitSlope = POSITIVE_INFINITY; }
+    else {// affine, look at a1
+      if (0.0 < _a1) {
+        _positiveLimitValue = POSITIVE_INFINITY; 
+        _negativeLimitValue = NEGATIVE_INFINITY; 
+        _positiveLimitSlope = _a1; 
+        _negativeLimitSlope = _a1; }
+      else if (0.0 < _a1) {
+        _positiveLimitValue = NEGATIVE_INFINITY; 
+        _negativeLimitValue = POSITIVE_INFINITY; 
+        _positiveLimitSlope = _a1; 
+        _negativeLimitSlope = _a1; }
+      else { // constant
+        _positiveLimitValue = _a0; 
+        _negativeLimitValue = _a0; 
+        _positiveLimitSlope = 0.0; 
+        _negativeLimitSlope = 0.0; } } } 
 
   public static final InterpolantXD2XY1 
   make (final double x0, 
@@ -104,6 +166,16 @@ public final class InterpolantXD2XY1 extends ScalarFunctional {
     if (x0 < x1) {
       return new InterpolantXD2XY1(x0,d0,x1,d1,x2,y2); }
     return new InterpolantXD2XY1(x1,d1,x0,d0,x2,y2); }
+
+  public static final InterpolantXD2XY1 
+  make (final Function f,
+        final double x0, 
+        final double x1, 
+        final double x2) { 
+    return make(
+      x0,f.slope(x0),
+      x1,f.slope(x1),
+      x2,f.doubleValue(x2)); }
 
   //--------------------------------------------------------------
 }

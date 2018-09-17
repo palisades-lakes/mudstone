@@ -17,7 +17,7 @@ import mudstone.java.test.functions.scalar.QCubic;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-16
+ * @version 2018-09-17
  */
 
 strictfp
@@ -37,7 +37,7 @@ public final class InterpolantXYD2Test {
     Common.checkArgmin(f,1.0e0);
     //System.out.println(f);
     final InterpolantXYD2 g = InterpolantXYD2.make(f,x0,x1);
-    Common.checkArgmin(g,4.0e0);
+    Common.checkArgmin(g,1.0e1);
     //System.out.println(g);
 
     assertEquals(
@@ -48,7 +48,7 @@ public final class InterpolantXYD2Test {
           f.doubleArgmin() + " != " + 
           g.getClass().getSimpleName() + ":" +
           g.doubleArgmin() + "\n"; });
-      
+
     final double[] xx = 
       new double[] { x0, x1, 
                      0.5*(x0+x1),
@@ -66,21 +66,28 @@ public final class InterpolantXYD2Test {
     //        f.doubleValue(xi) + " = " + g.doubleValue(xi));
     //      System.out.println(f.slope(xi) + " = " + g.slope(xi)); }
     for (final double xi : xx) {
-      if (Double.isFinite(xi)) {
       final double fi = f.doubleValue(xi);
       final double gi = g.doubleValue(xi);
-      final double delta = ulps*ulp(1.0+abs(fi)+abs(gi));
+      final double alpha = abs(fi)+abs(gi);
+      final double delta = 
+        ulps*ulp(1.0+(Double.isNaN(alpha) ? 0.0 : alpha));
       assertEquals(fi,gi,delta,
         () -> { 
-          return abs(fi-gi) + ">" + delta + 
-            " by " + abs(fi-gi)/delta + "\n"; });
+          return "\n|" + fi + " - " + gi + "| = " +
+            abs(fi-gi) + " > " + delta + 
+            "\n by " + abs(fi-gi)/delta + 
+            "\n at " + xi + "\n"; });
       final double dfi = f.slope(xi);
       final double dgi = g.slope(xi);
-      final double epsilon = ulps*ulp(1.0+abs(dfi)+abs(dgi));
+      final double beta = abs(dfi)+abs(dgi);
+      final double epsilon = 
+        ulps*ulp(1.0+(Double.isNaN(beta) ? 0.0 : beta));
       assertEquals(dfi,dgi,epsilon,
-        () -> { return abs(dfi-dgi) + ">" + epsilon + 
-            " by " + abs(dfi-dgi)/epsilon + "\n"; });
-    } } }
+        () -> { return "\n|" + dfi + " - " + dgi + "| = " +
+          abs(dfi-dgi) + ">" + epsilon + 
+          "\n by " + abs(dfi-dgi)/epsilon + 
+          "\n at " + xi + "\n"; });
+    } } 
 
   //--------------------------------------------------------------
 
