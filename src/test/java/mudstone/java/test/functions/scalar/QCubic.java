@@ -41,20 +41,67 @@ public final class QCubic extends ScalarFunctional {
 
   @Override
   public final double doubleValue (final double x) {
-    final BigFraction q = new BigFraction(x); 
-    return 
-      _a3.multiply(q).add(_a2)
-      .multiply(q).add(_a1)
-      .multiply(q).add(_a0)
-      .doubleValue(); }
+
+    if (Double.isFinite(x)) {
+      final BigFraction q = new BigFraction(x); 
+      return 
+        _a3.multiply(q).add(_a2)
+        .multiply(q).add(_a1)
+        .multiply(q).add(_a0)
+        .doubleValue(); } 
+
+    // TODO: could throw an exception...
+    if (Double.isNaN(x)) { return Double.NaN; }
+    
+    // otherwise x is +/- infinity; sign of value depends on a3
+    switch (ZERO.compareTo(_a3)) {
+    case -1 : return x; 
+    case 1 : return -x; 
+    case 0 : // quadratic, so look at a2:
+      switch (ZERO.compareTo(_a2)) {
+      case -1 : return Double.POSITIVE_INFINITY; 
+      case 1 : return Double.NEGATIVE_INFINITY; 
+      case 0 : // affine, look at a1
+        switch (ZERO.compareTo(_a1)) {
+        case -1 : return Double.POSITIVE_INFINITY; 
+        case 1 : return Double.NEGATIVE_INFINITY; 
+        case 0 : // constant
+          return _a0.doubleValue();
+        default : 
+          throw new IllegalStateException("can't get here"); } 
+      default : 
+        throw new IllegalStateException("can't get here"); } 
+    default : 
+      throw new IllegalStateException("can't get here"); } }
 
   @Override
   public final double slope (final double x) {
-    final BigFraction q = new BigFraction(x); 
-    return 
-      _a3.multiply(3).multiply(q).add(_a2.multiply(2))
-      .multiply(q).add(_a1)
-      .doubleValue(); }
+    if (Double.isFinite(x)) {
+      final BigFraction q = new BigFraction(x); 
+      return 
+        _a3.multiply(3).multiply(q).add(_a2.multiply(2))
+        .multiply(q).add(_a1)
+        .doubleValue(); } 
+    
+    // TODO: could throw an exception...
+    if (Double.isNaN(x)) { return Double.NaN; }
+
+    // otherwise x is +/- infinity; sign of value depends on a3
+    switch (ZERO.compareTo(_a3)) {
+    case -1 : return Double.POSITIVE_INFINITY; 
+    case 1 : return Double.NEGATIVE_INFINITY; 
+    case 0 : // quadratic, so look at a2:
+      switch (ZERO.compareTo(_a2)) {
+      case -1 : return x; 
+      case 1 : return -x; 
+      case 0 : // affine
+        return _a1.doubleValue();
+      default : 
+        throw new IllegalStateException("can't get here"); } 
+    default : 
+      throw new IllegalStateException("can't get here"); } }
+
+
 
   // TODO: ScalarFunctional parent class?
 
@@ -68,7 +115,7 @@ public final class QCubic extends ScalarFunctional {
   //--------------------------------------------------------------
   // Object methods
   //--------------------------------------------------------------
-  
+
   @Override
   public int hashCode () {
     final int prime = 31;
@@ -105,23 +152,23 @@ public final class QCubic extends ScalarFunctional {
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
-  
+
   private static final BigFraction 
   secondDerivative (final BigFraction a2,
                     final BigFraction a3,
                     final BigFraction q) {
     return a2.multiply(2).add(a3.multiply(6).multiply(q)); }
-    
+
   //--------------------------------------------------------------
   // NOTE: a finite local minimum, if possible, rather than global
   // minimum at +/- infinity.
-  
+
   private static final double argmin (final BigFraction a1,
                                       final BigFraction a2,
                                       final BigFraction a3) {
-    
+
     if (ZERO.equals(a3)) { return QQuadratic.argmin(a1,a2); }
-    
+
     final BigFraction threea3 = a3.multiply(3);
     final BigFraction b2m4ac =
       a2.multiply(a2).subtract(a1.multiply(threea3));
@@ -130,7 +177,7 @@ public final class QCubic extends ScalarFunctional {
       if (1 == ZERO.compareTo(a3)) {
         return Double.POSITIVE_INFINITY; }
       return Double.NEGATIVE_INFINITY; }
-    
+
     final BigFraction ma2 = a2.negate();
     // !!!WARNING!!! not exact any more!
     // TODO: something more precise?
@@ -167,9 +214,9 @@ public final class QCubic extends ScalarFunctional {
     return new QCubic(a0,a1,a2,a3); }
 
   public static final QCubic make (final double a0,
-                                  final double a1,
-                                  final double a2,
-                                  final double a3) { 
+                                   final double a1,
+                                   final double a2,
+                                   final double a3) { 
     return new QCubic(
       new BigFraction(a0),
       new BigFraction(a1),
