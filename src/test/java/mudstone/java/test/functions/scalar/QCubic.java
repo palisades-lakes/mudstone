@@ -9,6 +9,8 @@ import static java.lang.Double.isNaN;
 import static java.lang.StrictMath.sqrt;
 
 import org.apache.commons.math3.fraction.BigFraction;
+
+import static org.apache.commons.math3.fraction.BigFraction.TWO;
 import static org.apache.commons.math3.fraction.BigFraction.ZERO;
 
 import mudstone.java.functions.Function;
@@ -23,7 +25,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-17
+ * @version 2018-09-18
  */
 
 strictfp
@@ -132,6 +134,23 @@ public final class QCubic extends ScalarFunctional {
     return a2.multiply(2).add(a3.multiply(6).multiply(q)); }
 
   //--------------------------------------------------------------
+  private static final BigFraction MINUS2 = TWO.negate();
+
+  private static final double argmin (final BigFraction a1) {
+     // assuming a3 and a2 are 0
+       switch (ZERO.compareTo(a1)) {
+       case -1 : return Double.NEGATIVE_INFINITY;
+       case 1 : return Double.POSITIVE_INFINITY;
+       default : return Double.NaN; } }
+
+  private static final double argmin (final BigFraction a1,
+                                      final BigFraction a2) {
+     // assuming a3 is 0
+     switch (ZERO.compareTo(a2)) {
+     case -1 : return a1.divide(MINUS2.multiply(a2)).doubleValue(); 
+     case 1 : return Double.POSITIVE_INFINITY;
+     default : return argmin(a1); } }
+
   // NOTE: a finite local minimum, if possible, rather than global
   // minimum at +/- infinity.
 
@@ -139,9 +158,42 @@ public final class QCubic extends ScalarFunctional {
                                       final BigFraction a2,
                                       final BigFraction a3) {
 
-    if (ZERO.equals(a3)) { return QQuadratic.argmin(a1,a2); }
-
+    if (ZERO.equals(a3)) { return argmin(a1,a2); }
+    final int a3sign = a3.compareTo(ZERO);
     final BigFraction threea3 = a3.multiply(3);
+
+    if (ZERO.equals(a2)) {
+      if (ZERO.equals(a1)) { 
+        // ZERO is only critical point, not a min or max
+        if (0 < a3sign) { return NEGATIVE_INFINITY; }
+        if (0 > a3sign) { return POSITIVE_INFINITY; }
+        // can't get here
+        return NaN; }
+      final BigFraction sq = a1.negate().divide(threea3);
+      final int sqsign = sq.compareTo(ZERO);
+      if (0 >= sqsign) { // no critical points
+        if (0 < a3sign) { return NEGATIVE_INFINITY; }
+        if (0 > a3sign) { return POSITIVE_INFINITY; }
+        // can't get here
+        return NaN; }
+      // critical points are +/- sqrt()
+      // 2nd derivative is 6*a3*(critical point)
+      // so choose the critical point with the same sign as
+      return a3sign*sqrt(sq.doubleValue()); }
+    
+    if (ZERO.equals(a1)) { 
+      // critical points are 0 and (-2*a2)/(3*a3) with
+      // second derivatives 2*a2 and -2*a2\
+      final int a2sign = a2.compareTo(ZERO);
+      if (0 < a2sign) { return 0.0; }
+      if (0 > a2sign) { 
+        return 
+          a2.negate().multiply(2)
+          .divide(threea3).doubleValue(); }
+      // can't get here
+      return NaN; }
+
+    // a3, a2 and a1 all non-zero
     final BigFraction b2m4ac =
       a2.multiply(a2).subtract(a1.multiply(threea3));
     // complex roots, no critical points
@@ -178,7 +230,6 @@ public final class QCubic extends ScalarFunctional {
     _a0 = a0; _a1 = a1; _a2 = a2; _a3 = a3; 
     _xmin = argmin(a1,a2,a3); 
     // limiting values:
-    // sign of limit depends on a3
     final int a3sign = a3.compareTo(ZERO);
     if (0 < a3sign) {
       _positiveLimitValue = POSITIVE_INFINITY; 
@@ -197,19 +248,19 @@ public final class QCubic extends ScalarFunctional {
         _negativeLimitValue = POSITIVE_INFINITY; 
         _positiveLimitSlope = POSITIVE_INFINITY; 
         _negativeLimitSlope = NEGATIVE_INFINITY; }
-      else if (0 < a2sign) {
+      else if (0 > a2sign) {
         _positiveLimitValue = NEGATIVE_INFINITY; 
         _negativeLimitValue = NEGATIVE_INFINITY; 
         _positiveLimitSlope = NEGATIVE_INFINITY; 
         _negativeLimitSlope = POSITIVE_INFINITY; }
-      else {// affine, look at a1
+      else { // affine, look at a1
         final int a1sign = a1.compareTo(ZERO);
         if (0 < a1sign) {
           _positiveLimitValue = POSITIVE_INFINITY; 
           _negativeLimitValue = NEGATIVE_INFINITY; 
           _positiveLimitSlope = a1.doubleValue(); 
           _negativeLimitSlope = a1.doubleValue(); }
-        else if (0 < a1sign) {
+        else if (0 > a1sign) {
           _positiveLimitValue = NEGATIVE_INFINITY; 
           _negativeLimitValue = POSITIVE_INFINITY; 
           _positiveLimitSlope = a1.doubleValue(); 

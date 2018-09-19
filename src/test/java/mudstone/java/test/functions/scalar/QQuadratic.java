@@ -19,7 +19,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-14
+ * @version 2018-09-18
  */
 
 public final class QQuadratic extends ScalarFunctional {
@@ -119,31 +119,21 @@ public final class QQuadratic extends ScalarFunctional {
 
   private static final BigFraction MINUS2 = TWO.negate();
 
-  public static final double argmin (final BigFraction a1,
-                                     final BigFraction a2) {
-    switch (ZERO.compareTo(a2)) {
-    case -1 : return a1.divide(MINUS2.multiply(a2)).doubleValue(); 
-    case 1 : return Double.POSITIVE_INFINITY;
-    default : 
-      switch (ZERO.compareTo(a1)) {
-      case -1 : return Double.NEGATIVE_INFINITY;
-      case 1 : return Double.POSITIVE_INFINITY;
-      default : return Double.NaN; } } }
-
   private QQuadratic (final BigFraction a0,
                       final BigFraction a1,
                       final BigFraction a2) { 
     super(); 
     _a0 = a0; _a1 = a1; _a2 = a2; 
-    _xmin = argmin(a1,a2); 
     // limiting values:
     final int a2sign = a2.compareTo(ZERO);
     if (0 < a2sign) {
+      _xmin = a1.divide(MINUS2.multiply(a2)).doubleValue(); 
       _positiveLimitValue = POSITIVE_INFINITY; 
       _negativeLimitValue = POSITIVE_INFINITY; 
       _positiveLimitSlope = POSITIVE_INFINITY; 
       _negativeLimitSlope = NEGATIVE_INFINITY; }
-    else if (0 < a2sign) {
+    else if (0 > a2sign) {
+      _xmin = POSITIVE_INFINITY;
       _positiveLimitValue = NEGATIVE_INFINITY; 
       _negativeLimitValue = NEGATIVE_INFINITY; 
       _positiveLimitSlope = NEGATIVE_INFINITY; 
@@ -151,16 +141,19 @@ public final class QQuadratic extends ScalarFunctional {
     else {// affine, look at a1
       final int a1sign = a1.compareTo(ZERO);
       if (0 < a1sign) {
+        _xmin = NEGATIVE_INFINITY;
         _positiveLimitValue = POSITIVE_INFINITY; 
         _negativeLimitValue = NEGATIVE_INFINITY; 
         _positiveLimitSlope = a1.doubleValue(); 
         _negativeLimitSlope = a1.doubleValue(); }
-      else if (0 < a1sign) {
+      else if (0 > a1sign) {
+        _xmin = POSITIVE_INFINITY;
         _positiveLimitValue = NEGATIVE_INFINITY; 
         _negativeLimitValue = POSITIVE_INFINITY; 
         _positiveLimitSlope = a1.doubleValue(); 
         _negativeLimitSlope = a1.doubleValue(); }
       else { // constant
+        _xmin = NaN;
         _positiveLimitValue = a0.doubleValue(); 
         _negativeLimitValue = a0.doubleValue(); 
         _positiveLimitSlope = 0.0; 
