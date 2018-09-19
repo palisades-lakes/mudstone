@@ -30,7 +30,7 @@ public final class QCubicTest {
   public final void q0101 () {
 
     final QCubic f = QCubic.make(0.0,-1.0,0.0,1.0);
-    Common.checkArgmin(f,1.0e0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
 
     Assertions.assertEquals(-6.0,f.doubleValue(-2.0));
     Assertions.assertEquals(0.0,f.doubleValue(-1.0));
@@ -54,7 +54,7 @@ public final class QCubicTest {
   public final void q1110 () {
 
     final QCubic f = QCubic.make(1.0,-1.0,1.0,0.0);
-    Common.checkArgmin(f,1.0e0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
 
     Assertions.assertEquals(7.0,f.doubleValue(-2.0));
     Assertions.assertEquals(3.0,f.doubleValue(-1.0));
@@ -78,7 +78,7 @@ public final class QCubicTest {
   public final void q1100 () {
 
     final QCubic f = QCubic.make(1.0,1.0,0.0,0.0);
-    Common.checkArgmin(f,1.0e0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
 
     Assertions.assertEquals(-1.0,f.doubleValue(-2.0));
     Assertions.assertEquals(0.0,f.doubleValue(-1.0));
@@ -101,7 +101,7 @@ public final class QCubicTest {
   public final void q1000 () {
 
     final QCubic f = QCubic.make(1.0,0.0,0.0,0.0);
-    Common.checkArgmin(f,1.0e0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
 
     Assertions.assertEquals(1.0,f.doubleValue(-2.0));
     Assertions.assertEquals(1.0,f.doubleValue(-1.0));

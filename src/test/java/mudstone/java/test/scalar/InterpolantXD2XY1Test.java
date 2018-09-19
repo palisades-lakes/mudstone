@@ -39,8 +39,8 @@ public final class InterpolantXD2XY1Test {
     //System.out.println(g);
 
     assertEquals(f.doubleArgmin(),g.doubleArgmin());
-    Common.checkArgmin(f,1.0e0);
-    Common.checkArgmin(g,4.0e0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
+    Common.checkArgmin(g,4.0e0, 1.0e0);
 
     final double[] xx = 
       new double[] { x0, x1, x2,

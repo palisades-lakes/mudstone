@@ -34,10 +34,10 @@ public final class InterpolantXYD2Test {
                                   final double x1,
                                   final double ulps) {
     final QCubic f = QCubic.make(a0,a1,a2,a3);
-    Common.checkArgmin(f,1.0e0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
     //System.out.println(f);
     final InterpolantXYD2 g = InterpolantXYD2.make(f,x0,x1);
-    Common.checkArgmin(g,1.0e1);
+    Common.checkArgmin(g,1.0e1, 1.0e0);
     //System.out.println(g);
 
     assertEquals(

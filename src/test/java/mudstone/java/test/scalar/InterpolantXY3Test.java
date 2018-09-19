@@ -34,10 +34,10 @@ public final class InterpolantXY3Test {
                                       final double x2,
                                       final double ulps) {
     final QQuadratic f = QQuadratic.make(a0,a1,a2);
-    Common.checkArgmin(f,1.0e0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
     //System.out.println(f);
     final InterpolantXY3 g = InterpolantXY3.make(f,x0,x1,x2);
-    Common.checkArgmin(g,4.0e0);
+    Common.checkArgmin(g,4.0e0, 1.0e0);
    //System.out.println(g);
 
     assertEquals(f.doubleArgmin(),g.doubleArgmin());

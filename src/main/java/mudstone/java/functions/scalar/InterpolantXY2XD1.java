@@ -25,7 +25,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * the true function to its approximations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-18
+ * @version 2018-09-19
  */
 
 public final class InterpolantXY2XD1 extends ScalarFunctional {
@@ -57,8 +57,8 @@ public final class InterpolantXY2XD1 extends ScalarFunctional {
   @Override
   public final double doubleValue (final double x) {
     if (isFinite(x)) {
-      final double z = x-_x2;
-      return fma(z,fma(z,_a2,_a1),_a0);  }
+      final double u = x-_x2;
+      return fma(u,fma(u,_a2,_a1),_a0);  }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
     return _negativeLimitValue; }
@@ -66,8 +66,8 @@ public final class InterpolantXY2XD1 extends ScalarFunctional {
   @Override
   public final double slope (final double x) {
     if (isFinite(x)) {
-      final double z = x-_x2;
-      return fma(z,2.0*_a2,_a1);  }
+      final double u = x-_x2;
+      return fma(u,2.0*_a2,_a1);  }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
     return _negativeLimitSlope; }
@@ -92,30 +92,13 @@ public final class InterpolantXY2XD1 extends ScalarFunctional {
   // construction
   //--------------------------------------------------------------
 
-  public static final double argmin (final double x0,
-                                     final double d0,
-                                     final double x1,
-                                     final double d1) {
-    final double dd = d1-d0;
-    if (0.0 == dd) { // no critical point
-      if (d0 > 0.0) { return NEGATIVE_INFINITY; }
-      if (d0 < 0.0) { return POSITIVE_INFINITY; }
-      // constant, no argmin
-      return Double.NaN; }
-    if (0.0<dd/(x1-x0)) {
-      return (d1*x0 - d0*x1)/dd; }
-    // else critical point a local maximum
-    return Double.POSITIVE_INFINITY; }
-
   private InterpolantXY2XD1 (final double x0, 
                              final double y0,
                              final double x1, 
                              final double y1,
                              final double x2,
                              final double d2) {
-    assert x0 != x2;
     assert x0 != x1;
-    _x2 = x2;
     // TODO: use BigFraction to compute monomial coefficients?
     final double u0 = x0-x2;
     final double u02 = u0*u0;
@@ -123,9 +106,10 @@ public final class InterpolantXY2XD1 extends ScalarFunctional {
     final double u12 = u1*u1;
     final double du = u1-u0;
     final double du2 = u12-u02;
-    _a0 = fma(y0,u12,-fma(y1,u02,(d2*u0*u1*du)))/du2;
+    _a0 = ((fma(-d2,u0,y0)*u12)-(fma(-d2,u1,y1)*u02))/du2;
     _a1 = d2;
-    _a2 = fma(-d2,du,y1-y0);
+    _a2 = fma(-d2,du,y1-y0)/du2; 
+    _x2 = x2;
     if (0.0 < _a2) {
       _xmin = x2 - 0.5*_a1/_a2;
       _positiveLimitValue = POSITIVE_INFINITY; 
@@ -158,28 +142,28 @@ public final class InterpolantXY2XD1 extends ScalarFunctional {
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 
-  public static final InterpolantXY2XD1 
-  make (final double x0, 
-        final double y0,
-        final double x1, 
-        final double y1,
-        final double x2,
-        final double d2) { 
-    if (x0 < x1) {
-      return new InterpolantXY2XD1(x0,y0,x1,y1,x2,d2); }
-    return new InterpolantXY2XD1(x1,y1,x0,y0,x2,d2); }
+    public static final InterpolantXY2XD1 
+    make (final double x0, 
+          final double y0,
+          final double x1, 
+          final double y1,
+          final double x2,
+          final double d2) { 
+      if (x0 < x1) {
+        return new InterpolantXY2XD1(x0,y0,x1,y1,x2,d2); }
+      return new InterpolantXY2XD1(x1,y1,x0,y0,x2,d2); }
 
-  public static final InterpolantXY2XD1 
-  make (final Function f,
-        final double x0, 
-        final double x1, 
-        final double x2) { 
-    return make(
-      x0,f.doubleValue(x0),
-      x1,f.doubleValue(x1),
-      x2,f.slope(x2)); }
+    public static final InterpolantXY2XD1 
+    make (final Function f,
+          final double x0, 
+          final double x1, 
+          final double x2) { 
+      return make(
+        x0,f.doubleValue(x0),
+        x1,f.doubleValue(x1),
+        x2,f.slope(x2)); }
 
+    //--------------------------------------------------------------
+  }
   //--------------------------------------------------------------
-}
-//--------------------------------------------------------------
 

@@ -26,7 +26,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * as the descriptions in typical textbooks.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-18
+ * @version 2018-09-19
  */
 
 public final class InterpolantXD2XY1 extends ScalarFunctional {
@@ -58,8 +58,8 @@ public final class InterpolantXD2XY1 extends ScalarFunctional {
   @Override
   public final double doubleValue (final double x) {
     if (isFinite(x)) {
-      final double z = x-_x2;
-      return fma(z,fma(z,_a2,_a1),_a0);  }
+      final double u = x-_x2;
+      return fma(u,fma(u,_a2,_a1),_a0);  }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
     return _negativeLimitValue; }
@@ -92,21 +92,6 @@ public final class InterpolantXD2XY1 extends ScalarFunctional {
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
-
-//  public static final double argmin (final double x0,
-//                                     final double d0,
-//                                     final double x1,
-//                                     final double d1) {
-//    final double dd = d1-d0;
-//    if (0.0 == dd) { // no critical point
-//      if (d0 > 0.0) { return NEGATIVE_INFINITY; }
-//      if (d0 < 0.0) { return POSITIVE_INFINITY; }
-//      // constant, no argmin
-//      return Double.NaN; }
-//    if (0.0<dd/(x1-x0)) {
-//      return (d1*x0 - d0*x1)/dd; }
-//    // else critical point a local maximum
-//    return Double.POSITIVE_INFINITY; }
 
   private InterpolantXD2XY1 (final double x0, 
                              final double d0,
