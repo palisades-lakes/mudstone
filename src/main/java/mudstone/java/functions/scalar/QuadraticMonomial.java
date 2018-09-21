@@ -11,10 +11,10 @@ import static java.lang.Math.fma;
  * form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-20
+ * @version 2018-09-21
  */
 
-public final class MonomialQuadratic extends ScalarFunctional {
+public final class QuadraticMonomial extends ScalarFunctional {
 
   //--------------------------------------------------------------
   // fields
@@ -36,7 +36,7 @@ public final class MonomialQuadratic extends ScalarFunctional {
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
-  // Horner's arlgorithm
+  // Horner's algorithm
 
   @Override
   public final double doubleValue (final double x) {
@@ -76,7 +76,7 @@ public final class MonomialQuadratic extends ScalarFunctional {
   // construction
   //--------------------------------------------------------------
 
-  private MonomialQuadratic (final double a0, 
+  private QuadraticMonomial (final double a0, 
                              final double a1,
                              final double a2, 
                              final double x2) {
@@ -116,12 +116,12 @@ public final class MonomialQuadratic extends ScalarFunctional {
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 
-  public static final MonomialQuadratic 
+  public static final QuadraticMonomial 
   make (final double a0, 
         final double a1,
         final double a2, 
         final double x2) {
-    return new MonomialQuadratic(a0, a1,a2,x2); }
+    return new QuadraticMonomial(a0, a1,a2,x2); }
 
   //--------------------------------------------------------------
 }

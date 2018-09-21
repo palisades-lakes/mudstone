@@ -32,7 +32,7 @@ public final class InterpolateXD2XY1 implements ModelFactory {
   // ModelFactory methods
   //--------------------------------------------------------------
 
-  private final static MonomialQuadratic 
+  private final static QuadraticMonomial 
   interpolate (final double x0, 
                final double d0,
                final double x1, 
@@ -47,7 +47,7 @@ public final class InterpolateXD2XY1 implements ModelFactory {
     final double dd = d1-d0;
     final double a1 = (d0*z1-d1*z0)/dz;
     final double a2 = 0.5*dd/dz;
-    return MonomialQuadratic.make(a0,a1,a2,x2); }
+    return QuadraticMonomial.make(a0,a1,a2,x2); }
 
   //--------------------------------------------------------------
   // ModelFactory methods

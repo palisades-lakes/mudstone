@@ -33,7 +33,7 @@ public final class InterpolateXY3 implements ModelFactory {
   // ModelFactory methods
   //--------------------------------------------------------------
 
-  private final static MonomialQuadratic 
+  private final static QuadraticMonomial 
   interpolate (final double x0, 
                final double y0,
                final double x1, 
@@ -51,7 +51,7 @@ public final class InterpolateXY3 implements ModelFactory {
     final double a0 = ((fma(-d2,u0,y0)*u12)-(fma(-d2,u1,y1)*u02))/du2;
     final double a1 = d2;
     final double a2 = fma(-d2,du,y1-y0)/du2; 
-    return MonomialQuadratic.make(a0,a1,a2,x2); }
+    return QuadraticMonomial.make(a0,a1,a2,x2); }
 
   //--------------------------------------------------------------
   // ModelFactory methods
