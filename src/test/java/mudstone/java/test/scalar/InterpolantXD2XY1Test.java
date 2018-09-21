@@ -17,7 +17,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-17
+ * @version 2018-09-21
  */
 
 strictfp
@@ -33,12 +33,22 @@ public final class InterpolantXD2XY1Test {
                                       final double x1,
                                       final double x2,
                                       final double ulps) {
-    final QQuadratic f = QQuadratic.make(a0,a1,a2);
+    final QQuadratic f = QQuadratic.make(a0,a1,a2,0.0);
     //System.out.println(f);
     final InterpolantXD2XY1 g = InterpolantXD2XY1.make(f,x0,x1,x2);
     //System.out.println(g);
 
-    assertEquals(f.doubleArgmin(),g.doubleArgmin());
+    final double xf = f.doubleArgmin();
+    final double xg = g.doubleArgmin();
+    final double gamma = abs(xf)+abs(xg);
+    final double zeta = 
+      ulps*ulp(1.0+(Double.isNaN(gamma) ? 0.0 : gamma));
+    assertEquals(xf,xg,zeta,
+      () -> { 
+        return 
+          "\nargmin: |" + xf + "-" + xg +"|=" +
+          abs(xf-xg) + ">" + zeta + 
+          " by " + abs(xf-xg)/zeta + "\n"; });
     Common.checkArgmin(f,1.0e0, 1.0e0);
     Common.checkArgmin(g,4.0e0, 1.0e0);
 

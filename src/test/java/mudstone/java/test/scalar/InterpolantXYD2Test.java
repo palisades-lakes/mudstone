@@ -40,14 +40,17 @@ public final class InterpolantXYD2Test {
     Common.checkArgmin(g,1.0e1, 1.0e0);
     //System.out.println(g);
 
-    assertEquals(
-      f.doubleArgmin(),g.doubleArgmin(),
+    final double xf = f.doubleArgmin();
+    final double xg = g.doubleArgmin();
+    final double gamma = abs(xf)+abs(xg);
+    final double zeta = 
+      ulps*ulp(1.0+(Double.isNaN(gamma) ? 0.0 : gamma));
+    assertEquals(xf,xg,zeta,
       () -> { 
-        return "\n" +
-          f.getClass().getSimpleName() + ":" +
-          f.doubleArgmin() + " != " + 
-          g.getClass().getSimpleName() + ":" +
-          g.doubleArgmin() + "\n"; });
+        return 
+          "\nargmin: |" + xf + "-" + xg +"|=" +
+          abs(xf-xg) + ">" + zeta + 
+          " by " + abs(xf-xg)/zeta + "\n"; });
 
     final double[] xx = 
       new double[] { x0, x1, 

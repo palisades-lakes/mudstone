@@ -1,7 +1,5 @@
 package mudstone.java.functions.scalar;
 
-import static java.lang.Math.fma;
-
 import mudstone.java.functions.Function;
 
 /** A ModelFactory returning scalar quadratic functions 
@@ -33,25 +31,14 @@ public final class InterpolateXY3 implements ModelFactory {
   // ModelFactory methods
   //--------------------------------------------------------------
 
-  private final static QuadraticMonomial 
+  private final static QuadraticLagrange
   interpolate (final double x0, 
                final double y0,
                final double x1, 
                final double y1,
                final double x2,
-               final double d2) {
-    assert x0 != x1;
-    // TODO: use BigFraction to compute monomial coefficients?
-    final double u0 = x0-x2;
-    final double u02 = u0*u0;
-    final double u1 = x1-x2;
-    final double u12 = u1*u1;
-    final double du = u1-u0;
-    final double du2 = u12-u02;
-    final double a0 = ((fma(-d2,u0,y0)*u12)-(fma(-d2,u1,y1)*u02))/du2;
-    final double a1 = d2;
-    final double a2 = fma(-d2,du,y1-y0)/du2; 
-    return QuadraticMonomial.make(a0,a1,a2,x2); }
+               final double y2) {
+    return QuadraticLagrange.make(x0,y0,x1,y1,x2,y2); }
 
   //--------------------------------------------------------------
   // ModelFactory methods
@@ -65,7 +52,7 @@ public final class InterpolateXY3 implements ModelFactory {
     return interpolate(
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
-      x2,f.slope(x2)); }
+      x2,f.doubleValue(x2)); }
 
   @Override
   public final Function model (final double x0, 
@@ -73,8 +60,8 @@ public final class InterpolateXY3 implements ModelFactory {
                                final double x1, 
                                final double y1,
                                final double x2,
-                               final double d2)  {
-    return interpolate(x0,y0,x1,y1,x2,d2) ; }
+                               final double y2)  {
+    return interpolate(x0,y0,x1,y1,x2,y2) ; }
 
   //--------------------------------------------------------------
   // construction

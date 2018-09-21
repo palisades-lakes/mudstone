@@ -6,14 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import mudstone.java.functions.scalar.InterpolantXY3;
+import mudstone.java.functions.scalar.QuadraticLagrange;
 import mudstone.java.test.functions.scalar.QQuadratic;
 
 //----------------------------------------------------------------
-/** Test 3 point quadratic interpolation. 
+/** Test Lagrange form parabolas. 
  * <p>
  * <pre>
- * mvn -Dtest=mudstone/java/test/scalar/InterpolantXY3Test test > InterpolantXY3Test.txt
+ * mvn -Dtest=mudstone/java/test/scalar/QuadraticLagrangeTest test > QuadraticLagrangeTest.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
@@ -21,7 +21,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
  */
 
 strictfp
-public final class InterpolantXY3Test {
+public final class QuadraticLagrangeTest {
 
   private static final double GOLDEN_RATIO = 
     0.5*(1.0+Math.sqrt(5.0));
@@ -34,8 +34,10 @@ public final class InterpolantXY3Test {
                                       final double x2,
                                       final double ulps) {
     final QQuadratic f = QQuadratic.make(a0,a1,a2,0.0);
+    Common.checkArgmin(f,1.0e0, 1.0e0);
     //System.out.println(f);
-    final InterpolantXY3 g = InterpolantXY3.make(f,x0,x1,x2);
+    final QuadraticLagrange g = QuadraticLagrange.make(f,x0,x1,x2);
+    Common.checkArgmin(g,4.0e0,1.0e1);
    //System.out.println(g);
 
     final double xf = f.doubleArgmin();
@@ -49,9 +51,6 @@ public final class InterpolantXY3Test {
           "\nargmin: |" + xf + "-" + xg +"|=" +
           abs(xf-xg) + ">" + zeta + 
           " by " + abs(xf-xg)/zeta + "\n"; });
-    Common.checkArgmin(f,1.0e0,1.0e0);
-    
-    Common.checkArgmin(g,5.0e0,ulps);
 
     final double[] xx = 
       new double[] { x0, x1, x2,
@@ -86,16 +85,17 @@ public final class InterpolantXY3Test {
         ulps*ulp(1.0+(Double.isNaN(beta) ? 0.0 : beta));
       assertEquals(dfi,dgi,epsilon,
         () -> { return abs(dfi-dgi) + ">" + epsilon + 
-            " by " + abs(dfi-dgi)/epsilon + "\n"; }); } } 
+            " by " + abs(dfi-dgi)/epsilon + "\n"; });
+    } } 
 
   //--------------------------------------------------------------
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void q111 () {
-    quadratic(1.0,-1.0,1.0,-1.0,0.0,1.0,5.0e0);
-    quadratic(1.0,-1.0,1.0,0.0,1.0,GOLDEN_RATIO,5.0e1);
-    quadratic(1.0,-1.0,1.0,0.0,1.0,1.01,5.0e2); 
+    quadratic(1.0,-1.0,1.0,-1.0,0.0,1.0,1.0e0);
+    quadratic(1.0,-1.0,1.0,0.0,1.0,GOLDEN_RATIO,1.0e1);
+    quadratic(1.0,-1.0,1.0,0.0,1.0,1.01,5.0e1); 
     quadratic(1.0,-1.0,1.0,0.49,0.50,0.51,2.0e3); 
   }
 

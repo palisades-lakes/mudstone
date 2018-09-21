@@ -23,7 +23,8 @@ public final class QuadraticMonomial extends ScalarFunctional {
   private final double _a0;
   private final double _a1;
   private final double _a2;
-  private final double _x2;
+  // TODO: compose with translation instead of explicit origin?
+  private final double _xorigin;
 
   // TODO: space vs re-computing cost?
   private final double _xmin;
@@ -41,7 +42,7 @@ public final class QuadraticMonomial extends ScalarFunctional {
   @Override
   public final double doubleValue (final double x) {
     if (isFinite(x)) {
-      final double u = x-_x2;
+      final double u = x-_xorigin;
       return fma(u,fma(u,_a2,_a1),_a0);  }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
@@ -50,7 +51,7 @@ public final class QuadraticMonomial extends ScalarFunctional {
   @Override
   public final double slope (final double x) {
     if (isFinite(x)) {
-      final double z = x-_x2;
+      final double z = x-_xorigin;
       return fma(z,2.0*_a2,_a1);  }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
@@ -68,8 +69,9 @@ public final class QuadraticMonomial extends ScalarFunctional {
   public final String toString () {
     return
       getClass().getSimpleName() + "[" + 
-      _a0 + " + " + _a1 +"*(x-" + _x2 + ") + " +
-      _a2 + "*(x-" + _x2 + ")^2; " +
+      _a0 + " + " +
+      _a1 + "*(x-" + _xorigin + ") + " +
+      _a2 + "*(x-" + _xorigin + ")^2; " +
       _xmin + "]"; }
 
   //--------------------------------------------------------------
@@ -79,13 +81,13 @@ public final class QuadraticMonomial extends ScalarFunctional {
   private QuadraticMonomial (final double a0, 
                              final double a1,
                              final double a2, 
-                             final double x2) {
+                             final double xorigin) {
     _a0 = a0;
     _a1 = a1;
     _a2 = a2;
-    _x2 = x2;
+    _xorigin = xorigin;
     if (0.0 < a2) {
-      _xmin = x2 - 0.5*a1/a2;
+      _xmin = xorigin - 0.5*a1/a2;
       _positiveLimitValue = POSITIVE_INFINITY; 
       _negativeLimitValue = POSITIVE_INFINITY; 
       _positiveLimitSlope = POSITIVE_INFINITY; 
@@ -120,8 +122,8 @@ public final class QuadraticMonomial extends ScalarFunctional {
   make (final double a0, 
         final double a1,
         final double a2, 
-        final double x2) {
-    return new QuadraticMonomial(a0, a1,a2,x2); }
+        final double xorigin) {
+    return new QuadraticMonomial(a0,a1,a2,xorigin); }
 
   //--------------------------------------------------------------
 }

@@ -18,7 +18,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-19
+ * @version 2018-09-21
  */
 
 strictfp
@@ -38,7 +38,7 @@ public final class InterpolantXY2XD1Test {
                                        final double x1,
                                        final double x2,
                                        final double ulps) {
-    final QQuadratic f = QQuadratic.make(a0,a1,a2);
+    final QQuadratic f = QQuadratic.make(a0,a1,a2,0.0);
     //System.out.println(f);
     final InterpolantXY2XD1 g = InterpolantXY2XD1.make(f,x0,x1,x2);
     //System.out.println(g);
@@ -54,8 +54,8 @@ public final class InterpolantXY2XD1Test {
           "\nargmin: |" + xf + "-" + xg +"|=" +
           abs(xf-xg) + ">" + zeta + 
           " by " + abs(xf-xg)/zeta + "\n"; });
-    Common.checkArgmin(f,1.0e0, 1.0e0);
-    Common.checkArgmin(g,4.0e0, 1.0e0);
+    Common.checkArgmin(f,1.0e0,1.0e0);
+    Common.checkArgmin(g,4.0e0,2.0e0);
 
     final double[] xx = 
       new double[] { x0, x1, x2,
@@ -171,7 +171,7 @@ public final class InterpolantXY2XD1Test {
   @SuppressWarnings({ "static-method" })
   @Test
   public final void expandTest () {
-    final QQuadratic f = QQuadratic.make(1.0,-1.0,1.0);
+    final QQuadratic f = QQuadratic.make(1.0,-1.0,1.0,0.0);
 
     expansion(f,-1.0,0.0,1.0e0);
     expansion(f,0.0,1.0,1.0e0);
@@ -244,7 +244,7 @@ public final class InterpolantXY2XD1Test {
   @SuppressWarnings({ "static-method" })
   @Test
   public final void contractTest () {
-    final QQuadratic f = QQuadratic.make(1.0,-1.0,1.0);
+    final QQuadratic f = QQuadratic.make(1.0,-1.0,1.0,0.0);
     contraction(f,-1.0,0.0,1.0e0);
     contraction(f,0.0,1.0,1.0e0);
     contraction(f,0.0,EXPAND,1.0e0);
