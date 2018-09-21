@@ -2,6 +2,10 @@ package mudstone.java.functions;
 
 import mudstone.java.exceptions.Exceptions;
 
+// TODO:
+// should FUnctions be required/allowed to return correct limiting
+// values for non finite arguments?
+
 /** A (optionally differentiable) function between linear spaces,
  * from <b>R</b><sup>n</sup> (domain)
  * to <b>R</b><sup>m</sup> (codomain). 
@@ -45,7 +49,7 @@ import mudstone.java.exceptions.Exceptions;
  * </ul>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-13
+ * @version 2018-09-20
  */
 public interface Function {
 

@@ -1,19 +1,20 @@
 package mudstone.java.test.scalar;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import mudstone.java.test.functions.scalar.QQuadratic;
 
 //----------------------------------------------------------------
-/** Test 'exact' (BigFraction) cubic polynomial. 
+/** Test 'exact' (BigFraction) quadratic polynomial. 
  * <p>
  * <pre>
  * mvn -Dtest=mudstone/java/test/scalar/QQuadraticTest test > QQuadratic.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-16
+ * @version 2018-09-20
  */
 
 strictfp
@@ -29,21 +30,21 @@ public final class QQuadraticTest {
     final QQuadratic f = QQuadratic.make(1.0,-1.0,1.0);
     Common.checkArgmin(f,1.0e0, 1.0e0);
 
-    Assertions.assertEquals(7.0,f.doubleValue(-2.0));
-    Assertions.assertEquals(3.0,f.doubleValue(-1.0));
-    Assertions.assertEquals(1.0,f.doubleValue(0.0));
-    Assertions.assertEquals(0.75,f.doubleValue(0.5));
-    Assertions.assertEquals(1.0,f.doubleValue(1.0));
-    Assertions.assertEquals(3.0,f.doubleValue(2.0));
+    assertEquals(7.0,f.doubleValue(-2.0));
+    assertEquals(3.0,f.doubleValue(-1.0));
+    assertEquals(1.0,f.doubleValue(0.0));
+    assertEquals(0.75,f.doubleValue(0.5));
+    assertEquals(1.0,f.doubleValue(1.0));
+    assertEquals(3.0,f.doubleValue(2.0));
 
-    Assertions.assertEquals(-5.0,f.slope(-2.0));
-    Assertions.assertEquals(-3.0,f.slope(-1.0));
-    Assertions.assertEquals(-1.0,f.slope(0.0));
-    Assertions.assertEquals(0.0,f.slope(0.5));
-    Assertions.assertEquals(1.0,f.slope(1.0));
-    Assertions.assertEquals(3.0,f.slope(2.0));
+    assertEquals(-5.0,f.slope(-2.0));
+    assertEquals(-3.0,f.slope(-1.0));
+    assertEquals(-1.0,f.slope(0.0));
+    assertEquals(0.0,f.slope(0.5));
+    assertEquals(1.0,f.slope(1.0));
+    assertEquals(3.0,f.slope(2.0));
 
-    Assertions.assertEquals(0.5,f.doubleArgmin());
+    assertEquals(0.5,f.doubleArgmin());
   }
 
   @SuppressWarnings({ "static-method" })
@@ -53,21 +54,21 @@ public final class QQuadraticTest {
     final QQuadratic f = QQuadratic.make(0.0,-1.0,1.0);
     Common.checkArgmin(f,1.0e0, 1.0e0);
 
-    Assertions.assertEquals(6.0,f.doubleValue(-2.0));
-    Assertions.assertEquals(2.0,f.doubleValue(-1.0));
-    Assertions.assertEquals(0.0,f.doubleValue(0.0));
-    Assertions.assertEquals(-0.25,f.doubleValue(0.5));
-    Assertions.assertEquals(0.0,f.doubleValue(1.0));
-    Assertions.assertEquals(2.0,f.doubleValue(2.0));
+    assertEquals(6.0,f.doubleValue(-2.0));
+    assertEquals(2.0,f.doubleValue(-1.0));
+    assertEquals(0.0,f.doubleValue(0.0));
+    assertEquals(-0.25,f.doubleValue(0.5));
+    assertEquals(0.0,f.doubleValue(1.0));
+    assertEquals(2.0,f.doubleValue(2.0));
 
-    Assertions.assertEquals(-5.0,f.slope(-2.0));
-    Assertions.assertEquals(-3.0,f.slope(-1.0));
-    Assertions.assertEquals(-1.0,f.slope(0.0));
-    Assertions.assertEquals(0.0,f.slope(0.5));
-    Assertions.assertEquals(1.0,f.slope(1.0));
-    Assertions.assertEquals(3.0,f.slope(2.0));
+    assertEquals(-5.0,f.slope(-2.0));
+    assertEquals(-3.0,f.slope(-1.0));
+    assertEquals(-1.0,f.slope(0.0));
+    assertEquals(0.0,f.slope(0.5));
+    assertEquals(1.0,f.slope(1.0));
+    assertEquals(3.0,f.slope(2.0));
 
-    Assertions.assertEquals(0.5,f.doubleArgmin());
+    assertEquals(0.5,f.doubleArgmin());
   }
 
   @SuppressWarnings({ "static-method" })
@@ -77,20 +78,20 @@ public final class QQuadraticTest {
     final QQuadratic f = QQuadratic.make(1.0,1.0,0.0);
     Common.checkArgmin(f,1.0e0, 1.0e0);
 
-    Assertions.assertEquals(-1.0,f.doubleValue(-2.0));
-    Assertions.assertEquals(0.0,f.doubleValue(-1.0));
-    Assertions.assertEquals(1.0,f.doubleValue(0.0));
-    Assertions.assertEquals(2.0,f.doubleValue(1.0));
-    Assertions.assertEquals(3.0,f.doubleValue(2.0));
+    assertEquals(-1.0,f.doubleValue(-2.0));
+    assertEquals(0.0,f.doubleValue(-1.0));
+    assertEquals(1.0,f.doubleValue(0.0));
+    assertEquals(2.0,f.doubleValue(1.0));
+    assertEquals(3.0,f.doubleValue(2.0));
 
-    Assertions.assertEquals(1.0,f.slope(-2.0));
-    Assertions.assertEquals(1.0,f.slope(-1.0));
-    Assertions.assertEquals(1.0,f.slope(0.0));
-    Assertions.assertEquals(1.0,f.slope(0.5));
-    Assertions.assertEquals(1.0,f.slope(1.0));
-    Assertions.assertEquals(1.0,f.slope(2.0));
+    assertEquals(1.0,f.slope(-2.0));
+    assertEquals(1.0,f.slope(-1.0));
+    assertEquals(1.0,f.slope(0.0));
+    assertEquals(1.0,f.slope(0.5));
+    assertEquals(1.0,f.slope(1.0));
+    assertEquals(1.0,f.slope(2.0));
 
-    Assertions.assertEquals(Double.NEGATIVE_INFINITY,f.doubleArgmin());
+    assertEquals(Double.NEGATIVE_INFINITY,f.doubleArgmin());
   }
 
   @SuppressWarnings({ "static-method" })
@@ -98,22 +99,23 @@ public final class QQuadraticTest {
   public final void q100 () {
 
     final QQuadratic f = QQuadratic.make(1.0,0.0,0.0);
-    Common.checkArgmin(f,1.0e0, 1.0e0);
+    // constant, so argmin is NaN
+    Common.checkArgmin(f,1.0,1.0e0);
 
-    Assertions.assertEquals(1.0,f.doubleValue(-2.0));
-    Assertions.assertEquals(1.0,f.doubleValue(-1.0));
-    Assertions.assertEquals(1.0,f.doubleValue(0.0));
-    Assertions.assertEquals(1.0,f.doubleValue(1.0));
-    Assertions.assertEquals(1.0,f.doubleValue(2.0));
+    assertEquals(1.0,f.doubleValue(-2.0));
+    assertEquals(1.0,f.doubleValue(-1.0));
+    assertEquals(1.0,f.doubleValue(0.0));
+    assertEquals(1.0,f.doubleValue(1.0));
+    assertEquals(1.0,f.doubleValue(2.0));
 
-    Assertions.assertEquals(0.0,f.slope(-2.0));
-    Assertions.assertEquals(0.0,f.slope(-1.0));
-    Assertions.assertEquals(0.0,f.slope(0.0));
-    Assertions.assertEquals(0.0,f.slope(0.5));
-    Assertions.assertEquals(0.0,f.slope(1.0));
-    Assertions.assertEquals(0.0,f.slope(2.0));
+    assertEquals(0.0,f.slope(-2.0));
+    assertEquals(0.0,f.slope(-1.0));
+    assertEquals(0.0,f.slope(0.0));
+    assertEquals(0.0,f.slope(0.5));
+    assertEquals(0.0,f.slope(1.0));
+    assertEquals(0.0,f.slope(2.0));
 
-    Assertions.assertEquals(Double.NaN,f.doubleArgmin());
+    assertEquals(Double.NaN,f.doubleArgmin());
   }
 
   //--------------------------------------------------------------

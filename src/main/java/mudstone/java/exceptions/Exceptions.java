@@ -57,7 +57,6 @@ public final class Exceptions {
     throw new UnsupportedOperationException(
       "can't instantiate " + getClass()); }
 
-
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

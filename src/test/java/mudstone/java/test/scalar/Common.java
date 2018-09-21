@@ -29,8 +29,9 @@ public final class Common {
                                         final double dulps) {
 
     final double xmin = f.doubleArgmin();
-    assertEquals(0.0,f.slope(xmin),dulps*ulp(1.0));
+    
     if (isFinite(xmin)) {
+      assertEquals(0.0,f.slope(xmin),dulps*ulp(1.0));
       final double ymin = f.doubleValue(xmin);
       //final double delta = ulps*ulp(1.0+abs(xmin));
       final double delta = step*sqrt(ulp(1.0+abs(xmin)));
