@@ -42,12 +42,22 @@ public final class InterpolateXYD2 implements ModelFactory {
 
   @Override
   public final Function model (final Function f,
-                               final double x0,
-                               final double x1) {
-    assert x0 != x1;
+                               final double[] x) {
     return interpolate(
-      x0,f.doubleValue(x0),f.slope(x0),
-      x1,f.doubleValue(x1),f.slope(x1)); }
+      x[0],f.doubleValue(x[0]),f.slope(x[0]),
+      x[1],f.doubleValue(x[1]),f.slope(x[1])); }
+
+  @Override
+  public final Function model (final double[] z)  {
+    return interpolate(z[0],z[1],z[2],z[3],z[4],z[5]) ; }
+
+  @Override
+  public final double[] matchValueAt (final double[] x) {
+    return new double[] { x[0], x[1], }; }
+
+  @Override
+  public double[] matchSlopeAt (double[] x) {
+    return new double[] { x[0], x[1], }; }
 
   //--------------------------------------------------------------
   // construction

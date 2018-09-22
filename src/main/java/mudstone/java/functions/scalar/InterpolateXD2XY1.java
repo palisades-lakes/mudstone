@@ -23,7 +23,7 @@ import mudstone.java.functions.Function;
  * as the descriptions in typical textbooks.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-20
+ * @version 2018-09-21
  */
 
 public final class InterpolateXD2XY1 implements ModelFactory {
@@ -55,13 +55,19 @@ public final class InterpolateXD2XY1 implements ModelFactory {
 
   @Override
   public final Function model (final Function f,
-                               final double x0,
-                               final double x1,
-                               final double x2) {
+                               final double[] x) {
     return interpolate(
-      x0,f.slope(x0),
-      x1,f.slope(x1),
-      x2,f.doubleValue(x2)); }
+      x[0],f.slope(x[0]),
+      x[1],f.slope(x[1]),
+      x[2],f.doubleValue(x[2])); }
+
+  @Override
+  public final double[] matchValueAt (final double[] x) {
+    return new double[] { x[2], }; }
+
+  @Override
+  public double[] matchSlopeAt (double[] x) {
+    return new double[] { x[0], x[1], }; }
 
   //--------------------------------------------------------------
   // construction
@@ -71,7 +77,7 @@ public final class InterpolateXD2XY1 implements ModelFactory {
   private InterpolateXD2XY1 () { super(); }
 
   public static final ModelFactory 
-  make () { return new InterpolateXD2XY1(); }
+  get () { return new InterpolateXD2XY1(); }
 
   //--------------------------------------------------------------
 }

@@ -24,7 +24,7 @@ import mudstone.java.functions.Function;
  * the true function to its approximations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-20
+ * @version 2018-09-21
  */
 
 public final class InterpolateXY2XD1 implements ModelFactory {
@@ -59,22 +59,23 @@ public final class InterpolateXY2XD1 implements ModelFactory {
 
   @Override
   public final Function model (final Function f,
-                               final double x0,
-                               final double x1,
-                               final double x2) {
+                               final double[] x) {
     return interpolate(
-      x0,f.doubleValue(x0),
-      x1,f.doubleValue(x1),
-      x2,f.slope(x2)); }
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.slope(x[2])); }
 
   @Override
-  public final Function model (final double x0, 
-                               final double y0,
-                               final double x1, 
-                               final double y1,
-                               final double x2,
-                               final double d2)  {
-    return interpolate(x0,y0,x1,y1,x2,d2) ; }
+  public final Function model (final double[] z)  {
+    return interpolate(z[0],z[1],z[2],z[3],z[4],z[5]) ; }
+
+  @Override
+  public final double[] matchValueAt (final double[] x) {
+    return new double[] { x[0], x[1], }; }
+
+  @Override
+  public double[] matchSlopeAt (double[] x) {
+    return new double[] { x[2], }; }
 
   //--------------------------------------------------------------
   // construction
@@ -84,7 +85,7 @@ public final class InterpolateXY2XD1 implements ModelFactory {
   private InterpolateXY2XD1 () { super(); }
 
   public static final ModelFactory 
-  make () { return new InterpolateXY2XD1(); }
+  get () { return new InterpolateXY2XD1(); }
 
   //--------------------------------------------------------------
 }
