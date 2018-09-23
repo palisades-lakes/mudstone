@@ -9,12 +9,14 @@ import static java.lang.Math.abs;
 import static java.lang.Math.fma;
 import static java.lang.Math.sqrt;
 
+import org.apache.commons.math3.fraction.BigFraction;
+
 /** A cubic function from <b>R</b> to <b>R</b> 
  * in the Hermite basis. Convenient for matching value and slope
  * at 2 points.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-21
+ * @version 2018-09-22
  */
 
 public final class CubicHermite extends ScalarFunctional {
@@ -131,15 +133,30 @@ public final class CubicHermite extends ScalarFunctional {
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
+  // monomial coefficients for y = a0 + a1*u + a2+u^2 + a3*u^3,
+  // where u = (x-x0)/(x1-x0)
+  // Use BigFraction to accurately detect quadratic, affine, 
+  // constant cases...
 
-  private static final double a3 (final double x0,
+  @SuppressWarnings("unused")
+  private static final double a0 (final double x0,
                                   final double y0,
                                   final double d0,
                                   final double x1,
                                   final double y1,
                                   final double d1) {
-    final double dx = x1-x0;
-    return fma(2.0,(y0-y1),d0+d1)/(dx*dx*dx); }
+    return y0; }
+
+  @SuppressWarnings("unused")
+  private static final double a1 (final double x0,
+                                  final double y0,
+                                  final double d0,
+                                  final double x1,
+                                  final double y1,
+                                  final double d1) {
+    final BigFraction dx = 
+      new BigFraction(x1).subtract(new BigFraction(x0));
+    return new BigFraction(d0).multiply(dx).doubleValue(); }
 
   private static final double a2 (final double x0,
                                   final double y0,
@@ -147,8 +164,35 @@ public final class CubicHermite extends ScalarFunctional {
                                   final double x1,
                                   final double y1,
                                   final double d1) {
-    final double dx = x1-x0;
-    return fma(3.0,(y1-y0),fma(-2.0,d0,d1))/(dx*dx); }
+    final BigFraction dx = 
+      new BigFraction(x1).subtract(new BigFraction(x0));
+    final BigFraction dy = 
+      new BigFraction(y1).subtract(new BigFraction(y0));
+    final BigFraction dd = 
+      new BigFraction(d0).multiply(2).add(new BigFraction(d1));
+    return dy.multiply(3).subtract(dd.multiply(dx)).doubleValue(); }
+
+  private static final double a3 (final double x0,
+                                  final double y0,
+                                  final double d0,
+                                  final double x1,
+                                  final double y1,
+                                  final double d1) {
+    final BigFraction dx = 
+      new BigFraction(x1).subtract(new BigFraction(x0)).reduce();
+    System.out.println("dx=" + dx);
+    final BigFraction dy = 
+      new BigFraction(y1).subtract(new BigFraction(y0)).reduce();
+    System.out.println("dy=" + dy);
+    System.out.println("dy/dx=" + dy.divide(dx).reduce());
+    final BigFraction dd = 
+      new BigFraction(d0).add(new BigFraction(d1)).reduce();
+    System.out.println("dd/2="+dd.divide(2).reduce());
+    System.out.println("dd="+dd);
+    System.out.println("2dy/dx="+dy.multiply(2).divide(dx).reduce());
+    System.out.println("dd*dx="+dd.multiply(dx).reduce());
+    System.out.println("2dy="+dy.multiply(2).reduce());
+    return dy.multiply(-2).add(dd.multiply(dx)).doubleValue(); }
 
   private static final double argmin (final double x0,
                                       final double y0,
@@ -179,49 +223,61 @@ public final class CubicHermite extends ScalarFunctional {
                         final double x1, 
                         final double y1,
                         final double d1) {
-    assert x0 < x1  : "Fail: " + x0 + " < " + x1 ;
+    assert x0 != x1  : "Fail: " + x0 + " == " + x1 ;
+    System.out.println("CH[" + 
+      a0(x0,y0,d0,x1,y1,d1) + " + " + 
+      a1(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ") + " +
+      a2(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^2 + "+ 
+      a3(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^3]");
+
     _x0 = x0;
     _dx10 = x1-x0;
     _y0 = y0;
     _y1 = y1;
     _d0 = d0;
     _d1 = d1;
-    _xmin = argmin(x0,y0,d0,x1,y1,d1); 
     // limiting values:
     // sign of limit depends on monomial 3
     if (0.0 < a3(x0,y0,d0,x1,y1,d1)) {
+      _xmin = argmin(x0,y0,d0,x1,y1,d1); 
       _positiveLimitValue = POSITIVE_INFINITY; 
       _negativeLimitValue = NEGATIVE_INFINITY; 
       _positiveLimitSlope = POSITIVE_INFINITY; 
       _negativeLimitSlope = NEGATIVE_INFINITY; }
     else if (0.0 > a3(x0,y0,d0,x1,y1,d1)) {  
+      _xmin = argmin(x0,y0,d0,x1,y1,d1); 
       _positiveLimitValue = NEGATIVE_INFINITY; 
       _negativeLimitValue = POSITIVE_INFINITY; 
       _positiveLimitSlope = NEGATIVE_INFINITY; 
       _negativeLimitSlope = POSITIVE_INFINITY; }
     else // quadratic, so look at a2:
       if (0.0 < a2(x0,y0,d0,x1,y1,d1)) {
+        _xmin = argmin(x0,y0,d0,x1,y1,d1); 
         _positiveLimitValue = POSITIVE_INFINITY; 
         _negativeLimitValue = POSITIVE_INFINITY; 
         _positiveLimitSlope = POSITIVE_INFINITY; 
         _negativeLimitSlope = NEGATIVE_INFINITY; }
       else if (0.0 > a2(x0,y0,d0,x1,y1,d1)) {
+        _xmin = POSITIVE_INFINITY;
         _positiveLimitValue = NEGATIVE_INFINITY; 
         _negativeLimitValue = NEGATIVE_INFINITY; 
         _positiveLimitSlope = NEGATIVE_INFINITY; 
         _negativeLimitSlope = POSITIVE_INFINITY; }
       else { // affine, look at a1
         if (0.0 < d0) {
+          _xmin = NEGATIVE_INFINITY;
           _positiveLimitValue = POSITIVE_INFINITY; 
           _negativeLimitValue = NEGATIVE_INFINITY; 
           _positiveLimitSlope = d0; 
           _negativeLimitSlope = d0; }
         else if (0.0 > d0) {
+          _xmin = POSITIVE_INFINITY;
           _positiveLimitValue = NEGATIVE_INFINITY; 
           _negativeLimitValue = POSITIVE_INFINITY; 
           _positiveLimitSlope = d0; 
           _negativeLimitSlope = d0; }
         else {
+          _xmin = NaN;
           _positiveLimitValue = y0; 
           _negativeLimitValue = y0; 
           _positiveLimitSlope = 0.0; 

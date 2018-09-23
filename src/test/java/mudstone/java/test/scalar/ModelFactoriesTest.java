@@ -26,7 +26,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-21
+ * @version 2018-09-22
  */
 
 strictfp
@@ -35,7 +35,7 @@ public final class ModelFactoriesTest {
   private static final double GOLDEN_RATIO = 
     0.5*(1.0+Math.sqrt(5.0));
 
-   //--------------------------------------------------------------
+  //--------------------------------------------------------------
   /** any input function; any model function. */
 
   private static final void general (final Function f,
@@ -119,20 +119,28 @@ public final class ModelFactoriesTest {
         yulps*ulp(1.0+(Double.isNaN(alpha) ? 0.0 : alpha));
       assertEquals(fi,gi,delta,
         () -> { 
-          return abs(fi-gi) + ">" + delta + 
-            " by " + abs(fi-gi)/delta + "\n"; });
+          return 
+            "\n" + f +
+            "\n" + g +
+            "\n" + abs(fi-gi) + ">" + delta + 
+            "\n by " + abs(fi-gi)/delta + 
+            "\n at " + xi + "\n"; });
       final double dfi = f.slope(xi);
       final double dgi = g.slope(xi);
       final double beta = abs(dfi)+abs(dgi);
       final double epsilon = 
         dulps*ulp(1.0+(Double.isNaN(beta) ? 0.0 : beta));
       assertEquals(dfi,dgi,epsilon,
-        () -> { return abs(dfi-dgi) + ">" + epsilon + 
-          " by " + abs(dfi-dgi)/epsilon + "\n"; });
+        () -> { return 
+          "\n" + f +
+          "\n" + g +
+          "\n" + abs(dfi-dgi) + ">" + epsilon + 
+          " by " + abs(dfi-dgi)/epsilon + 
+          "\n at " + xi + "\n"; });
     } } 
 
   //--------------------------------------------------------------
-  
+
   private static final Iterable<Function> cubics = 
     List.of(
       QCubic.make(0.0,-1.0,0.0,1.0),
@@ -144,9 +152,9 @@ public final class ModelFactoriesTest {
   private static final Iterable<Function> quadratics = 
     List.of(
       QQuadratic.make(1.0,-1.0,1.0,0.0),
-      QQuadratic.make(0.0,-1.0,1.0,0.0)//,
-      //QQuadratic.make(1.0,1.0,0.0,0.0),
-      //QQuadratic.make(1.0,0.0,0.0,0.0)
+      QQuadratic.make(0.0,-1.0,1.0,0.0),
+      QQuadratic.make(1.0,1.0,0.0,0.0),
+      QQuadratic.make(1.0,0.0,0.0,0.0)
       );
 
   private static final Iterable<Function> functions = 
@@ -163,7 +171,7 @@ public final class ModelFactoriesTest {
 
   private static final Iterable<ModelFactory> factories = 
     Iterables.concat(cubicFactories,quadraticFactories); 
-  
+
   @SuppressWarnings({ "static-method" })
   @Test
   public final void generalTests () {
@@ -194,19 +202,19 @@ public final class ModelFactoriesTest {
         exact(f,factory,new double[]{0.49,0.50,0.51},
           2.0e0,5.0e4,1.0e6); } } } 
 
-//    @SuppressWarnings({ "static-method" })
-//    @Test
-//    public final void cubicTest () {
-//      for (final Function f : cubics) {
-//        for (final ModelFactory factory : cubicFactories) {
-//          exact(f,factory,new double[]{-1.0,0.0,1.0},
-//            1.0e0,1.0e0,1.0e0);
-//          exact(f,factory,new double[]{0.0,1.0,GOLDEN_RATIO},
-//            1.0e0,1.0e0,1.0e0);
-//          exact(f,factory,new double[]{0.0,1.0,1.01},
-//            1.0e0,1.0e0,1.0e0);
-//          exact(f,factory,new double[]{0.49,0.50,0.51},
-//            1.0e0,1.0e0,1.0e0); } } } 
+  //    @SuppressWarnings({ "static-method" })
+  //    @Test
+  //    public final void cubicTest () {
+  //      for (final Function f : cubics) {
+  //        for (final ModelFactory factory : cubicFactories) {
+  //          exact(f,factory,new double[]{-1.0,0.0,1.0},
+  //            1.0e0,1.0e0,1.0e0);
+  //          exact(f,factory,new double[]{0.0,1.0,GOLDEN_RATIO},
+  //            1.0e0,1.0e0,1.0e0);
+  //          exact(f,factory,new double[]{0.0,1.0,1.01},
+  //            1.0e0,1.0e0,1.0e0);
+  //          exact(f,factory,new double[]{0.49,0.50,0.51},
+  //            1.0e0,1.0e0,1.0e0); } } } 
 
   //--------------------------------------------------------------
 }

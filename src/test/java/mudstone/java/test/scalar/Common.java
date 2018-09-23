@@ -36,7 +36,6 @@ public final class Common {
       assertEquals(0.0,f.slope(xmin),kappa,
         () -> { 
           return 
-            "\n" + f.getClass().getSimpleName() + 
             "\n" + f + "\n" +
             "0.0 != " + f.slope(xmin) + "\n" +
             "by " + (abs(f.slope(xmin))/kappa) + "\n" +
@@ -48,18 +47,20 @@ public final class Common {
         ymin < f.doubleValue(xmin-delta),
         () -> { 
           return 
-            "\n" + f.getClass().getSimpleName() + 
             "\n" + f + "\n" +
             ymin + ">=" + f.doubleValue(xmin-delta) + "\n" +
-            " at " + xmin + " : " + (xmin-delta) + "\n";  });
+            "by " + (ymin-f.doubleValue(xmin-delta)) + "\n" +
+            "at " + xmin + " : " + (xmin-delta) + "\n" +
+            "delta= " + delta + "\n";  });
       assertTrue(
         ymin < f.doubleValue(xmin+delta),
         () -> { 
           return 
-          "\n" + f.getClass().getSimpleName() + 
           "\n" + f + "\n" +
           ymin + ">=" + f.doubleValue(xmin+delta) + "\n" +
-          " at " + xmin + " : " + (xmin+delta) + "\n"; }); } }
+          "by " + (ymin-f.doubleValue(xmin+delta)) + "\n" +
+          " at " + xmin + " : " + (xmin+delta) + "\n" +
+          "delta= " + delta + "\n";  }); } }
 
   //--------------------------------------------------------------
   // utility class; disable constructor
