@@ -180,18 +180,18 @@ public final class CubicHermite extends ScalarFunctional {
                                   final double d1) {
     final BigFraction dx = 
       new BigFraction(x1).subtract(new BigFraction(x0)).reduce();
-    System.out.println("dx=" + dx);
+    //System.out.println("dx=" + dx);
     final BigFraction dy = 
       new BigFraction(y1).subtract(new BigFraction(y0)).reduce();
-    System.out.println("dy=" + dy);
-    System.out.println("dy/dx=" + dy.divide(dx).reduce());
+    //System.out.println("dy=" + dy);
+    //System.out.println("dy/dx=" + dy.divide(dx).reduce());
     final BigFraction dd = 
       new BigFraction(d0).add(new BigFraction(d1)).reduce();
-    System.out.println("dd/2="+dd.divide(2).reduce());
-    System.out.println("dd="+dd);
-    System.out.println("2dy/dx="+dy.multiply(2).divide(dx).reduce());
-    System.out.println("dd*dx="+dd.multiply(dx).reduce());
-    System.out.println("2dy="+dy.multiply(2).reduce());
+    //System.out.println("dd/2="+dd.divide(2).reduce());
+    //System.out.println("dd="+dd);
+    //System.out.println("2dy/dx="+dy.multiply(2).divide(dx).reduce());
+    //System.out.println("dd*dx="+dd.multiply(dx).reduce());
+    //System.out.println("2dy="+dy.multiply(2).reduce());
     return dy.multiply(-2).add(dd.multiply(dx)).doubleValue(); }
 
   private static final double argmin (final double x0,

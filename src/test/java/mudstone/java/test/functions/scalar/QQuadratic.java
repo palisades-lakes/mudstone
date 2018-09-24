@@ -20,7 +20,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-21
+ * @version 2018-09-23
  */
 
 public final class QQuadratic extends ScalarFunctional {
@@ -33,8 +33,6 @@ public final class QQuadratic extends ScalarFunctional {
   private final BigFraction _a0;
   private final BigFraction _a1;
   private final BigFraction _a2;
-  // TODO: compose with translation instead of explicit origin?
-  private final BigFraction _xorigin;
 
   // TODO: space vs re-computing cost?
   private final double _xmin;
@@ -51,7 +49,7 @@ public final class QQuadratic extends ScalarFunctional {
   @Override
   public final double doubleValue (final double x) {
     if (isFinite(x)) {
-      final BigFraction q = new BigFraction(x).subtract(_xorigin); 
+      final BigFraction q = new BigFraction(x); 
       return 
         _a2
         .multiply(q).add(_a1)
@@ -64,7 +62,7 @@ public final class QQuadratic extends ScalarFunctional {
   @Override
   public final double slope (final double x) {
     if (isFinite(x)) {
-      final BigFraction q = new BigFraction(x).subtract(_xorigin); 
+      final BigFraction q = new BigFraction(x); 
       return 
         _a2.multiply(2)
         .multiply(q).add(_a1)
@@ -91,7 +89,6 @@ public final class QQuadratic extends ScalarFunctional {
     result = prime * result + _a0.hashCode();
     result = prime * result + _a1.hashCode();
     result = prime * result + _a2.hashCode();
-    result = prime * result + _xorigin.hashCode();
     final long temp = Double.doubleToLongBits(_xmin);
     result = prime * result + (int) (temp ^ (temp >>> 32));
     return result; }
@@ -105,7 +102,6 @@ public final class QQuadratic extends ScalarFunctional {
     if (!_a0.equals(other._a0)) { return false; }
     if (!_a1.equals(other._a1)) { return false; }
     if (!_a2.equals(other._a2)) { return false; }
-    if (!_xorigin.equals(other._xorigin)) { return false; }
     // handles NaN
     if (Double.doubleToLongBits(_xmin) != 
       Double.doubleToLongBits(other._xmin)) { 
@@ -115,10 +111,7 @@ public final class QQuadratic extends ScalarFunctional {
   @Override
   public String toString () {
     return 
-      "Q[" + 
-      _a0 + " + " +
-      _a1 + "*(x-" + _xorigin + ") + " +
-      _a2 + "*(x-" + _xorigin + ")^2; " +
+      "Q[" + _a0 + " + " + _a1 + "*x + " + _a2 + "*x^2; " + 
       _xmin + "]"; }
 
   //--------------------------------------------------------------
@@ -127,14 +120,13 @@ public final class QQuadratic extends ScalarFunctional {
 
   private QQuadratic (final BigFraction a0,
                       final BigFraction a1,
-                      final BigFraction a2,
-                      final BigFraction xorigin) { 
+                      final BigFraction a2) { 
     super(); 
-    _a0 = a0; _a1 = a1; _a2 = a2; _xorigin = xorigin;
+    _a0 = a0; _a1 = a1; _a2 = a2; 
     // limiting values:
     final int a2sign = a2.compareTo(ZERO);
     if (0 < a2sign) {
-      _xmin = xorigin.subtract(a1.divide(a2.multiply(2))).doubleValue(); 
+      _xmin = a1.divide(a2.multiply(2)).negate().doubleValue(); 
       _positiveLimitValue = POSITIVE_INFINITY; 
       _negativeLimitValue = POSITIVE_INFINITY; 
       _positiveLimitSlope = POSITIVE_INFINITY; 
@@ -170,19 +162,16 @@ public final class QQuadratic extends ScalarFunctional {
 
   public static final QQuadratic make (final BigFraction a0,
                                        final BigFraction a1,
-                                       final BigFraction a2,
-                                       final BigFraction xorigin) { 
-    return new QQuadratic(a0,a1,a2,xorigin); }
+                                       final BigFraction a2) { 
+    return new QQuadratic(a0,a1,a2); }
 
   public static final QQuadratic make (final double a0,
                                        final double a1,
-                                       final double a2,
-                                       final double xorigin) { 
+                                       final double a2) { 
     return new QQuadratic(
       new BigFraction(a0),
       new BigFraction(a1),
-      new BigFraction(a2),
-      new BigFraction(xorigin)); }
+      new BigFraction(a2)); }
 
   //--------------------------------------------------------------
 } // end class

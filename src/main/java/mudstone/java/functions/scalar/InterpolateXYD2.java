@@ -67,7 +67,7 @@ public final class InterpolateXYD2 implements ModelFactory {
   private InterpolateXYD2 () { super(); }
 
   public static final ModelFactory 
-  make () { return new InterpolateXYD2(); }
+  get () { return new InterpolateXYD2(); }
 
   //--------------------------------------------------------------
 }
