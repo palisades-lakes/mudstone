@@ -1,10 +1,12 @@
 package mudstone.java.test.scalar;
 
-import static java.lang.Double.*;
-import static java.lang.StrictMath.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static java.lang.Double.isFinite;
+import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.sqrt;
+import static java.lang.StrictMath.ulp;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import mudstone.java.functions.Function;
@@ -16,7 +18,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
 /** Shared tests for scalar functions
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-23
+ * @version 2018-09-24
  */
 
 strictfp
@@ -181,12 +183,12 @@ public final class Common {
                                         final double xulps,
                                         final double yulps,
                                         final double dulps) {
-    System.out.println(f);
+//    System.out.println(f);
     checkArgmin(f,1.0e1*xulps,dulps);
     final Function g = factory.model(f,xs);
-    System.out.println(g);
+//    System.out.println(g);
     checkArgmin(g,1.0e1*xulps,dulps);
-    System.out.println(Arrays.toString(xs));
+//    System.out.println(Arrays.toString(xs));
     for (final double xi : factory.matchValueAt(xs)) {
       assertEqualValue(f,g,xi,yulps); }
     for (final double xi : factory.matchSlopeAt(xs)) {

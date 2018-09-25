@@ -224,11 +224,11 @@ public final class CubicHermite extends ScalarFunctional {
                         final double y1,
                         final double d1) {
     assert x0 != x1  : "Fail: " + x0 + " == " + x1 ;
-    System.out.println("CH[" + 
-      a0(x0,y0,d0,x1,y1,d1) + " + " + 
-      a1(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ") + " +
-      a2(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^2 + "+ 
-      a3(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^3]");
+//    System.out.println("CH[" + 
+//      a0(x0,y0,d0,x1,y1,d1) + " + " + 
+//      a1(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ") + " +
+//      a2(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^2 + "+ 
+//      a3(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^3]");
 
     _x0 = x0;
     _dx10 = x1-x0;

@@ -15,7 +15,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-22
+ * @version 2018-09-24
  */
 
 public final class QuadraticLagrange extends ScalarFunctional {
@@ -176,10 +176,10 @@ public final class QuadraticLagrange extends ScalarFunctional {
     _b1 = y1/((x1-x2)*(x1-x0));
     _b2 = y2/((x2-x0)*(x2-x1));
 
-    System.out.println("QL[" + 
-      a0(x0,y0,x1,y1,x2,y2) + " + " + 
-      a1(x0,y0,x1,y1,x2,y2) + "*x + " + 
-      a2(x0,y0,x1,y1,x2,y2) + "*x^2]");
+//    System.out.println("QL[" + 
+//      a0(x0,y0,x1,y1,x2,y2) + " + " + 
+//      a1(x0,y0,x1,y1,x2,y2) + "*x + " + 
+//      a2(x0,y0,x1,y1,x2,y2) + "*x^2]");
     // TODO: accurate 1st and 2nd derivative sign calculation?
     final double a2 = a2(x0,y0,x1,y1,x2,y2);
     if (0.0 < a2) {
