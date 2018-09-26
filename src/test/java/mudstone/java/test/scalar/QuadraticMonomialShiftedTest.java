@@ -13,14 +13,15 @@ import org.junit.jupiter.api.Test;
 import com.google.common.collect.Iterables;
 
 import mudstone.java.functions.Function;
+import mudstone.java.functions.scalar.InterpolateXD2XY1;
+import mudstone.java.functions.scalar.InterpolateXY2XD1;
 import mudstone.java.functions.scalar.ModelFactory;
-import mudstone.java.functions.scalar.QuadraticMonomialFactory;
 
 //----------------------------------------------------------------
 /** Test monomial form parabolas. 
  * <p>
  * <pre>
- * mvn -q -Dtest=mudstone/java/test/scalar/QuadraticMonomialTest test > QuadraticMonomialTest.txt
+ * mvn -q -Dtest=mudstone/java/test/scalar/QuadraticMonomialShiftedTest test > QuadraticMonomialShiftedTest.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
@@ -28,14 +29,15 @@ import mudstone.java.functions.scalar.QuadraticMonomialFactory;
  */
 
 strictfp
-public final class QuadraticMonomialTest {
+public final class QuadraticMonomialShiftedTest {
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void tests () {
     final Iterable<ModelFactory> factories = 
       List.of(
-        QuadraticMonomialFactory.get());
+        InterpolateXY2XD1.get(),
+        InterpolateXD2XY1.get());
     final Iterable<Function> functions = Iterables.concat(
       quadraticQuadratics
       , affineQuadratics
@@ -44,7 +46,7 @@ public final class QuadraticMonomialTest {
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
         for (final double[] kn : knots) {
-          exact(f,factory,kn,2.0e2,2.0e2,1.0e3); } } } }
+          exact(f,factory,kn,1.0e7,5.0e8,2.0e7); } } } }
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

@@ -10,7 +10,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * <p>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-25
  */
 
 public final class Math832 extends ScalarFunctional {
@@ -27,8 +27,6 @@ public final class Math832 extends ScalarFunctional {
     final double c = 1.0e4 / sqrtX;
     return a + b + c; }
 
-  //--------------------------------------------------------------
-  
   @Override
   public final double slope (final double x) {
     final double sqrtX = Math.sqrt(x);
@@ -37,12 +35,14 @@ public final class Math832 extends ScalarFunctional {
     final double dc = -5.0e3 / x*sqrtX;
     return da + db + dc; }
 
-  //--------------------------------------------------------------
-
   @Override
   public final Function tangentAt (final double x) {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
 
+  // TODO: more decimal places?
+  @Override
+  public final double doubleArgmin () { return 804.9355825;  }
+  
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------

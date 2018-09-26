@@ -20,7 +20,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-23
+ * @version 2018-09-25
  */
 
 strictfp
@@ -40,7 +40,7 @@ public final class CubicHermiteTest {
       );
     for (final Function f : functions) {
       for (final double[] kn : knots) {
-        exact(f,factory,kn,2.0e5,5.0e5,5.0e6); } } }
+        exact(f,factory,kn,1.0e12,1.0e8,1.0e14); } } }
 
   //--------------------------------------------------------------
 }

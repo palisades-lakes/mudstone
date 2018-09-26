@@ -2,6 +2,7 @@ package mudstone.java.test.scalar;
 
 import static java.lang.Double.isFinite;
 import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.min;
 import static java.lang.StrictMath.sqrt;
 import static java.lang.StrictMath.ulp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,14 +12,19 @@ import java.util.List;
 
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.ModelFactory;
+import mudstone.java.test.functions.scalar.Math832;
 import mudstone.java.test.functions.scalar.QCubic;
 import mudstone.java.test.functions.scalar.QQuadratic;
+import mudstone.java.test.functions.scalar.Quintic;
+import mudstone.java.test.functions.scalar.SemiCubic;
+import mudstone.java.test.functions.scalar.Sin;
+import mudstone.java.test.functions.scalar.Square;
 
 //----------------------------------------------------------------
 /** Shared tests for scalar functions
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-24
+ * @version 2018-09-25
  */
 
 strictfp
@@ -32,7 +38,13 @@ public final class Common {
     new double[] {-1.0,0.0,1.0,},
     new double[] {0.0,1.0,GOLDEN_RATIO,},
     new double[] {0.99,1.0,1.01,},
-    new double[] {0.49,0.50,0.51,});
+    new double[] {0.49,0.50,0.51,},
+
+    new double[] {-1.0e2,0.0,1.0e2,},
+    new double[] {0.0,1.0e2,GOLDEN_RATIO*1.0e2,}//,
+    //new double[] {0.999e2,1.000e2,1.001e2,},
+    //new double[] {0.499e2,0.500e2,0.501e2,} 
+    );
 
   public static final Iterable<Function> cubicCubics = 
     List.of(
@@ -71,6 +83,15 @@ public final class Common {
   public static final Iterable<Function> constantQuadratics = 
     List.of(QQuadratic.make(1.0,0.0,0.0));
 
+  public static final Iterable<Function> testFns =
+    List.of(
+      //Math832.get(),
+      //Quintic.get(),
+      //SemiCubic.get(),
+      //Sin.get(),
+      Square.get()
+      );
+  
   //--------------------------------------------------------------
   /** Check that the value of <code>f</code> actually a local
    * minimum, that is, it increases if we move a small amount
@@ -184,10 +205,10 @@ public final class Common {
                                         final double yulps,
                                         final double dulps) {
 //    System.out.println(f);
-    checkArgmin(f,1.0e1*xulps,dulps);
+    checkArgmin(f,1.0e2*min(1.0e1,xulps),dulps);
     final Function g = factory.model(f,xs);
 //    System.out.println(g);
-    checkArgmin(g,1.0e1*xulps,dulps);
+    checkArgmin(g,1.0e2*min(1.0e1,xulps),dulps);
 //    System.out.println(Arrays.toString(xs));
     for (final double xi : factory.matchValueAt(xs)) {
       assertEqualValue(f,g,xi,yulps); }

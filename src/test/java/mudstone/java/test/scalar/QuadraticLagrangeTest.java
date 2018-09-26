@@ -22,7 +22,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-23
+ * @version 2018-09-25
  */
 
 strictfp
@@ -41,7 +41,7 @@ public final class QuadraticLagrangeTest {
       );
     for (final Function f : functions) {
       for (final double[] kn : knots) {
-        exact(f,factory,kn,1.0e3,5.0e4,5.0e4); } } }
+        exact(f,factory,kn,2.0e7,5.0e9,1.0e8); } } }
 
   //--------------------------------------------------------------
 }

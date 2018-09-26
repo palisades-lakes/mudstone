@@ -9,7 +9,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * <p>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-25
  */
 
 public final class Square extends ScalarFunctional {
@@ -21,17 +21,16 @@ public final class Square extends ScalarFunctional {
   @Override
   public final double doubleValue (final double x) { return x*x; }
 
-  //--------------------------------------------------------------
-
   @Override
   public final double slope (final double x) { return 2.0*x; }
-  
-  //--------------------------------------------------------------
 
   @Override
   public final Function tangentAt (final double x) {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
   
+  @Override
+  public final double doubleArgmin () { return 0.0; }
+
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------

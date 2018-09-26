@@ -198,8 +198,7 @@ public final class QCubic extends ScalarFunctional {
       a2.multiply(a2).subtract(a1.multiply(threea3));
     // complex roots, no critical points
     if (1 == ZERO.compareTo(b2m4ac)) {
-      if (1 == ZERO.compareTo(a3)) {
-        return POSITIVE_INFINITY; }
+      if (1 == ZERO.compareTo(a3)) { return POSITIVE_INFINITY; }
       return NEGATIVE_INFINITY; }
 
     final BigFraction ma2 = a2.negate();
@@ -254,22 +253,18 @@ public final class QCubic extends ScalarFunctional {
         _positiveLimitSlope = NEGATIVE_INFINITY; 
         _negativeLimitSlope = POSITIVE_INFINITY; }
       else { // affine, look at a1
+        _positiveLimitSlope = a1.doubleValue(); 
+        _negativeLimitSlope = a1.doubleValue(); 
         final int a1sign = a1.compareTo(ZERO);
         if (0 < a1sign) {
           _positiveLimitValue = POSITIVE_INFINITY; 
-          _negativeLimitValue = NEGATIVE_INFINITY; 
-          _positiveLimitSlope = a1.doubleValue(); 
-          _negativeLimitSlope = a1.doubleValue(); }
+          _negativeLimitValue = NEGATIVE_INFINITY; }
         else if (0 > a1sign) {
           _positiveLimitValue = NEGATIVE_INFINITY; 
-          _negativeLimitValue = POSITIVE_INFINITY; 
-          _positiveLimitSlope = a1.doubleValue(); 
-          _negativeLimitSlope = a1.doubleValue(); }
+          _negativeLimitValue = POSITIVE_INFINITY; }
         else { // constant
           _positiveLimitValue = a0.doubleValue(); 
-          _negativeLimitValue = a0.doubleValue(); 
-          _positiveLimitSlope = 0.0; 
-          _negativeLimitSlope = 0.0; } } } } 
+          _negativeLimitValue = a0.doubleValue(); } } } } 
 
   //--------------------------------------------------------------
 

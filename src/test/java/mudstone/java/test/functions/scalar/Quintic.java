@@ -13,7 +13,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Local minimum at 0.27195613.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-25
  */
 
 public final class Quintic extends ScalarFunctional {
@@ -26,7 +26,6 @@ public final class Quintic extends ScalarFunctional {
   public final double doubleValue (final double x) {
     return -(x-1.0)*(x-0.5)*x*(x+0.5)*(x+1.0); }
 
-  //--------------------------------------------------------------
   // TODO: accurate polynomial evaluation?
 
   @Override
@@ -38,12 +37,14 @@ public final class Quintic extends ScalarFunctional {
       ((x-1.0)*(x-0.5)*x*(x+1.0)) +
       ((x-1.0)*(x-0.5)*x*(x+0.5))); }
 
-  //--------------------------------------------------------------
-
   @Override
   public final Function tangentAt (final double x) {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
 
+  @Override
+  public final double doubleArgmin () {
+    return 0.27195613; }
+  
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------

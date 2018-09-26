@@ -22,9 +22,9 @@ public final class BracketedD2  implements StopTest {
                              final Object history) {
     final DoubleInterval t = (DoubleInterval) history;
     return 
-      (f.slope(t.x0()) < 0.0)
+      (f.slope(t.lower()) < 0.0)
       &&
-      (0.0 < f.slope(t.x1())); }
+      (0.0 < f.slope(t.upper())); }
   
   // --------------------------------------------------------------
 } // end interface

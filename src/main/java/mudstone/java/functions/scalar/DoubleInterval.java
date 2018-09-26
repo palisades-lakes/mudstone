@@ -3,7 +3,7 @@ package mudstone.java.functions.scalar;
 /** Two strictly increasing <code>double</code>s. Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-25
  */
 public final class DoubleInterval  {
 
@@ -11,11 +11,11 @@ public final class DoubleInterval  {
   // fields
   //--------------------------------------------------------------
 
-  private final double _x0;
-  public final double x0 () { return _x0; }
+  private final double _lower;
+  public final double lower () { return _lower; }
 
-  private final double _x1;
-  public final double x1 () { return _x1; }
+  private final double _upper;
+  public final double upper () { return _upper; }
 
   //--------------------------------------------------------------
   // Object methods
@@ -25,11 +25,11 @@ public final class DoubleInterval  {
   public final int hashCode () {
     int c = 17;
 
-    final long l0  = Double.doubleToLongBits(_x0);
+    final long l0  = Double.doubleToLongBits(_lower);
     final int c0 = (int) (l0 ^ (l0 >>> 32));
     c = (31*c) + c0;
 
-    final long l1  = Double.doubleToLongBits(_x1);
+    final long l1  = Double.doubleToLongBits(_upper);
     final int c1 = (int) (l1 ^ (l1 >>> 32));
     c = (31*c) + c1;
 
@@ -40,15 +40,15 @@ public final class DoubleInterval  {
     if (! (that instanceof DoubleInterval)) { return false; }
     final DoubleInterval di = (DoubleInterval) that;
     return
-      (_x0 == di._x0) && (_x1 == di._x1); }
+      (_lower == di._lower) && (_upper == di._upper); }
 
   @Override
   public final String toString () {
     return
       String.format(
         "DoubleInterval(%E,%E)",
-        Double.valueOf(_x0), 
-        Double.valueOf(_x1)); }
+        Double.valueOf(_lower), 
+        Double.valueOf(_upper)); }
 
   //--------------------------------------------------------------
   // construction
@@ -58,7 +58,7 @@ public final class DoubleInterval  {
                           final double x1) {
     super(); 
     assert (x0 < x1);
-    _x0 = x0; _x1 = x1; }
+    _lower = x0; _upper = x1; }
 
   /** <code>a</code>, <code>b>/code>, and <code>c</code> must be 
    * distinct. 
