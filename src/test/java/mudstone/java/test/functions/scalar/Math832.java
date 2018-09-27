@@ -10,7 +10,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * <p>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-25
+ * @version 2018-09-26
  */
 
 public final class Math832 extends ScalarFunctional {
@@ -53,9 +53,6 @@ public final class Math832 extends ScalarFunctional {
   //--------------------------------------------------------------
   /** Return a {@link Math832} test function of the given
    * <code>dimension</code>.
-   * Correct gradient is zero vektor; passing in
-   * <code>gi</code> allows creating an
-   * invalid function for testing.
    */
 
   public static final Math832 get () { return new Math832(); }

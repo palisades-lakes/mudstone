@@ -24,7 +24,7 @@ import mudstone.java.functions.scalar.QuadraticMonomialFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-25
+ * @version 2018-09-26
  */
 
 strictfp
@@ -34,17 +34,13 @@ public final class QuadraticMonomialTest {
   @Test
   public final void tests () {
     final Iterable<ModelFactory> factories = 
-      List.of(
-        QuadraticMonomialFactory.get());
+      List.of(QuadraticMonomialFactory.get());
     final Iterable<Function> functions = Iterables.concat(
-      quadraticQuadratics
-      , affineQuadratics
-      , constantQuadratics
-      );
+      quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
         for (final double[] kn : knots) {
-          exact(f,factory,kn,2.0e2,2.0e2,1.0e3); } } } }
+          exact(f,factory,kn,5.0e2,5.0e3,2.0e4); } } } }
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

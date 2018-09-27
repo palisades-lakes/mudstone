@@ -12,13 +12,13 @@ import com.google.common.collect.Iterables;
 
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.ModelFactory;
-import mudstone.java.functions.scalar.QuadraticLagrangeFactory;
+import mudstone.java.functions.scalar.QuadraticNewtonFactory;
 
 //----------------------------------------------------------------
-/** Test Lagrange form parabolas. 
+/** Test Newton form parabolas. 
  * <p>
  * <pre>
- * mvn -q -Dtest=mudstone/java/test/scalar/QuadraticLagrangeTest test > QuadraticLagrangeTest.txt
+ * mvn -q -Dtest=mudstone/java/test/scalar/QuadraticNewtonTest test > QuadraticNewtonTest.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
@@ -26,14 +26,14 @@ import mudstone.java.functions.scalar.QuadraticLagrangeFactory;
  */
 
 strictfp
-public final class QuadraticLagrangeTest {
+public final class QuadraticNewtonTest {
 
   //--------------------------------------------------------------
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void tests () {
-    final ModelFactory factory = QuadraticLagrangeFactory.get();
+    final ModelFactory factory = QuadraticNewtonFactory.get();
     final Iterable<Function> functions = Iterables.concat(
       quadraticQuadratics
       , affineQuadratics
@@ -41,7 +41,7 @@ public final class QuadraticLagrangeTest {
       );
     for (final Function f : functions) {
       for (final double[] kn : knots) {
-        exact(f,factory,kn,5.0e2,5.0e4,5.0e4); } } }
+        exact(f,factory,kn,5.0e2,5.0e3,2.0e4); } } }
 
   //--------------------------------------------------------------
 }

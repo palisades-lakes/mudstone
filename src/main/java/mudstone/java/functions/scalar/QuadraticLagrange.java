@@ -7,8 +7,6 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
-import org.apache.commons.math3.fraction.BigFraction;
-
 import mudstone.java.functions.Function;
 
 /** An quadratic function from <b>R</b> to <b>R</b> in Lagrange 
@@ -50,7 +48,7 @@ public final class QuadraticLagrange extends ScalarFunctional {
       final double dx0 = x-_x0;
       final double dx1 = x-_x1;
       final double dx2 = x-_x2;
-      return fma(_b0,dx1*dx2,fma (_b1,dx2*dx0,_b2*dx0*dx1)); }
+      return fma(_b0,dx1*dx2,fma(_b1,dx2*dx0,_b2*dx0*dx1)); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
     return _negativeLimitValue; }
@@ -84,85 +82,7 @@ public final class QuadraticLagrange extends ScalarFunctional {
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
-  // monomial coefficients for limiting values.
-  // use BigFraction to be better at detecting affine and constant
-  // functions
 
-  private static final double a0 (final double x0, 
-                                  final double y0,
-                                  final double x1, 
-                                  final double y1,
-                                  final double x2, 
-                                  final double y2) {
-    final BigFraction qx0 = new BigFraction(x0);
-    final BigFraction qy0 = new BigFraction(y0);
-    final BigFraction qx1 = new BigFraction(x1);
-    final BigFraction qy1 = new BigFraction(y1);
-    final BigFraction qx2 = new BigFraction(x2);
-    final BigFraction qy2 = new BigFraction(y2);
-    final BigFraction dx01 = qx0.subtract(qx1);
-    final BigFraction dx12 = qx1.subtract(qx2);
-    final BigFraction dx20 = qx2.subtract(qx0);
-    final BigFraction z0 = 
-      qy0.multiply(qx1).multiply(qx2)
-      .divide(dx01.multiply(dx20));
-    final BigFraction z1 = 
-      qy1.multiply(qx2).multiply(qx0)
-      .divide(dx12.multiply(dx01));
-    final BigFraction z2 = 
-      qy2.multiply(qx0).multiply(qx1)
-      .divide(dx20.multiply(dx12));
-    return z0.add(z1).add(z2).negate().doubleValue(); }
-
-  private static final double a1 (final double x0, 
-                                  final double y0,
-                                  final double x1, 
-                                  final double y1,
-                                  final double x2, 
-                                  final double y2) {
-    final BigFraction qx0 = new BigFraction(x0);
-    final BigFraction qy0 = new BigFraction(y0);
-    final BigFraction qx1 = new BigFraction(x1);
-    final BigFraction qy1 = new BigFraction(y1);
-    final BigFraction qx2 = new BigFraction(x2);
-    final BigFraction qy2 = new BigFraction(y2);
-    final BigFraction dx01 = qx0.subtract(qx1);
-    final BigFraction dx12 = qx1.subtract(qx2);
-    final BigFraction dx20 = qx2.subtract(qx0);
-    final BigFraction z0 = 
-      qy0.multiply(qx1.add(qx2))
-      .divide(dx01.multiply(dx20));
-    final BigFraction z1 = 
-      qy1.multiply(qx2.add(qx0))
-      .divide(dx12.multiply(dx01));
-    final BigFraction z2 = 
-      qy2.multiply(qx0.add(qx1))
-      .divide(dx20.multiply(dx12));
-    return z0.add(z1).add(z2).doubleValue(); }
-
-  private static final double a2 (final double x0, 
-                                  final double y0,
-                                  final double x1, 
-                                  final double y1,
-                                  final double x2, 
-                                  final double y2) {
-    final BigFraction qx0 = new BigFraction(x0);
-    final BigFraction qy0 = new BigFraction(y0);
-    final BigFraction qx1 = new BigFraction(x1);
-    final BigFraction qy1 = new BigFraction(y1);
-    final BigFraction qx2 = new BigFraction(x2);
-    final BigFraction qy2 = new BigFraction(y2);
-    final BigFraction dx01 = qx0.subtract(qx1);
-    final BigFraction dx12 = qx1.subtract(qx2);
-    final BigFraction dx20 = qx2.subtract(qx0);
-    final BigFraction z0 = qy0.divide(dx01.multiply(dx20));
-    final BigFraction z1 = qy1.divide(dx12.multiply(dx01));
-    final BigFraction z2 = qy2.divide(dx20.multiply(dx12));
-    return z0.add(z1).add(z2).negate().doubleValue(); }
-
-  //--------------------------------------------------------------
-
-  // symmetric argmin formula
   private QuadraticLagrange (final double x0, final double y0,
                              final double x1, final double y1,
                              final double x2, final double y2) {
@@ -181,41 +101,40 @@ public final class QuadraticLagrange extends ScalarFunctional {
 //      a1(x0,y0,x1,y1,x2,y2) + "*x + " + 
 //      a2(x0,y0,x1,y1,x2,y2) + "*x^2]");
     // TODO: accurate 1st and 2nd derivative sign calculation?
-    final double a2 = a2(x0,y0,x1,y1,x2,y2);
-    if (0.0 < a2) {
-      final double a = (x1-x2)*(y0-y1);
-      final double b = (x0-x1)*(y1-y2);
-      final double numer = ((x1+x0)*b)-((x1+x2)*a); 
-      _xmin = numer/(2.0*(b-a)); 
+    final double[] a = QuadraticUtils
+      .interpolatingMonomialCoefficients(x0,y0,x1,y1,x2,y2);
+    if (0.0 < a[2]) {
+      final double c0 = (x1-x2)*(y0-y1);
+      final double c1 = (x0-x1)*(y1-y2);
+      final double numer = ((x1+x0)*c1)-((x1+x2)*c0); 
+      _xmin = numer/(2.0*(c1-c0)); 
       _positiveLimitValue = POSITIVE_INFINITY; 
       _negativeLimitValue = POSITIVE_INFINITY; 
       _positiveLimitSlope = POSITIVE_INFINITY; 
       _negativeLimitSlope = NEGATIVE_INFINITY; }
-    else if (0.0 > a2) {
+    else if (0.0 > a[2]) {
       _xmin = POSITIVE_INFINITY;
       _positiveLimitValue = NEGATIVE_INFINITY; 
       _negativeLimitValue = NEGATIVE_INFINITY; 
       _positiveLimitSlope = NEGATIVE_INFINITY; 
       _negativeLimitSlope = POSITIVE_INFINITY; }
     else {// affine, look at a1
-      final double a1 = a1(x0,y0,x1,y1,x2,y2);
-      if (0.0 < a1) {
+      if (0.0 < a[1]) {
         _xmin = NEGATIVE_INFINITY;
         _positiveLimitValue = POSITIVE_INFINITY; 
         _negativeLimitValue = NEGATIVE_INFINITY; 
-        _positiveLimitSlope = a1; 
-        _negativeLimitSlope = a1; }
-      else if (0.0 > a1) {
+        _positiveLimitSlope = a[1]; 
+        _negativeLimitSlope = a[1]; }
+      else if (0.0 > a[1]) {
         _xmin = POSITIVE_INFINITY;
         _positiveLimitValue = NEGATIVE_INFINITY; 
         _negativeLimitValue = POSITIVE_INFINITY; 
-        _positiveLimitSlope = a1; 
-        _negativeLimitSlope = a1; }
+        _positiveLimitSlope = a[1]; 
+        _negativeLimitSlope = a[1]; }
       else { // constant
-        final double a0 = a0(x0,y0,x1,y1,x2,y2);
         _xmin = NaN;
-        _positiveLimitValue = a0; 
-        _negativeLimitValue = a0; 
+        _positiveLimitValue = a[0]; 
+        _negativeLimitValue = a[0]; 
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 

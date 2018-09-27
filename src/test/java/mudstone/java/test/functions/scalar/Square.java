@@ -41,9 +41,6 @@ public final class Square extends ScalarFunctional {
   //--------------------------------------------------------------
   /** Return a {@link Square} test function of the given
    * <code>dimension</code>.
-   * Correct gradient is zero vektor; passing in
-   * <code>gi</code> allows creating an
-   * invalid function for testing.
    */
 
   public static final Square get () { return new Square(); }

@@ -44,9 +44,6 @@ public final class Sin extends ScalarFunctional {
   //--------------------------------------------------------------
   /** Return a {@link Sin} test function of the given
    * <code>dimension</code>.
-   * Correct gradient is zero vektor; passing in
-   * <code>gi</code> allows creating an
-   * invalid function for testing.
    */
 
   public static final Sin get () { return new Sin(); }

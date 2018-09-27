@@ -1,59 +1,55 @@
 package mudstone.java.test.functions.scalar;
 
+import static java.lang.Math.*;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
-/** Test function for 1d minimization (see 
- * org.apache.commons.math3.optim.univariate.BracketFinderTest).
+/** Test function for 1d minimization.
  * <p>
+ * See http://heath.cs.illinois.edu/scicomp/notes/chap07.pdf
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-26
  */
 
-public final class SemiCubic extends ScalarFunctional {
+public final class Runge extends ScalarFunctional {
 
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
 
   @Override
-  public final double doubleValue (final double x) {
-    if (x < -2.0) { return doubleValue(-2.0); }
-    return (x - 1.0) * (x + 2.0) * (x + 3.0); }
-
-  //--------------------------------------------------------------
-  // TODO: accurate polynomial evaluation?
+  public final double doubleValue (final double x) { 
+    final double denom = fma(25.0*x,x,1.0); 
+    return 2.0-(1.0/denom); }
 
   @Override
-  public final double slope (final double x) {
-    if (x < -2.0) { return 0.0; }
-    return 
-      ((x + 2.0) * (x + 3.0)) + 
-      ((x - 1.0) * (x + 3.0)) + 
-      ((x - 1.0) * (x + 2.0)); }
-
-  //--------------------------------------------------------------
+  public final double slope (final double x) { 
+    final double denom = fma(25.0*x,x,1.0); 
+    return (50.0*x)/(denom*denom); }
 
   @Override
   public final Function tangentAt (final double x) {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
+  
+  @Override
+  public final double doubleArgmin () { return 0.0; }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
   // TODO: singleton?
-
-  private SemiCubic () { super(); }
+  
+  private Runge () { super(); }
 
   //--------------------------------------------------------------
-  /** Return a {@link SemiCubic} test function of the given
+  /** Return a {@link Runge} test function of the given
    * <code>dimension</code>.
    */
 
-  public static final SemiCubic get () { return new SemiCubic(); }
+  public static final Runge get () { return new Runge(); }
 
   //--------------------------------------------------------------
 } // end class
