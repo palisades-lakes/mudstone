@@ -16,7 +16,7 @@ import org.apache.commons.math3.fraction.BigFraction;
  * at 2 points.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-22
+ * @version 2018-09-27
  */
 
 public final class CubicHermite extends ScalarFunctional {
@@ -116,7 +116,8 @@ public final class CubicHermite extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin () { return _xmin; }
+  public final double doubleArgmin (final DoubleInterval support) { 
+    return _xmin; }
 
   //--------------------------------------------------------------
   // Object methods

@@ -3,6 +3,7 @@ package mudstone.java.test.functions.scalar;
 import static java.lang.Math.*;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
+import mudstone.java.functions.scalar.DoubleInterval;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -11,7 +12,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * See http://heath.cs.illinois.edu/scicomp/notes/chap07.pdf
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-26
+ * @version 2018-09-27
  */
 
 public final class Runge extends ScalarFunctional {
@@ -35,7 +36,8 @@ public final class Runge extends ScalarFunctional {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
   
   @Override
-  public final double doubleArgmin () { return 0.0; }
+  public final double doubleArgmin (final DoubleInterval support) { 
+    return 0.0; }
 
   //--------------------------------------------------------------
   // construction

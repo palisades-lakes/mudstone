@@ -2,6 +2,7 @@ package mudstone.java.test.functions.scalar;
 
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
+import mudstone.java.functions.scalar.DoubleInterval;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -10,7 +11,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * <p>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-26
+ * @version 2018-09-27
  */
 
 public final class Math832 extends ScalarFunctional {
@@ -41,7 +42,8 @@ public final class Math832 extends ScalarFunctional {
 
   // TODO: more decimal places?
   @Override
-  public final double doubleArgmin () { return 804.9355825;  }
+  public final double doubleArgmin (final DoubleInterval support) { 
+    return 804.9355825;  }
   
   //--------------------------------------------------------------
   // construction

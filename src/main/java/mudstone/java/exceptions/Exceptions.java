@@ -2,12 +2,14 @@ package mudstone.java.exceptions;
 
 import java.util.stream.Stream;
 
+import mudstone.java.Classes;
+
 /** Exception utilities.
  * <p>
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-27
  */
 
 public final class Exceptions {
@@ -32,7 +34,7 @@ public final class Exceptions {
                         final Class... args) {
     final String[] argClasses =
       Stream.of(args)
-      .map(x -> x.getSimpleName())
+      .map(x -> Classes.getSimpleName(x))
       .toArray(String[]::new);
     return unsupportedOperation(
       receiver.getSimpleName(),method,argClasses); }
@@ -44,7 +46,7 @@ public final class Exceptions {
                         final Object... args) {
     final Class[] argClasses =
       Stream.of(args)
-      .map(x -> x.getClass())
+      .map(x -> Classes.getClass(x)) // null safe
       .toArray(Class[]::new);
     return unsupportedOperation(
       receiver.getClass(),method,argClasses); }

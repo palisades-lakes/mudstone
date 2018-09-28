@@ -46,7 +46,7 @@ public final class QCubicTest {
     Assertions.assertEquals(0.0,f.slope(sqrt(3.0)/3.0),delta);
     Assertions.assertEquals(2.0,f.slope(1.0));
     Assertions.assertEquals(11.0,f.slope(2.0));
-    Assertions.assertEquals(sqrt(3.0)/3.0,f.doubleArgmin());
+    Assertions.assertEquals(sqrt(3.0)/3.0,f.doubleArgmin(null));
   }
 
   @SuppressWarnings({ "static-method" })
@@ -70,7 +70,7 @@ public final class QCubicTest {
     Assertions.assertEquals(1.0,f.slope(1.0));
     Assertions.assertEquals(3.0,f.slope(2.0));
 
-    Assertions.assertEquals(0.5,f.doubleArgmin());
+    Assertions.assertEquals(0.5,f.doubleArgmin(null));
   }
 
   @SuppressWarnings({ "static-method" })
@@ -93,7 +93,7 @@ public final class QCubicTest {
     Assertions.assertEquals(1.0,f.slope(1.0));
     Assertions.assertEquals(1.0,f.slope(2.0));
 
-    Assertions.assertEquals(Double.NEGATIVE_INFINITY,f.doubleArgmin());
+    Assertions.assertEquals(Double.NEGATIVE_INFINITY,f.doubleArgmin(null));
   }
 
   @SuppressWarnings({ "static-method" })
@@ -116,7 +116,7 @@ public final class QCubicTest {
     Assertions.assertEquals(0.0,f.slope(1.0));
     Assertions.assertEquals(0.0,f.slope(2.0));
 
-    Assertions.assertEquals(Double.NaN,f.doubleArgmin());
+    Assertions.assertEquals(Double.NaN,f.doubleArgmin(null));
   }
   //--------------------------------------------------------------
 }

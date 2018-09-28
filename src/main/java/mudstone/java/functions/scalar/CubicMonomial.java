@@ -11,7 +11,7 @@ import static java.lang.StrictMath.sqrt;
 /** A cubic function from <b>R</b> to <b>R</b> in monomial form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-25
+ * @version 2018-09-27
  */
 
 public final class CubicMonomial extends ScalarFunctional {
@@ -55,7 +55,8 @@ public final class CubicMonomial extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin () { return _xmin; }
+  public final double doubleArgmin (final DoubleInterval support) { 
+    return _xmin; }
 
   //--------------------------------------------------------------
   // Object methods

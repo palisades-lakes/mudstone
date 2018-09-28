@@ -11,6 +11,7 @@ import org.apache.commons.math3.fraction.BigFraction;
 
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
+import mudstone.java.functions.scalar.DoubleInterval;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -76,7 +77,8 @@ public final class QQuadratic extends ScalarFunctional {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
 
   @Override
-  public final double doubleArgmin () { return _xmin; }
+  public final double doubleArgmin (final DoubleInterval support) { 
+    return _xmin; }
 
   //--------------------------------------------------------------
   // Object methods

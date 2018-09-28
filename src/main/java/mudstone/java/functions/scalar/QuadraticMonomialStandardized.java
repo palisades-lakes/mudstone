@@ -13,7 +13,7 @@ import static java.lang.Math.fma;
  * to a given codomain interval.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-25
+ * @version 2018-09-27
  */
 
 public final class QuadraticMonomialStandardized 
@@ -26,15 +26,15 @@ extends ScalarFunctional {
   // f(u) = a0 + a1*u + a2*u^2
 
   // TODO: compare to composition with standardizing transforms?
-  
+
 
   private final double _a0;
   private final double _a1;
   private final double _a2;
-  
+
   private final double _ax;
   private final double _bx;
-  
+
   private final double _by;
   private final double _ay;
 
@@ -70,7 +70,8 @@ extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin () { return _xmin; }
+  public final double doubleArgmin (final DoubleInterval support) { 
+    return _xmin; }
 
   //--------------------------------------------------------------
   // Object methods
@@ -80,7 +81,7 @@ extends ScalarFunctional {
   @Override
   public final String toString () {
     return
-      getClass().getSimpleName() + "[" + 
+      "QMST[" + 
       "u= "+ _ax + "*x + " + _bx + "; " + 
       "v= " + _a0 + " + " +
       _a1 + "*u + " +
@@ -104,10 +105,10 @@ extends ScalarFunctional {
     _a2 = a2;
     _bx = bx;
     _ax = ax;
-    _by = by;
+    _by = by; 
     _ay = ay;
     if (0.0 < a2*ay) {
-      _xmin = fma(ax,-0.5*a1/a2,bx);
+      _xmin = fma(1.0/ax,-0.5*a1/a2,-bx/ax);
       _positiveLimitValue = POSITIVE_INFINITY; 
       _negativeLimitValue = POSITIVE_INFINITY; 
       _positiveLimitSlope = POSITIVE_INFINITY; 
@@ -138,22 +139,16 @@ extends ScalarFunctional {
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 
-  public static final QuadraticMonomialStandardized 
+  public static QuadraticMonomialStandardized 
   make (final double a0, 
         final double a1,
         final double a2, 
-        final DoubleInterval xInterval,
-        final DoubleInterval yInterval) {
-    final double x0 = xInterval.lower();
-    final double x1 = xInterval.upper();
-    final double dx = x1 - x0;
-    final double y0 = yInterval.lower();
-    final double y1 = yInterval.upper();
-    final double dy = y1 - y0;
-    
-    return new QuadraticMonomialStandardized(
-      a0,a1,a2,1.0/dx,-x0/dx,dy,y0); }
-
+        final double ax,
+        final double bx,
+        final double ay,
+        final double by) {
+    return 
+      new QuadraticMonomialStandardized(a0,a1,a2,ax,bx,ay,by); }
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

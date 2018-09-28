@@ -12,12 +12,8 @@ import java.util.List;
 
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.ModelFactory;
-import mudstone.java.test.functions.scalar.Math832;
 import mudstone.java.test.functions.scalar.QCubic;
 import mudstone.java.test.functions.scalar.QQuadratic;
-import mudstone.java.test.functions.scalar.Quintic;
-import mudstone.java.test.functions.scalar.SemiCubic;
-import mudstone.java.test.functions.scalar.Sin;
 import mudstone.java.test.functions.scalar.Square;
 
 //----------------------------------------------------------------
@@ -96,7 +92,8 @@ public final class Common {
   /** Check that the value of <code>f</code> actually a local
    * minimum, that is, it increases if we move a small amount
    * (<code>step*sqrt(ulp(1+abs(xmin)))</code>)s away from 
-   * <code>f.doubleArgmin()</code>.
+   * <code>f.doubleArgmin(support)</code> within 
+   * <code>support</code>.
    * Only require this if <code>f.doubleArgmin()</code> is finite.
    */
 
@@ -104,7 +101,7 @@ public final class Common {
                                         final double step, 
                                         final double dulps) {
 
-    final double xmin = f.doubleArgmin();
+    final double xmin = f.doubleArgmin(null);
 
     if (isFinite(xmin)) {
 
@@ -144,8 +141,8 @@ public final class Common {
   private static final void assertEqualArgmin (final Function f,
                                                final Function g,
                                                final double xulps) {
-    final double xf = f.doubleArgmin();
-    final double xg = g.doubleArgmin();
+    final double xf = f.doubleArgmin(null);
+    final double xg = g.doubleArgmin(null);
     final double gamma = abs(xf)+abs(xg);
     final double zeta = 
       xulps*ulp(1.0+(Double.isNaN(gamma) ? 0.0 : gamma));
@@ -243,8 +240,8 @@ public final class Common {
                      x0 + (x1-x0)*GOLDEN_RATIO,
                      x1 + (x2-x1)*GOLDEN_RATIO,
                      x2 + (x0-x2)*GOLDEN_RATIO,
-                     f.doubleArgmin(),
-                     g.doubleArgmin(), };
+                     f.doubleArgmin(null),
+                     g.doubleArgmin(null), };
     for (final double xi : xx) {
       assertEqualValue(f,g,xi,yulps);
       assertEqualSlope(f,g,xi,dulps); } }

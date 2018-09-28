@@ -1,6 +1,7 @@
 package mudstone.java.functions;
 
 import mudstone.java.exceptions.Exceptions;
+import mudstone.java.functions.scalar.DoubleInterval;
 
 // TODO:
 // should FUnctions be required/allowed to return correct limiting
@@ -49,7 +50,7 @@ import mudstone.java.exceptions.Exceptions;
  * </ul>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-20
+ * @version 2018-09-27
  */
 public interface Function {
 
@@ -230,13 +231,14 @@ public interface Function {
    * has a local minimum.
    * Only intended to be implemented where this can be calculated
    * efficiently, in something like closed form.
+   * @param support TODO
    */
   @SuppressWarnings("unused")
-  public default double doubleArgmin () {
+  public default double doubleArgmin (final DoubleInterval support) {
     assert 1 == domain().dimension();
     assert 1 == codomain().dimension();
     throw Exceptions.unsupportedOperation(
-      getClass(),"doubleArgmin",Double.TYPE); }
+      this,"doubleArgmin",support); }
 
   //--------------------------------------------------------------
 }

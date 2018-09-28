@@ -44,7 +44,7 @@ public final class QQuadraticTest {
     assertEquals(1.0,f.slope(1.0));
     assertEquals(3.0,f.slope(2.0));
 
-    assertEquals(0.5,f.doubleArgmin());
+    assertEquals(0.5,f.doubleArgmin(null));
   }
 
   @SuppressWarnings({ "static-method" })
@@ -68,7 +68,7 @@ public final class QQuadraticTest {
     assertEquals(1.0,f.slope(1.0));
     assertEquals(3.0,f.slope(2.0));
 
-    assertEquals(0.5,f.doubleArgmin());
+    assertEquals(0.5,f.doubleArgmin(null));
   }
 
   @SuppressWarnings({ "static-method" })
@@ -91,7 +91,7 @@ public final class QQuadraticTest {
     assertEquals(1.0,f.slope(1.0));
     assertEquals(1.0,f.slope(2.0));
 
-    assertEquals(Double.NEGATIVE_INFINITY,f.doubleArgmin());
+    assertEquals(Double.NEGATIVE_INFINITY,f.doubleArgmin(null));
   }
 
   @SuppressWarnings({ "static-method" })
@@ -115,7 +115,7 @@ public final class QQuadraticTest {
     assertEquals(0.0,f.slope(1.0));
     assertEquals(0.0,f.slope(2.0));
 
-    assertEquals(Double.NaN,f.doubleArgmin());
+    assertEquals(Double.NaN,f.doubleArgmin(null));
   }
 
   //--------------------------------------------------------------

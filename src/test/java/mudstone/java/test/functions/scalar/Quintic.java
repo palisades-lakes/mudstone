@@ -2,6 +2,7 @@ package mudstone.java.test.functions.scalar;
 
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
+import mudstone.java.functions.scalar.DoubleInterval;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -42,7 +43,7 @@ public final class Quintic extends ScalarFunctional {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
 
   @Override
-  public final double doubleArgmin () {
+  public final double doubleArgmin (final DoubleInterval support) {
     return 0.27195613; }
   
   //--------------------------------------------------------------

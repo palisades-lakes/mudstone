@@ -54,7 +54,8 @@ public final class QuadraticMonomial extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin () { return _xmin; }
+  public final double doubleArgmin (final DoubleInterval support) { 
+    return _xmin; }
 
   //--------------------------------------------------------------
   // Object methods
