@@ -7,13 +7,14 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
 /** An quadratic function from <b>R</b> to <b>R</b> in Lagrange 
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-24
+ * @version 2018-09-28
  */
 
 public final class QuadraticLagrange extends ScalarFunctional {
@@ -65,8 +66,10 @@ public final class QuadraticLagrange extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return _xmin; }
+  public final double doubleArgmin (final Domain support) { 
+    final Interval bounds = (Interval) support;
+    if (bounds.contains(_xmin)) { return _xmin; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // Object methods
@@ -84,6 +87,19 @@ public final class QuadraticLagrange extends ScalarFunctional {
   // construction
   //--------------------------------------------------------------
 
+  private static final double argmin (final double x0, 
+                                      final double y0,
+                                      final double x1, 
+                                      final double y1,
+                                      final double x2, 
+                                      final double y2) {
+    final double c0 = (x1-x2)*(y0-y1);
+    final double c1 = (x0-x1)*(y1-y2);
+    final double numer = ((x1+x0)*c1)-((x1+x2)*c0); 
+    return numer/(2.0*(c1-c0)); }
+  
+  //--------------------------------------------------------------
+
   private QuadraticLagrange (final double x0, final double y0,
                              final double x1, final double y1,
                              final double x2, final double y2) {
@@ -97,18 +113,13 @@ public final class QuadraticLagrange extends ScalarFunctional {
     _b1 = y1/((x1-x2)*(x1-x0));
     _b2 = y2/((x2-x0)*(x2-x1));
 
-//    System.out.println("QL[" + 
-//      a0(x0,y0,x1,y1,x2,y2) + " + " + 
-//      a1(x0,y0,x1,y1,x2,y2) + "*x + " + 
-//      a2(x0,y0,x1,y1,x2,y2) + "*x^2]");
     // TODO: accurate 1st and 2nd derivative sign calculation?
     final double[] a = QuadraticUtils
       .interpolatingMonomialCoefficients(x0,y0,x1,y1,x2,y2);
+//    System.out.println(
+//      "QL[" + a[0] + " + " + a[1] + "*x + " + a[2] + "*x^2]");
     if (0.0 < a[2]) {
-      final double c0 = (x1-x2)*(y0-y1);
-      final double c1 = (x0-x1)*(y1-y2);
-      final double numer = ((x1+x0)*c1)-((x1+x2)*c0); 
-      _xmin = numer/(2.0*(c1-c0)); 
+      _xmin = argmin(x0,y0,x1,y1,x2,y2);
       _positiveLimitValue = POSITIVE_INFINITY; 
       _negativeLimitValue = POSITIVE_INFINITY; 
       _positiveLimitSlope = POSITIVE_INFINITY; 

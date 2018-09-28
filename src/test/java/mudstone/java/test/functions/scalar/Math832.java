@@ -1,8 +1,10 @@
 package mudstone.java.test.functions.scalar;
 
+import static java.lang.Double.NaN;
+
+import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
-import mudstone.java.functions.scalar.DoubleInterval;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -42,8 +44,9 @@ public final class Math832 extends ScalarFunctional {
 
   // TODO: more decimal places?
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return 804.9355825;  }
+  public final double doubleArgmin (final Domain support) { 
+    if (support.contains(804.9355825)) { return 804.9355825;  } 
+    return NaN; }
   
   //--------------------------------------------------------------
   // construction

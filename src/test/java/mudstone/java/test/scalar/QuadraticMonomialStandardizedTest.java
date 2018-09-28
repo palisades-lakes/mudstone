@@ -3,6 +3,7 @@ package mudstone.java.test.scalar;
 import static mudstone.java.test.scalar.Common.affineQuadratics;
 import static mudstone.java.test.scalar.Common.constantQuadratics;
 import static mudstone.java.test.scalar.Common.exact;
+import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.knots;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 
@@ -25,7 +26,7 @@ import mudstone.java.functions.scalar.QuadraticMonomialStandardizedFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-27
+ * @version 2018-09-28
  */
 
 strictfp
@@ -40,10 +41,10 @@ public final class QuadraticMonomialStandardizedTest {
       quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
-        System.out.println(f);
+        //System.out.println(f);
         for (final double[] kn : knots) {
-          System.out.println(Arrays.toString(kn));
-          exact(f,factory,kn,5.0e2,5.0e3,2.0e4); } } } }
+          //System.out.println(Arrays.toString(kn));
+          exact(f,factory,kn,expand(kn),1.0e3,5.0e3,2.0e4); } } } }
   
   //--------------------------------------------------------------
 }

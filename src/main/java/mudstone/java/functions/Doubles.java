@@ -1,5 +1,7 @@
 package mudstone.java.functions;
 
+import static java.lang.Double.*;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.fma;
 import static java.lang.Math.ulp;
@@ -9,7 +11,7 @@ import static java.lang.Math.ulp;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-07
+ * @version 2018-09-28
  */
 
 public final class Doubles {
@@ -47,7 +49,27 @@ public final class Doubles {
     return abs(z0-z1) <= delta; }
 
   //--------------------------------------------------------------
-  // vector ops
+  // 'vector' or 'list'  ops
+  //--------------------------------------------------------------
+  
+  public static final double min (final double[] x) {
+    final int n = x.length;
+    double xmin = POSITIVE_INFINITY;
+    for (int i=0;i<n;i++) { 
+      // NaN elements will be ignored.
+      if (x[i] < xmin) { xmin=x[i]; } }
+    return xmin; }
+  
+  //--------------------------------------------------------------
+
+  public static final double max (final double[] x) {
+    final int n = x.length;
+    double xmax = NEGATIVE_INFINITY;
+    for (int i=0;i<n;i++) { 
+      // NaN elements will be ignored.
+      if (x[i] > xmax) { xmax=x[i]; } }
+    return xmax; }
+  
   //--------------------------------------------------------------
   
   public static final boolean strictlyIncreasing (final double[] x) {

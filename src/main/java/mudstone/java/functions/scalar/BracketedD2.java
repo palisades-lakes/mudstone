@@ -20,7 +20,7 @@ public final class BracketedD2  implements StopTest {
   @Override
   public final boolean stop (final Function f,
                              final Object history) {
-    final DoubleInterval t = (DoubleInterval) history;
+    final Interval t = (Interval) history;
     return 
       (f.slope(t.lower()) < 0.0)
       &&

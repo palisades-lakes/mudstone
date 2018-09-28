@@ -47,10 +47,12 @@ public interface Domain {
   
   //--------------------------------------------------------------
   /** Is <code>x</code> an element of the Domain? */
+  
   public default boolean contains (final Object x) {
     throw Exceptions.unsupportedOperation(this,"contains",x); }
   
   /** Is <code>x</code> an element of the Domain? */
+  
   @SuppressWarnings("unused")
   public default boolean contains (final double x)  {
     throw Exceptions.unsupportedOperation(

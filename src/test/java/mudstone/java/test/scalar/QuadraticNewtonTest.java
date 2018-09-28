@@ -3,6 +3,7 @@ package mudstone.java.test.scalar;
 import static mudstone.java.test.scalar.Common.affineQuadratics;
 import static mudstone.java.test.scalar.Common.constantQuadratics;
 import static mudstone.java.test.scalar.Common.exact;
+import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.knots;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 
@@ -22,7 +23,7 @@ import mudstone.java.functions.scalar.QuadraticNewtonFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-26
+ * @version 2018-09-28
  */
 
 strictfp
@@ -35,13 +36,10 @@ public final class QuadraticNewtonTest {
   public final void tests () {
     final ModelFactory factory = QuadraticNewtonFactory.get();
     final Iterable<Function> functions = Iterables.concat(
-      quadraticQuadratics
-      , affineQuadratics
-      , constantQuadratics
-      );
+      quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final Function f : functions) {
       for (final double[] kn : knots) {
-        exact(f,factory,kn,5.0e2,5.0e3,2.0e4); } } }
+        exact(f,factory,kn,expand(kn),5.0e2,5.0e3, 2.0e4); } } }
 
   //--------------------------------------------------------------
 }

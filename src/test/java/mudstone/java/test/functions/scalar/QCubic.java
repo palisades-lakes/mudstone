@@ -13,9 +13,9 @@ import org.apache.commons.math3.fraction.BigFraction;
 import static org.apache.commons.math3.fraction.BigFraction.TWO;
 import static org.apache.commons.math3.fraction.BigFraction.ZERO;
 
+import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
-import mudstone.java.functions.scalar.DoubleInterval;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -26,7 +26,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-18
+ * @version 2018-09-28
  */
 
 strictfp
@@ -85,8 +85,9 @@ public final class QCubic extends ScalarFunctional {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
 
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return _xmin; }
+  public final double doubleArgmin (final Domain support) { 
+    if (support.contains(_xmin)) { return _xmin; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // Object methods
@@ -121,7 +122,7 @@ public final class QCubic extends ScalarFunctional {
   @Override
   public final String toString () {
     return 
-      "Q[" + _a0 + " + " + _a1 + "*x + "
+      "Q3[" + _a0 + " + " + _a1 + "*x + "
       + _a2 + "*x^2 + " + _a3 + "*x^3; " 
       + _xmin + "]"; }
 

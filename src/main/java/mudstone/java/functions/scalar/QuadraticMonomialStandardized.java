@@ -7,13 +7,15 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import mudstone.java.functions.Domain;
+
 /** A quadratic function from <b>R</b> to <b>R</b> in monomial 
  * form composed implicitly with standardizing affine functions
  * that map a domain interval to [0,1] and [0,1] codomain values
  * to a given codomain interval.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-27
+ * @version 2018-09-28
  */
 
 public final class QuadraticMonomialStandardized 
@@ -70,8 +72,10 @@ extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return _xmin; }
+  public final double doubleArgmin (final Domain support) { 
+    final Interval bounds = (Interval) support;
+    if (bounds.contains(_xmin)) { return _xmin; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // Object methods

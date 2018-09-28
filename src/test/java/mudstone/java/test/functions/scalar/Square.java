@@ -1,8 +1,10 @@
 package mudstone.java.test.functions.scalar;
 
+import static java.lang.Double.NaN;
+
+import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional1d;
-import mudstone.java.functions.scalar.DoubleInterval;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -10,7 +12,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * <p>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-25
+ * @version 2018-09-28
  */
 
 public final class Square extends ScalarFunctional {
@@ -30,8 +32,9 @@ public final class Square extends ScalarFunctional {
     return AffineFunctional1d.make(slope(x),doubleValue(x)); }
   
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return 0.0; }
+  public final double doubleArgmin (final Domain support) { 
+    if (support.contains(0.0)) { return 0.0; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // construction

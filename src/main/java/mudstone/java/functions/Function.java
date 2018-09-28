@@ -1,7 +1,6 @@
 package mudstone.java.functions;
 
 import mudstone.java.exceptions.Exceptions;
-import mudstone.java.functions.scalar.DoubleInterval;
 
 // TODO:
 // should FUnctions be required/allowed to return correct limiting
@@ -50,7 +49,7 @@ import mudstone.java.functions.scalar.DoubleInterval;
  * </ul>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-27
+ * @version 2018-09-28
  */
 public interface Function {
 
@@ -92,7 +91,6 @@ public interface Function {
   public default Domain range () {
     return null; }
 //    throw Exceptions.unsupportedOperation(this,"range"); }
-
 
   //--------------------------------------------------------------
   // general methods
@@ -228,13 +226,17 @@ public interface Function {
       getClass(),"slope",Double.TYPE); }
 
   /** Return a domain value at which the function
-   * has a local minimum.
+   * achieves an isolated local minimum, where the slope of
+   * function is zero, in the (closure) of the 
+   * <code>support</code>. If there is more than one such domain
+   * value, return any one of them. If there are no isolated 
+   * local minima, return NaN. 
+   * <p>
    * Only intended to be implemented where this can be calculated
    * efficiently, in something like closed form.
-   * @param support TODO
    */
   @SuppressWarnings("unused")
-  public default double doubleArgmin (final DoubleInterval support) {
+  public default double doubleArgmin (final Domain support) {
     assert 1 == domain().dimension();
     assert 1 == codomain().dimension();
     throw Exceptions.unsupportedOperation(

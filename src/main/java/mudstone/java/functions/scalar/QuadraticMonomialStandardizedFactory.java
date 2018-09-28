@@ -13,7 +13,7 @@ import mudstone.java.functions.Function;
  * other quadratic implementations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-27
+ * @version 2018-09-28
  */
 
 public final class QuadraticMonomialStandardizedFactory 
@@ -57,8 +57,14 @@ implements ModelFactory {
 
     final BigFraction ymin = new BigFraction(min(y0,min(y1,y2)));
     final BigFraction ymax = new BigFraction(max(y0,max(y1,y2)));
-    final BigFraction ay = ymax.subtract(ymin).reciprocal();
-    final BigFraction by = ay.negate().multiply(ymin);
+    final BigFraction ay;
+    final BigFraction by;
+    if (ymin.equals(ymax) ) {
+      ay = BigFraction.ZERO;
+      by = ymin; }
+    else {
+      ay = ymax.subtract(ymin).reciprocal();
+      by = ay.negate().multiply(ymin); }
 
     // monomial coefficients for interpolating points 
     // (0,1) -> (0,1)
@@ -71,10 +77,8 @@ implements ModelFactory {
     // need y transform from (0,1) to y range
     return QuadraticMonomialStandardized.make(
       a[0],a[1],a[2],
-      ax.doubleValue(),
-      bx.doubleValue(),
-      ymax.subtract(ymin).doubleValue(),
-      ymin.doubleValue()); }
+      ax.doubleValue(),bx.doubleValue(),
+      ymax.subtract(ymin).doubleValue(),ymin.doubleValue()); }
 
   //--------------------------------------------------------------
   // ModelFactory methods

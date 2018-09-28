@@ -5,6 +5,8 @@ import static mudstone.java.test.scalar.Common.affineQuadratics;
 import static mudstone.java.test.scalar.Common.constantCubics;
 import static mudstone.java.test.scalar.Common.constantQuadratics;
 import static mudstone.java.test.scalar.Common.exact;
+import static mudstone.java.test.scalar.Common.expand;
+import static mudstone.java.test.scalar.Common.general;
 import static mudstone.java.test.scalar.Common.knots;
 import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
@@ -28,7 +30,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-25
+ * @version 2018-09-28
  */
 
 strictfp
@@ -50,15 +52,15 @@ public final class CubicMonomialTest {
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
         for (final double[] kn : knots) {
-          exact(f,factory,kn,2.0e2,2.0e2,1.0e3); } } } }
+          exact(f,factory,kn,expand(kn),2.0e2,2.0e2, 1.0e3); } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
-  public final void tests () {
+  public final void generalTests () {
     final ModelFactory factory = CubicMonomialFactory.get();
       for (final Function f : testFns) {
         for (final double[] kn : knots) {
-          exact(f,factory,kn,2.0e2,2.0e2,2.0e7); } } } 
+          general(f,factory,kn,expand(kn),2.0e2,2.0e2, 2.0e7); } } } 
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

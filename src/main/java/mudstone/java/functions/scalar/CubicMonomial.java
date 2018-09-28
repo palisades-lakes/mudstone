@@ -6,12 +6,15 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
+import static java.lang.Math.nextUp;
 import static java.lang.StrictMath.sqrt;
+
+import mudstone.java.functions.Domain;
 
 /** A cubic function from <b>R</b> to <b>R</b> in monomial form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-27
+ * @version 2018-09-28
  */
 
 public final class CubicMonomial extends ScalarFunctional {
@@ -55,8 +58,9 @@ public final class CubicMonomial extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return _xmin; }
+  public final double doubleArgmin (final Domain support) { 
+    if (support.contains(_xmin)) { return _xmin; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // Object methods

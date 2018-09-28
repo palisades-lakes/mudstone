@@ -7,13 +7,14 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
 /** An quadratic function from <b>R</b> to <b>R</b> in Lagrange 
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-26
+ * @version 2018-09-28
  */
 
 public final class QuadraticNewton extends ScalarFunctional {
@@ -62,8 +63,9 @@ public final class QuadraticNewton extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return _xmin; }
+  public final double doubleArgmin (final Domain support) { 
+    if (support.contains(_xmin)) { return _xmin; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // Object methods

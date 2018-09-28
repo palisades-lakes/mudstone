@@ -7,11 +7,13 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import mudstone.java.functions.Domain;
+
 /** A quadratic function from <b>R</b> to <b>R</b> in monomial 
  * form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-21
+ * @version 2018-09-28
  */
 
 public final class QuadraticMonomialShifted extends ScalarFunctional {
@@ -58,8 +60,10 @@ public final class QuadraticMonomialShifted extends ScalarFunctional {
     return _negativeLimitSlope; }
 
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return _xmin; }
+  public final double doubleArgmin (final Domain support) { 
+    final Interval bounds = (Interval) support;
+    if (bounds.contains(_xmin)) { return _xmin; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // Object methods

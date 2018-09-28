@@ -7,16 +7,19 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.abs;
 import static java.lang.Math.fma;
+import static java.lang.Math.nextUp;
 import static java.lang.Math.sqrt;
 
 import org.apache.commons.math3.fraction.BigFraction;
+
+import mudstone.java.functions.Domain;
 
 /** A cubic function from <b>R</b> to <b>R</b> 
  * in the Hermite basis. Convenient for matching value and slope
  * at 2 points.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-27
+ * @version 2018-09-28
  */
 
 public final class CubicHermite extends ScalarFunctional {
@@ -115,9 +118,23 @@ public final class CubicHermite extends ScalarFunctional {
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
     return _negativeLimitSlope; }
 
+//  @Override
+//  public final double doubleArgmin (final Domain support) { 
+//    final Interval bounds = (Interval) support;
+//    if (bounds.contains(_xmin)) { return _xmin; }
+//    final double x0 = bounds.lower();
+//    final double x1 = nextUp(bounds.upper());
+//    // note: if xmin == xupper and it's a strict local minimum, 
+//    // that will be returned.
+//    final double y0 = doubleValue(x0);
+//    final double y1 = doubleValue(x1);
+//    if (y0 <= y1) { return x0; }
+//    return x1; }
+
   @Override
-  public final double doubleArgmin (final DoubleInterval support) { 
-    return _xmin; }
+  public final double doubleArgmin (final Domain support) { 
+    if (support.contains(_xmin)) { return _xmin; }
+    return NaN; }
 
   //--------------------------------------------------------------
   // Object methods
