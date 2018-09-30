@@ -6,7 +6,6 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
-import static java.lang.Math.nextUp;
 import static java.lang.StrictMath.sqrt;
 
 import mudstone.java.functions.Domain;

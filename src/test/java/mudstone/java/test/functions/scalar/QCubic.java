@@ -137,22 +137,23 @@ public final class QCubic extends ScalarFunctional {
     return a2.multiply(2).add(a3.multiply(6).multiply(q)); }
 
   //--------------------------------------------------------------
+
   private static final BigFraction MINUS2 = TWO.negate();
 
   private static final double argmin (final BigFraction a1) {
-     // assuming a3 and a2 are 0
-       switch (ZERO.compareTo(a1)) {
-       case -1 : return Double.NEGATIVE_INFINITY;
-       case 1 : return Double.POSITIVE_INFINITY;
-       default : return Double.NaN; } }
+    // assuming a3 and a2 are 0
+    switch (ZERO.compareTo(a1)) {
+    case -1 : return Double.NEGATIVE_INFINITY;
+    case 1 : return Double.POSITIVE_INFINITY;
+    default : return Double.NaN; } }
 
   private static final double argmin (final BigFraction a1,
                                       final BigFraction a2) {
-     // assuming a3 is 0
-     switch (ZERO.compareTo(a2)) {
-     case -1 : return a1.divide(MINUS2.multiply(a2)).doubleValue(); 
-     case 1 : return Double.POSITIVE_INFINITY;
-     default : return argmin(a1); } }
+    // assuming a3 is 0
+    switch (ZERO.compareTo(a2)) {
+    case -1 : return a1.divide(MINUS2.multiply(a2)).doubleValue(); 
+    case 1 : return Double.POSITIVE_INFINITY;
+    default : return argmin(a1); } }
 
   // NOTE: a finite local minimum, if possible, rather than global
   // minimum at +/- infinity.
@@ -183,7 +184,7 @@ public final class QCubic extends ScalarFunctional {
       // 2nd derivative is 6*a3*(critical point)
       // so choose the critical point with the same sign as
       return a3sign*sqrt(sq.doubleValue()); }
-    
+
     if (ZERO.equals(a1)) { 
       // critical points are 0 and (-2*a2)/(3*a3) with
       // second derivatives 2*a2 and -2*a2\
@@ -271,10 +272,10 @@ public final class QCubic extends ScalarFunctional {
 
   //--------------------------------------------------------------
 
-  public static final QCubic get (final BigFraction a0,
-                                  final BigFraction a1,
-                                  final BigFraction a2,
-                                  final BigFraction a3) { 
+  public static final QCubic make (final BigFraction a0,
+                                   final BigFraction a1,
+                                   final BigFraction a2,
+                                   final BigFraction a3) { 
     return new QCubic(a0,a1,a2,a3); }
 
   public static final QCubic make (final double a0,

@@ -4,26 +4,26 @@ import mudstone.java.functions.Function;
 
 /** A ModelFactory returning scalar quadratic functions 
  * interpolating
- * <code>(x0,y0=f(x0)), (x1,y1=f(x1), (x2,y2=f(x2))</code>.
- * 
+ * <code>(x0,y0=f(x0)), (x1,y1=f(x1), (x2,d2=df(x2))</code>.
+ * <p>
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-29
+ * @version 2018-09-26
  */
 
-public final class QuadraticLagrangeFactory implements ModelFactory {
+public final class CubicNewtonFactory implements ModelFactory {
 
   //--------------------------------------------------------------
-  // methods
+  // ModelFactory methods
   //--------------------------------------------------------------
 
-  private final static QuadraticLagrange
+  private final static QuadraticNewton
   interpolate (final double x0, 
                final double y0,
                final double x1, 
                final double y1,
                final double x2,
                final double y2) {
-    return QuadraticLagrange.make(x0,y0,x1,y1,x2,y2); }
+    return QuadraticNewton.make(x0,y0,x1,y1,x2,y2); }
 
   //--------------------------------------------------------------
   // ModelFactory methods
@@ -39,10 +39,7 @@ public final class QuadraticLagrangeFactory implements ModelFactory {
 
 //  @Override
 //  public final Function model (final double[] z)  {
-//    return interpolate(
-//      z[0],z[1],
-//      z[2],z[3],
-//      z[4],z[5]) ; }
+//    return interpolate(z[0],z[1],z[2],z[3],z[4],z[5]) ; }
 
   @Override
   public final double[] matchValueAt (final double[] knots) {
@@ -57,10 +54,10 @@ public final class QuadraticLagrangeFactory implements ModelFactory {
   //--------------------------------------------------------------
   // TODO: singleton?
 
-  private QuadraticLagrangeFactory () { super(); }
+  private CubicNewtonFactory () { super(); }
 
   public static final ModelFactory 
-  get () { return new QuadraticLagrangeFactory(); }
+  get () { return new CubicNewtonFactory(); }
 
   //--------------------------------------------------------------
 }

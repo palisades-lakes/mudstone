@@ -7,7 +7,6 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.abs;
 import static java.lang.Math.fma;
-import static java.lang.Math.nextUp;
 import static java.lang.Math.sqrt;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -19,7 +18,7 @@ import mudstone.java.functions.Domain;
  * at 2 points.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-09-29
  */
 
 public final class CubicHermite extends ScalarFunctional {
