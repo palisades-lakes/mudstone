@@ -249,10 +249,10 @@ public final class Common {
                                         final double yulps, 
                                         final double dulps) {
     //    System.out.println(f);
-    checkArgmin(f,support,1.0e2*min(1.0e1,xulps),dulps);
+    checkArgmin(f,support,5.0e2*min(1.0e1,xulps),dulps);
     final Function g = factory.model(f,xs);
     //    System.out.println(g);
-    checkArgmin(g,support,1.0e2*min(1.0e1,xulps),dulps);
+    checkArgmin(g,support,5.0e2*min(1.0e1,xulps),dulps);
     //    System.out.println(Arrays.toString(xs));
     for (final double xi : factory.matchValueAt(xs)) {
       assertEqualValue(f,g,xi,yulps); }
@@ -276,7 +276,8 @@ public final class Common {
     final Function g = 
       general(f,factory,xs,support,xulps,yulps, dulps);
     assertLocalMin(
-      g,f.doubleArgmin(support),support,1.0e2*min(1.0e1,xulps),dulps);
+      g,f.doubleArgmin(support),support,
+      5.0e2*min(1.0e1,xulps),dulps);
     final double x0 = xs[0];
     final double x1 = xs[1];
     final double x2 = xs[2];

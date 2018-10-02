@@ -27,7 +27,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-01
+ * @version 2018-10-02
  */
 
 strictfp
@@ -48,7 +48,7 @@ public final class CubicHermiteTest {
       for (final double[] kn : knots) {
         //System.out.println(Arrays.toString(kn));
         //System.out.println(expand(kn));
-        exact(f,factory,kn,expand(kn),1.0e12,1.0e8, 1.0e14); } } }
+        exact(f,factory,kn,expand(kn),5.0e5,5.0e6,5.0e7); } } }
 
   //--------------------------------------------------------------
 }

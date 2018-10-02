@@ -95,11 +95,16 @@ public final class CubicHermite extends ScalarFunctional {
 
     final double t = (x-_x0)/_dx10;
     if (isFinite(x)) {
-      return 
-        _y0*h00(t) +
-        _y1*h01(t) +
-        _d0*_dx10*h10(t) +
-        _d1*_dx10*h11(t); }
+//      return 
+//        _y0*h00(t) +
+//        _y1*h01(t) +
+//        _d0*_dx10*h10(t) +
+//        _d1*_dx10*h11(t); }
+    return 
+      fma(_y0,h00(t),
+      fma(_y1,h01(t),
+      _dx10*fma(_d0,h10(t),
+      _d1*h11(t)))); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
     return _negativeLimitValue; }
