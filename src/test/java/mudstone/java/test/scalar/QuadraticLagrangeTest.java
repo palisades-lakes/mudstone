@@ -7,8 +7,6 @@ import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.knots;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Iterables;
@@ -25,7 +23,7 @@ import mudstone.java.functions.scalar.QuadraticLagrangeFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-01
  */
 
 strictfp

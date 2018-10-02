@@ -7,6 +7,10 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import java.util.Arrays;
+
+import org.apache.commons.math3.fraction.BigFraction;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
@@ -14,7 +18,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-01
  */
 
 public final class CubicNewton extends ScalarFunctional {
@@ -25,10 +29,12 @@ public final class CubicNewton extends ScalarFunctional {
 
   private final double _x0;
   private final double _x1;
+  private final double _x2;
 
   private final double _b0;
   private final double _b1;
   private final double _b2;
+  private final double _b3;
 
   // TODO: space vs re-computing cost?
   private final double _xmin;
@@ -47,8 +53,13 @@ public final class CubicNewton extends ScalarFunctional {
     if (isFinite(x)) {
       final double dx0 = x-_x0;
       final double dx1 = x-_x1;
-      return fma(dx0,fma(dx1,_b2,_b1),_b0); }
-
+      final double dx2 = x-_x2;
+      return 
+        fma(dx0,
+          fma(dx1,
+            fma(dx2,_b3,_b2),
+            _b1),
+          _b0); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
     return _negativeLimitValue; }
@@ -56,8 +67,13 @@ public final class CubicNewton extends ScalarFunctional {
   @Override
   public final double slope (final double x) {
     if (isFinite(x)) {
-      return fma(_b2,fma(2.0,x,-(_x0+_x1)),_b1); }
-
+      final double dx0 = x-_x0;
+      final double dx1 = x-_x1;
+      final double dx2 = x-_x2;
+      return 
+        _b1 +
+        _b2*(dx0+dx1) +
+        _b3*((dx0*dx1)+(dx1*dx2)+(dx2*dx0)); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
     return _negativeLimitSlope; }
@@ -75,8 +91,8 @@ public final class CubicNewton extends ScalarFunctional {
   public final String toString () {
     return
       getClass().getSimpleName() + "[" + 
-      _x0 + "," + _x1 + ";" +
-      _b0 + "," + _b1 + "," + _b2 + ";" +
+      _x0 + "," + _x1 + "," + _x2 + ";" +
+      _b0 + "," + _b1 + "," + _b2+ "," + _b3 + ";" +
       _xmin + "]"; }
 
   //--------------------------------------------------------------
@@ -84,79 +100,125 @@ public final class CubicNewton extends ScalarFunctional {
   //--------------------------------------------------------------
 
   private CubicNewton (final double x0, final double y0,
-                           final double x1, final double y1,
-                           final double x2, final double y2) {
+                       final double x1, final double y1,
+                       final double x2, final double y2,
+                       final double x3, final double y3) {
     assert x0 != x1;
+    assert x0 != x2;
+    assert x0 != x3;
     assert x1 != x2;
-    assert x2 != x0;
+    assert x1 != x3;
+    assert x2 != x3;
+    
     _x0 = x0;
     _x1 = x1;
+    _x2 = x2;
+    
     _b0 = y0;
-    // TODO: BigFraction calculations?
     _b1 = (y1-y0)/(x1-x0);
-    _b2 = (((y2-y1)/(x2-x1)) - _b1)/(x2-x0);
-
-    //    System.out.println("QN[" + 
-    //      a0(x0,y0,x1,y1,x2,y2) + " + " + 
-    //      a1(x0,y0,x1,y1,x2,y2) + "*x + " + 
-    //      a2(x0,y0,x1,y1,x2,y2) + "*x^2]");
-    // TODO: accurate 1st and 2nd derivative sign calculation?
-    final double[] a = 
-      QuadraticUtils.interpolatingMonomialCoefficients(
-        x0,y0,x1,y1,x2,y2);
-    if (0.0 < a[2]) {
-      _xmin = 0.5*(x0+x1-(_b1/_b2)); 
-      _positiveLimitValue = POSITIVE_INFINITY; 
-      _negativeLimitValue = POSITIVE_INFINITY; 
-      _positiveLimitSlope = POSITIVE_INFINITY; 
-      _negativeLimitSlope = NEGATIVE_INFINITY; }
-    else if (0.0 > a[2]) {
-      _xmin = POSITIVE_INFINITY;
-      _positiveLimitValue = NEGATIVE_INFINITY; 
-      _negativeLimitValue = NEGATIVE_INFINITY; 
-      _positiveLimitSlope = NEGATIVE_INFINITY; 
-      _negativeLimitSlope = POSITIVE_INFINITY; }
-    else {// affine, look at a1
-      if (0.0 < a[1]) {
-        _xmin = NEGATIVE_INFINITY;
+    final double x20 = x2-x0;
+    final double x21 = x2-x1;
+    final double y20 = y2-y0;
+    _b2 = fma(-_b1,x20,y20)/(x20*x21);
+    final double x30 = x3-x0;
+    final double x31 = x3-x1;
+    final double x32 = x3-x2;
+    final double y30 = y3-y0;
+    //_b3 = (y30 - _b1*x30 - _b2*x30*x31)/(x30*x31*x32);
+    _b3 = fma(x30,fma(x31,-_b2,-_b1),y30)/(x30*x31*x32);
+    
+    // derivative as a*x^2 + b*x + c
+    final double a = 3.0*_b3;
+    final double b = (_b2-_b3*(x0-x1-x2));
+    final double c = _b1 -_b2*(x0+x1)+_b3*(x0*x1+x1*x2+x2*x0);
+    System.out.println(y0 + " + " + c + "*x + " + b + "*x^2 + " + a + "*x^3");
+    if (0.0 == a) { // quadratic
+      if (0.0 < b) { 
+        _xmin = -c/b; 
         _positiveLimitValue = POSITIVE_INFINITY; 
-        _negativeLimitValue = NEGATIVE_INFINITY; 
-        _positiveLimitSlope = a[1]; 
-        _negativeLimitSlope = a[1]; }
-      else if (0.0 > a[1]) {
+        _negativeLimitValue = POSITIVE_INFINITY; 
+        _positiveLimitSlope = POSITIVE_INFINITY; 
+        _negativeLimitSlope = NEGATIVE_INFINITY; }
+      else if (0.0 > b) { // +/- infinity both minima
         _xmin = POSITIVE_INFINITY;
         _positiveLimitValue = NEGATIVE_INFINITY; 
+        _negativeLimitValue = NEGATIVE_INFINITY; 
+        _positiveLimitSlope = NEGATIVE_INFINITY; 
+        _negativeLimitSlope = POSITIVE_INFINITY; }
+      else { // affine
+        if (0.0 < c) {
+          _xmin = NEGATIVE_INFINITY;
+          _positiveLimitValue = POSITIVE_INFINITY; 
+          _negativeLimitValue = NEGATIVE_INFINITY; 
+          _positiveLimitSlope = c; 
+          _negativeLimitSlope = c; }
+        else if (0.0 > c) {
+          _xmin = POSITIVE_INFINITY;
+          _positiveLimitValue = NEGATIVE_INFINITY; 
+          _negativeLimitValue = POSITIVE_INFINITY; 
+          _positiveLimitSlope = c; 
+          _negativeLimitSlope = c; }
+        else { // constant
+          _xmin = NaN; 
+          _positiveLimitValue = y0; 
+          _negativeLimitValue = y0; 
+          _positiveLimitSlope = 0.0; 
+          _negativeLimitSlope = 0.0; } } }
+    else { // 0.0 != a, nontrivial cubic
+      //final double[] roots = QuadraticUtils.roots(c,b,a);
+      final BigFraction[] roots = 
+        QuadraticUtils.roots(
+          new BigFraction(c),
+          new BigFraction(b),
+          new BigFraction(a));
+      System.out.println("roots" + Arrays.toString(roots));
+      assert 2 >= roots.length;
+      if (0 == roots.length) { // no critical points
+        if (0.0 < a) { 
+          _xmin = NEGATIVE_INFINITY; }
+        else { // (0.0 > a)
+          _xmin = POSITIVE_INFINITY; } } 
+      else if (2 == roots.length) {
+        final double r0 = roots[0].doubleValue();
+        final double r1 = roots[1].doubleValue();
+        if (2.0*a*r0 + b > 0.0) { 
+          _xmin = r0; }
+        else { // if (2.0*a*r1 + b > 0.0) { 
+          _xmin = r1; } }
+      else { // 1 == roots.length;
+        if (0.0 < a) {
+          _xmin = NEGATIVE_INFINITY; }
+        else { // (0.0 > a)
+          _xmin = POSITIVE_INFINITY; } }
+      if (0.0 < a) {
+        _positiveLimitValue = POSITIVE_INFINITY; 
+        _negativeLimitValue = NEGATIVE_INFINITY; 
+        _positiveLimitSlope = POSITIVE_INFINITY; 
+        _negativeLimitSlope = POSITIVE_INFINITY; }
+      else { // 0.0 > a
+        _positiveLimitValue = NEGATIVE_INFINITY; 
         _negativeLimitValue = POSITIVE_INFINITY; 
-        _positiveLimitSlope = a[1]; 
-        _negativeLimitSlope = a[1]; }
-      else { // constant
-        _xmin = NaN;
-        _positiveLimitValue = a[0]; 
-        _negativeLimitValue = a[0]; 
-        _positiveLimitSlope = 0.0; 
-        _negativeLimitSlope = 0.0; } } } 
-  
-  // TODO: experiment with reordering x0,x1,x2
-  // currrent form drops x2; better to retain xmin,xmax and drop 
-  // inner sample point?
+        _positiveLimitSlope = NEGATIVE_INFINITY; 
+        _negativeLimitSlope = NEGATIVE_INFINITY; } } } 
+
   public static final CubicNewton 
   make (final double x0, final double y0,
         final double x1, final double y1,
-        final double x2, final double y2) {
-
-    assert (x0 != x1) && (x1 != x2) && (x2 != x0);
-
-    return new CubicNewton(x0,y0,x1,y1,x2,y2); }
+        final double x2, final double y2,
+        final double x3, final double y3) {
+    return new CubicNewton(x0,y0,x1,y1,x2,y2,x3,y3); }
 
   public static final CubicNewton 
   make (final Function f, 
         final double x0, 
         final double x1, 
-        final double x2) {
+        final double x2, 
+        final double x3) {
     return make(
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
-      x2,f.doubleValue(x2));}
+      x2,f.doubleValue(x2),
+      x3,f.doubleValue(x3)); }
 
   //--------------------------------------------------------------
 }

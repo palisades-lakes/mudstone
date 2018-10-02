@@ -40,14 +40,6 @@ public final class CubicLagrangeFactory implements ModelFactory {
       knots[2],f.doubleValue(knots[2]),
       knots[3],f.doubleValue(knots[3])); }
 
-//  @Override
-//  public final Function model (final double[] z)  {
-//    return interpolate(
-//      z[0],z[1],
-//      z[2],z[3],
-//      z[4],z[5],
-//      z[6],z[7]) ; }
-
   @Override
   public final double[] matchValueAt (final double[] knots) {
     return new double[] 

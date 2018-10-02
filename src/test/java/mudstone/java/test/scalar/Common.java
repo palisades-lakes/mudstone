@@ -9,7 +9,6 @@ import static java.lang.StrictMath.ulp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import mudstone.java.functions.Domain;
@@ -25,7 +24,7 @@ import mudstone.java.test.functions.scalar.Square;
 /** Shared tests for scalar functions
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-01
  */
 
 strictfp
@@ -36,13 +35,14 @@ public final class Common {
 
   public static final Iterable<double[]> knots =
     List.of(
-      new double[] {-1.0,0.0,1.0,},
-      new double[] {0.0,1.0,GOLDEN_RATIO,},
-      new double[] {0.99,1.0,1.01,},
-      new double[] {0.49,0.50,0.51,},
+      new double[] {-1.0,0.0,1.0,2.0},
+      new double[] {0.0,1.0,GOLDEN_RATIO,GOLDEN_RATIO*GOLDEN_RATIO,},
+      new double[] {0.99,1.0,1.01,1.02},
+      new double[] {0.49,0.50,0.51,0.52},
 
-      new double[] {-1.0e2,0.0,1.0e2,},
-      new double[] {0.0,1.0e2,GOLDEN_RATIO*1.0e2,}//,
+      new double[] {-1.0e2,0.0,1.0e2,2.0e2,},
+      new double[] {0.0,1.0e2,GOLDEN_RATIO*1.0e2,
+                    GOLDEN_RATIO*GOLDEN_RATIO*1.0e2,}//,
       //new double[] {0.999e2,1.000e2,1.001e2,},
       //new double[] {0.499e2,0.500e2,0.501e2,} 
       );
