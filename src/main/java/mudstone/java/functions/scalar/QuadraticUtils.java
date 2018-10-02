@@ -37,10 +37,30 @@ public final class QuadraticUtils  {
       return new BigFraction[] { a1.divide(m2a2), }; }
     final BigFraction sqrtb2m4ac = 
       new BigFraction(sqrt(b2m4ac.doubleValue())); 
-    
+
     return new BigFraction [] 
       { a1.add(sqrtb2m4ac).divide(m2a2),
         a1.subtract(sqrtb2m4ac).divide(m2a2), }; }
+
+  //--------------------------------------------------------------
+  /** do a couple newton steps for more accuracy in quadratic 
+   * roots. modifies <code>roots</code>!!!
+   */
+
+  public static final double[] improveRoots (final double a0,
+                                             final double a1,
+                                             final double a2,
+                                             final double[] r) {
+    assert 2 >= r.length;
+    if (2 == r.length) { 
+      r[0] = -fma(a2,r[0]*r[0],a0)/a1;
+//      r[0] = -fma(a2,r[0]*r[0],a0)/a1;
+//      r[0] = -fma(a2,r[0]*r[0],a0)/a1;
+      r[1] = -fma(a2,r[1]*r[1],a0)/a1;
+//      r[1] = -fma(a2,r[1]*r[1],a0)/a1;
+//      r[1] = -fma(a2,r[1]*r[1],a0)/a1; 
+    }
+    return r; }
 
   //--------------------------------------------------------------
   /** return a <code>double[]</code> containing the real zeros
@@ -56,9 +76,10 @@ public final class QuadraticUtils  {
     if (b2m4ac < 0.0) { return new double[0]; }
     if (b2m4ac == 0.0) { return new double[] { -0.5*a1/a2, }; }
     final double sqrtb2m4ac = sqrt(b2m4ac);  
-    return new double[] 
-      { 0.5*(-a1 - sqrtb2m4ac)/a2,
-        0.5*(-a1 + sqrtb2m4ac)/a2, }; }
+    // one step improvement
+    final double r0 = 0.5*(-a1 - sqrtb2m4ac)/a2;
+    final double r1 = 0.5*(-a1 + sqrtb2m4ac)/a2;
+    return improveRoots(a0,a1,a2,new double[] { r0, r1 }); }
 
   //--------------------------------------------------------------
   // use BigFraction to be better at detecting affine and constant

@@ -87,12 +87,12 @@ public final class Common {
 
   public static final Iterable<Function> testFns =
     List.of(
-//      Math832.get(),
-//      Quintic.get(),
-//    Runge.get(),
-//      SemiCubic.get(),
-//      Sin.get(),
-//      Square.get()
+      //      Math832.get(),
+      //      Quintic.get(),
+      //    Runge.get(),
+      //      SemiCubic.get(),
+      //      Sin.get(),
+      //      Square.get()
       );
 
   //--------------------------------------------------------------
@@ -100,14 +100,69 @@ public final class Common {
    * used to handle polynomial interpolants of affine functions
    * that end up with very small higher order coefficients.
    */
-  
+
   public static final Interval expand (final double[] kn) {
     final double k0 = Doubles.min(kn);
     final double k1 = Doubles.max(kn);
     final double dk = k1-k0;
     final double a = 1.0e3;
     return Interval.closed(fma(-a,dk,k0),fma(a,dk,k1)); }
-  
+
+  //--------------------------------------------------------------
+  /** Check that the value of <code>f</code> actually a local
+   * minimum, that is, it increases if we move a small amount
+   * (<code>step*sqrt(ulp(1+abs(xmin)))</code>)s away from 
+   * <code>f.doubleArgmin(support)</code> within 
+   * <code>support</code>.
+   * Only require this if <code>f.doubleArgmin()</code> is finite.
+   */
+
+  public static final void assertLocalMin (final Function f,
+                                           final double x,
+                                           final Domain support, 
+                                           final double step, 
+                                           final double dulps) {
+    if (isFinite(x)) {
+      final double kappa = dulps*ulp(1.0);
+      //System.out.println(dulps + "*" + ulp(1.0) + "=" + kappa);
+      assertEquals(0.0,f.slope(x),kappa,
+        () -> { 
+          return 
+            "\n" + f + "\n" +
+            "0.0 != " + f.slope(x) + "\n" +
+            "by " + (abs(f.slope(x))/kappa) + " dulps\n" +
+            "at " + x + "\n";  });
+
+      final double ymin = f.doubleValue(x);
+
+      // TODO: test for a strict local minimum?
+      final double delta = step*sqrt(ulp(1.0+abs(x)));
+      final double x0 = x-delta;
+      if (support.contains(x0)) {
+        assertTrue(
+          ymin <= f.doubleValue(x0),
+          () -> { 
+            return 
+              "\n" + f + "\n" +
+              ymin + ">=" + f.doubleValue(x-delta) + "\n" +
+              "by " + (ymin-f.doubleValue(x-delta)) + "\n" +
+              "at " + x + " : " + (x-delta) + "\n" +
+              "delta= " + delta + "\n";  }); }
+      final double x1 = x+delta;
+      if (support.contains(x1)) {
+        assertTrue(
+          ymin <= f.doubleValue(x1),
+          () -> { 
+            return 
+              "\n" + f + "\n" +
+              ymin + ">=" + f.doubleValue(x+delta) + "\n" +
+              "by " + (ymin-f.doubleValue(x+delta)) + "\n" +
+              " at " + x + " : " + (x+delta) + "\n" +
+              "delta= " + delta + "\n";  }); } } 
+    //System.out.println("\n" + f + 
+    //  "\nat " + x + "\nslope= " + f.slope(x)); 
+    }
+
   //--------------------------------------------------------------
   /** Check that the value of <code>f</code> actually a local
    * minimum, that is, it increases if we move a small amount
@@ -123,42 +178,7 @@ public final class Common {
                                         final double dulps) {
     final double xmin = f.doubleArgmin(support);
     if (isFinite(xmin)) {
-      final double kappa = dulps*ulp(1.0);
-      //System.out.println(dulps + "*" + ulp(1.0) + "=" + kappa);
-      assertEquals(0.0,f.slope(xmin),kappa,
-        () -> { 
-          return 
-            "\n" + f + "\n" +
-            "0.0 != " + f.slope(xmin) + "\n" +
-            "by " + (abs(f.slope(xmin))/kappa) + " dulps\n" +
-            "at " + xmin + "\n";  });
-
-      final double ymin = f.doubleValue(xmin);
-      
-      // TODO: test for a strict local minimum?
-      final double delta = step*sqrt(ulp(1.0+abs(xmin)));
-      final double x0 = xmin-delta;
-      if (support.contains(x0)) {
-        assertTrue(
-          ymin <= f.doubleValue(x0),
-          () -> { 
-            return 
-              "\n" + f + "\n" +
-              ymin + ">=" + f.doubleValue(xmin-delta) + "\n" +
-              "by " + (ymin-f.doubleValue(xmin-delta)) + "\n" +
-              "at " + xmin + " : " + (xmin-delta) + "\n" +
-              "delta= " + delta + "\n";  }); }
-      final double x1 = xmin+delta;
-      if (support.contains(x1)) {
-        assertTrue(
-          ymin <= f.doubleValue(x1),
-          () -> { 
-            return 
-              "\n" + f + "\n" +
-              ymin + ">=" + f.doubleValue(xmin+delta) + "\n" +
-              "by " + (ymin-f.doubleValue(xmin+delta)) + "\n" +
-              " at " + xmin + " : " + (xmin+delta) + "\n" +
-              "delta= " + delta + "\n";  }); } } }
+      assertLocalMin(f,xmin,support,step,dulps); } }
 
   //--------------------------------------------------------------
 
@@ -176,7 +196,7 @@ public final class Common {
         return 
           "\nargmin: |" + xf + "-" + xg +"|=" +
           abs(xf-xg) + ">" + zeta + 
-          " by " + abs(xf-xg)/zeta + " xulps" + "\n"; }); }
+          "\n by " + abs(xf-xg)/zeta + " xulps" + "\n"; }); }
 
   //--------------------------------------------------------------
 
@@ -229,10 +249,10 @@ public final class Common {
                                         final double yulps, 
                                         final double dulps) {
     //    System.out.println(f);
-    checkArgmin(f,support,1.0e2*min(1.0e1,xulps), dulps);
+    checkArgmin(f,support,1.0e2*min(1.0e1,xulps),dulps);
     final Function g = factory.model(f,xs);
     //    System.out.println(g);
-    checkArgmin(g,support,1.0e2*min(1.0e1,xulps), dulps);
+    checkArgmin(g,support,1.0e2*min(1.0e1,xulps),dulps);
     //    System.out.println(Arrays.toString(xs));
     for (final double xi : factory.matchValueAt(xs)) {
       assertEqualValue(f,g,xi,yulps); }
@@ -255,6 +275,8 @@ public final class Common {
                                   final double dulps) {
     final Function g = 
       general(f,factory,xs,support,xulps,yulps, dulps);
+    assertLocalMin(
+      g,f.doubleArgmin(support),support,1.0e2*min(1.0e1,xulps),dulps);
     final double x0 = xs[0];
     final double x1 = xs[1];
     final double x2 = xs[2];

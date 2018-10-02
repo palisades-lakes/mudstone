@@ -12,7 +12,6 @@ import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 import static mudstone.java.test.scalar.Common.testFns;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-01
+ * @version 2018-10-02
  */
 
 strictfp
@@ -41,8 +40,7 @@ public final class CubicNewtonTest {
   @Test
   public final void exactTests () {
     final Iterable<ModelFactory> factories = 
-      List.of(
-        CubicNewtonFactory.get());
+      List.of(CubicNewtonFactory.get());
     final Iterable<Function> functions = Iterables.concat(
       quadraticCubics
       , affineCubics
@@ -52,11 +50,11 @@ public final class CubicNewtonTest {
       , constantQuadratics);
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
-        System.out.println();
-        System.out.println(f);
+        //System.out.println();
+        //System.out.println(f);
         for (final double[] kn : knots) {
-          System.out.println(Arrays.toString(kn));
-          exact(f,factory,kn,expand(kn),1.0e0,2.0e4,2.0e4); } } } }
+          //System.out.println(Arrays.toString(kn));
+          exact(f,factory,kn,expand(kn),2.0e4,5.0e5,5.0e6); } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test

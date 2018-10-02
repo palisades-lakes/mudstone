@@ -7,10 +7,6 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
-import java.util.Arrays;
-
-import org.apache.commons.math3.fraction.BigFraction;
-
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
@@ -18,7 +14,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-01
+ * @version 2018-10-02
  */
 
 public final class CubicNewton extends ScalarFunctional {
@@ -109,29 +105,28 @@ public final class CubicNewton extends ScalarFunctional {
     assert x1 != x2;
     assert x1 != x3;
     assert x2 != x3;
-    
+
     _x0 = x0;
     _x1 = x1;
     _x2 = x2;
-    
+
     _b0 = y0;
     _b1 = (y1-y0)/(x1-x0);
     final double x20 = x2-x0;
     final double x21 = x2-x1;
     final double y20 = y2-y0;
-    _b2 = fma(-_b1,x20,y20)/(x20*x21);
+    _b2 = (y20 - (_b1*x20))/(x20*x21);
     final double x30 = x3-x0;
     final double x31 = x3-x1;
     final double x32 = x3-x2;
     final double y30 = y3-y0;
-    //_b3 = (y30 - _b1*x30 - _b2*x30*x31)/(x30*x31*x32);
-    _b3 = fma(x30,fma(x31,-_b2,-_b1),y30)/(x30*x31*x32);
+    _b3 = (y30 - _b1*x30 - _b2*x30*x31)/(x30*x31*x32);
     
-    // derivative as a*x^2 + b*x + c
+    // derivative as 3a*x^2 + 2b*x + c
     final double a = 3.0*_b3;
-    final double b = (_b2-_b3*(x0-x1-x2));
-    final double c = _b1 -_b2*(x0+x1)+_b3*(x0*x1+x1*x2+x2*x0);
-    System.out.println(y0 + " + " + c + "*x + " + b + "*x^2 + " + a + "*x^3");
+    final double b = 2.0*(_b2-(_b3*(x0+x1+x2)));
+    final double c = _b1 -_b2*(x0+x1) +_b3*(x0*x1+x1*x2+x2*x0);
+    //System.out.println("QN: " + y0 + " + " + c + "*x + " + b/2 + "*x^2 + " + a/3 + "*x^3");
     if (0.0 == a) { // quadratic
       if (0.0 < b) { 
         _xmin = -c/b; 
@@ -165,13 +160,13 @@ public final class CubicNewton extends ScalarFunctional {
           _positiveLimitSlope = 0.0; 
           _negativeLimitSlope = 0.0; } } }
     else { // 0.0 != a, nontrivial cubic
-      //final double[] roots = QuadraticUtils.roots(c,b,a);
-      final BigFraction[] roots = 
-        QuadraticUtils.roots(
-          new BigFraction(c),
-          new BigFraction(b),
-          new BigFraction(a));
-      System.out.println("roots" + Arrays.toString(roots));
+      final double[] roots = QuadraticUtils.roots(c,b,a);
+//            final BigFraction[] roots = 
+//              QuadraticUtils.roots(
+//                new BigFraction(c),
+//                new BigFraction(b),
+//                new BigFraction(a));
+      //System.out.println("roots" + Arrays.toString(roots));
       assert 2 >= roots.length;
       if (0 == roots.length) { // no critical points
         if (0.0 < a) { 
@@ -179,8 +174,11 @@ public final class CubicNewton extends ScalarFunctional {
         else { // (0.0 > a)
           _xmin = POSITIVE_INFINITY; } } 
       else if (2 == roots.length) {
-        final double r0 = roots[0].doubleValue();
-        final double r1 = roots[1].doubleValue();
+        final double r0 = roots[0];
+        final double r1 = roots[1];
+//              final double r0 = roots[0].doubleValue();
+//              final double r1 = roots[1].doubleValue();
+        //System.out.println("roots: " + r0 + ", " + r1);
         if (2.0*a*r0 + b > 0.0) { 
           _xmin = r0; }
         else { // if (2.0*a*r1 + b > 0.0) { 

@@ -14,7 +14,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-02
  */
 
 public final class QuadraticNewton extends ScalarFunctional {
@@ -47,7 +47,12 @@ public final class QuadraticNewton extends ScalarFunctional {
     if (isFinite(x)) {
       final double dx0 = x-_x0;
       final double dx1 = x-_x1;
-      return fma(dx0,fma(dx1,_b2,_b1),_b0); }
+      return 
+        fma(dx0,
+          fma(dx1,
+            _b2,
+            _b1),
+          _b0); }
 
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
@@ -56,8 +61,12 @@ public final class QuadraticNewton extends ScalarFunctional {
   @Override
   public final double slope (final double x) {
     if (isFinite(x)) {
-      return fma(_b2,fma(2.0,x,-(_x0+_x1)),_b1); }
-
+//      return fma(_b2,fma(2.0,x,-(_x0+_x1)),_b1); }
+    final double dx0 = x-_x0;
+    final double dx1 = x-_x1;
+    return 
+      _b1 +
+      _b2*(dx0+dx1); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
     return _negativeLimitSlope; }
@@ -92,15 +101,12 @@ public final class QuadraticNewton extends ScalarFunctional {
     _x0 = x0;
     _x1 = x1;
     _b0 = y0;
-    // TODO: BigFraction calculations?
     _b1 = (y1-y0)/(x1-x0);
-    _b2 = (((y2-y1)/(x2-x1)) - _b1)/(x2-x0);
+    final double x20 = x2-x0;
+    final double x21 = x2-x1;
+    final double y20 = y2-y0;
+    _b2 = (y20 - (_b1*x20))/(x20*x21);
 
-    //    System.out.println("QN[" + 
-    //      a0(x0,y0,x1,y1,x2,y2) + " + " + 
-    //      a1(x0,y0,x1,y1,x2,y2) + "*x + " + 
-    //      a2(x0,y0,x1,y1,x2,y2) + "*x^2]");
-    // TODO: accurate 1st and 2nd derivative sign calculation?
     final double[] a = 
       QuadraticUtils.interpolatingMonomialCoefficients(
         x0,y0,x1,y1,x2,y2);
