@@ -14,7 +14,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-03
  */
 
 public final class QuadraticLagrange extends ScalarFunctional {
@@ -150,10 +150,13 @@ public final class QuadraticLagrange extends ScalarFunctional {
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 
-  public static final QuadraticLagrange 
+  public static final ScalarFunctional 
   make (final double x0, final double y0,
         final double x1, final double y1,
         final double x2, final double y2) {
+
+    if ((y0==y1) && (y1==y2)) {
+      return ConstantFunction.make(y0); }
 
     // TODO: not necessary to sort?
     if (x0 < x1) {
@@ -175,7 +178,7 @@ public final class QuadraticLagrange extends ScalarFunctional {
     throw new IllegalArgumentException(
       "Not distinct: " + x0 + ", " + x1 + ", " + x2); }
 
-  public static final QuadraticLagrange 
+  public static final ScalarFunctional 
   make (final Function f, 
         final double x0, 
         final double x1, 

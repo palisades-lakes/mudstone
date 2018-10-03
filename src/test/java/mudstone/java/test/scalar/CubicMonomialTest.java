@@ -4,6 +4,7 @@ import static mudstone.java.test.scalar.Common.affineCubics;
 import static mudstone.java.test.scalar.Common.affineQuadratics;
 import static mudstone.java.test.scalar.Common.constantCubics;
 import static mudstone.java.test.scalar.Common.constantQuadratics;
+import static mudstone.java.test.scalar.Common.cubicCubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
@@ -30,7 +31,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-01
+ * @version 2018-10-02
  */
 
 strictfp
@@ -40,15 +41,10 @@ public final class CubicMonomialTest {
   @Test
   public final void exactTests () {
     final Iterable<ModelFactory> factories = 
-      List.of(
-        CubicMonomialFactory.get());
+      List.of(CubicMonomialFactory.get());
     final Iterable<Function> functions = Iterables.concat(
-      quadraticCubics
-      , affineCubics
-      , constantCubics
-      , quadraticQuadratics
-      , affineQuadratics
-      , constantQuadratics);
+      cubicCubics, quadraticCubics, affineCubics, constantCubics, 
+      quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
         for (final double[] kn : knots) {

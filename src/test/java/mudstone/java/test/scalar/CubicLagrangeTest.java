@@ -4,6 +4,7 @@ import static mudstone.java.test.scalar.Common.affineCubics;
 import static mudstone.java.test.scalar.Common.affineQuadratics;
 import static mudstone.java.test.scalar.Common.constantCubics;
 import static mudstone.java.test.scalar.Common.constantQuadratics;
+import static mudstone.java.test.scalar.Common.cubicCubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
@@ -30,29 +31,26 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-01
+ * @version 2018-10-03
  */
 
-strictfp
 public final class CubicLagrangeTest {
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void exactTests () {
     final Iterable<ModelFactory> factories = 
-      List.of(
-        CubicLagrangeFactory.get());
+      List.of(CubicLagrangeFactory.get());
     final Iterable<Function> functions = Iterables.concat(
-      quadraticCubics
-      , affineCubics
-      , constantCubics
-      , quadraticQuadratics
-      , affineQuadratics
-      , constantQuadratics);
+      cubicCubics, quadraticCubics, affineCubics, constantCubics, 
+      quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
+        //System.out.println();
+        //System.out.println(f);
         for (final double[] kn : knots) {
-          exact(f,factory,kn,expand(kn),2.0e2,2.0e2, 1.0e3); } } } }
+          //System.out.println(Arrays.toString(kn));
+          exact(f,factory,kn,expand(kn),5.0e6,5.0e6,1.0e8); } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
@@ -60,7 +58,7 @@ public final class CubicLagrangeTest {
     final ModelFactory factory = CubicLagrangeFactory.get();
       for (final Function f : testFns) {
         for (final double[] kn : knots) {
-          general(f,factory,kn,expand(kn),2.0e2,2.0e2, 2.0e7); } } } 
+          general(f,factory,kn,expand(kn),1.0e0,1.0e0,1.0e0); } } } 
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

@@ -7,7 +7,7 @@ import mudstone.java.functions.Function;
  * <code>(x0,y0=f(x0)), (x1,y1=f(x1), (x2,y2=f(x2)) (x3,y3=f(x3))</code>.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-29
+ * @version 2018-10-03
  */
 
 public final class CubicLagrangeFactory implements ModelFactory {
@@ -16,7 +16,7 @@ public final class CubicLagrangeFactory implements ModelFactory {
   // methods
   //--------------------------------------------------------------
 
-  private final static CubicLagrange
+  private final static ScalarFunctional
   interpolate (final double x0, 
                final double y0,
                final double x1, 

@@ -232,7 +232,9 @@ public final class Common {
     assertEquals(dfi,dgi,epsilon,
       () -> { return 
         "\n" + f +
+        "\nslope: " + dfi +
         "\n" + g +
+        "\nslope: " + dgi +
         "\n" + abs(dfi-dgi) + ">" + epsilon + 
         "\n by " + abs(dfi-dgi)/epsilon  + " dulps" + 
         "\n at " + x + "\n"; }); }

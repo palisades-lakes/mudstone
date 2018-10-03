@@ -27,7 +27,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-02
+ * @version 2018-10-03
  */
 
 strictfp

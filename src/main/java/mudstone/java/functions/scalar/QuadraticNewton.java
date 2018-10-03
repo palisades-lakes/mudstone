@@ -14,7 +14,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-02
+ * @version 2018-10-03
  */
 
 public final class QuadraticNewton extends ScalarFunctional {
@@ -145,16 +145,19 @@ public final class QuadraticNewton extends ScalarFunctional {
   // TODO: experiment with reordering x0,x1,x2
   // currrent form drops x2; better to retain xmin,xmax and drop 
   // inner sample point?
-  public static final QuadraticNewton 
+  public static final ScalarFunctional 
   make (final double x0, final double y0,
         final double x1, final double y1,
         final double x2, final double y2) {
+
+    if ((y0==y1) && (y1==y2)) {
+      return ConstantFunction.make(y0); }
 
     assert (x0 != x1) && (x1 != x2) && (x2 != x0);
 
     return new QuadraticNewton(x0,y0,x1,y1,x2,y2); }
 
-  public static final QuadraticNewton 
+  public static final ScalarFunctional 
   make (final Function f, 
         final double x0, 
         final double x1, 

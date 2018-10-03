@@ -4,7 +4,7 @@ import static mudstone.java.test.scalar.Common.affineCubics;
 import static mudstone.java.test.scalar.Common.affineQuadratics;
 import static mudstone.java.test.scalar.Common.constantCubics;
 import static mudstone.java.test.scalar.Common.constantQuadratics;
-import static mudstone.java.test.scalar.Common.exact;
+import static mudstone.java.test.scalar.Common.*;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
 import static mudstone.java.test.scalar.Common.knots;
@@ -30,7 +30,7 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-02
+ * @version 2018-10-03
  */
 
 strictfp
@@ -42,19 +42,15 @@ public final class CubicNewtonTest {
     final Iterable<ModelFactory> factories = 
       List.of(CubicNewtonFactory.get());
     final Iterable<Function> functions = Iterables.concat(
-      quadraticCubics
-      , affineCubics
-      , constantCubics
-      , quadraticQuadratics
-      , affineQuadratics
-      , constantQuadratics);
+      cubicCubics, quadraticCubics, affineCubics, constantCubics, 
+      quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final ModelFactory factory : factories) {
       for (final Function f : functions) {
         //System.out.println();
         //System.out.println(f);
         for (final double[] kn : knots) {
           //System.out.println(Arrays.toString(kn));
-          exact(f,factory,kn,expand(kn),2.0e4,5.0e5,5.0e6); } } } }
+          exact(f,factory,kn,expand(kn),1.0e5,5.0e5,5.0e6); } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test

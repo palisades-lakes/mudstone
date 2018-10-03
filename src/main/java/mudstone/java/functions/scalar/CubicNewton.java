@@ -111,6 +111,17 @@ public final class CubicNewton extends ScalarFunctional {
     _x2 = x2;
 
     _b0 = y0;
+    // exact constant function
+    // TODO: detect earlier and return a ConstantFunction
+    if ((y0==y1) && (y1==y2) && (y2==y3)) {
+      _b1 = 0.0; _b2 = 0.0; _b3 = 0.0;
+      _xmin = NaN; 
+      _positiveLimitValue = y0; 
+      _negativeLimitValue = y0; 
+      _positiveLimitSlope = 0.0; 
+      _negativeLimitSlope = 0.0; 
+      return; } 
+    
     _b1 = (y1-y0)/(x1-x0);
     final double x20 = x2-x0;
     final double x21 = x2-x1;
@@ -199,14 +210,17 @@ public final class CubicNewton extends ScalarFunctional {
         _positiveLimitSlope = NEGATIVE_INFINITY; 
         _negativeLimitSlope = NEGATIVE_INFINITY; } } } 
 
-  public static final CubicNewton 
+  public static final ScalarFunctional 
   make (final double x0, final double y0,
         final double x1, final double y1,
         final double x2, final double y2,
         final double x3, final double y3) {
+    if ((y0==y1) && (y1==y0) && (y2==y3)) {
+      return ConstantFunction.make(y0); }
+
     return new CubicNewton(x0,y0,x1,y1,x2,y2,x3,y3); }
 
-  public static final CubicNewton 
+  public static final ScalarFunctional 
   make (final Function f, 
         final double x0, 
         final double x1, 
