@@ -14,7 +14,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-01
+ * @version 2018-10-02
  */
 
 public final class CubicLagrange extends ScalarFunctional {
