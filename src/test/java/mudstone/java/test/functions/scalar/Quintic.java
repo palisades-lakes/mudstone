@@ -42,7 +42,7 @@ public final class Quintic extends ScalarFunctional {
 
   @Override
   public final Function tangentAt (final double x) {
-    return AffineFunctional1d.make(slope(x),doubleValue(x)); }
+    return AffineFunctional1d.make(doubleValue(x),slope(x)); }
 
   @Override
   public final double doubleArgmin (final Domain support) { 

@@ -23,7 +23,7 @@ import mudstone.java.functions.Function;
  * as the descriptions in typical textbooks.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-21
+ * @version 2018-10-04
  */
 
 public final class InterpolateXD2XY1 implements ModelFactory {
@@ -32,7 +32,7 @@ public final class InterpolateXD2XY1 implements ModelFactory {
   // ModelFactory methods
   //--------------------------------------------------------------
 
-  private final static QuadraticMonomialShifted 
+  private final static ScalarFunctional 
   interpolate (final double x0, 
                final double d0,
                final double x1, 

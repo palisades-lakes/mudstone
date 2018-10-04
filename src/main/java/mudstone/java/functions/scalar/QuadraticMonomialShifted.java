@@ -13,7 +13,7 @@ import mudstone.java.functions.Domain;
  * form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-04
  */
 
 public final class QuadraticMonomialShifted extends ScalarFunctional {
@@ -84,9 +84,9 @@ public final class QuadraticMonomialShifted extends ScalarFunctional {
   //--------------------------------------------------------------
 
   private QuadraticMonomialShifted (final double a0, 
-                             final double a1,
-                             final double a2, 
-                             final double xorigin) {
+                                    final double a1,
+                                    final double a2, 
+                                    final double xorigin) {
     _a0 = a0;
     _a1 = a1;
     _a2 = a2;
@@ -123,11 +123,15 @@ public final class QuadraticMonomialShifted extends ScalarFunctional {
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 
-  public static final QuadraticMonomialShifted 
+  public static final ScalarFunctional 
   make (final double a0, 
         final double a1,
         final double a2, 
         final double xorigin) {
+    if (0.0==a2) {
+      if (0.0==a1) { 
+        return ConstantFunction.make(a0); }
+      return AffineFunctional1d.make(fma(-a1,xorigin,a0),a1); }
     return new QuadraticMonomialShifted(a0,a1,a2,xorigin); }
 
   //--------------------------------------------------------------

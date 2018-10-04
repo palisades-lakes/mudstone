@@ -32,7 +32,7 @@ public final class Sin extends ScalarFunctional {
 
   @Override
   public final Function tangentAt (final double x) {
-    return AffineFunctional1d.make(slope(x),doubleValue(x)); }
+    return AffineFunctional1d.make(doubleValue(x),slope(x)); }
   
   //--------------------------------------------------------------
   // construction

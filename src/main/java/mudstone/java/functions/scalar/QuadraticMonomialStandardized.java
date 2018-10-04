@@ -15,7 +15,7 @@ import mudstone.java.functions.Domain;
  * to a given codomain interval.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-04
  */
 
 public final class QuadraticMonomialStandardized 
@@ -143,7 +143,7 @@ extends ScalarFunctional {
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 
-  public static QuadraticMonomialStandardized 
+  public static ScalarFunctional 
   make (final double a0, 
         final double a1,
         final double a2, 
@@ -151,6 +151,12 @@ extends ScalarFunctional {
         final double bx,
         final double ay,
         final double by) {
+    if (0.0==a2) {
+      if (0.0==a1) { 
+        return ConstantFunction.make(fma(ay,a0,by)); }
+      final double c0 = fma(ay,fma(a1,bx,a0),by);
+      final double c1 = a1*ax*ay;
+      return AffineFunctional1d.make(c0,c1); }
     return 
       new QuadraticMonomialStandardized(a0,a1,a2,ax,bx,ay,by); }
   //--------------------------------------------------------------

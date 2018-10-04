@@ -23,7 +23,7 @@ public final class QuadraticNewtonFactory implements ModelFactory {
                final double y1,
                final double x2,
                final double y2) {
-    return QuadraticNewton.make(x0,y0,x1,y1,x2,y2); }
+    return QuadraticNewton.interpolateXY(x0,y0,x1,y1,x2,y2); }
 
   //--------------------------------------------------------------
   // ModelFactory methods

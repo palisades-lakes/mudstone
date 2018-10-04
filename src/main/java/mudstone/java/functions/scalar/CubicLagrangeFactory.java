@@ -25,7 +25,7 @@ public final class CubicLagrangeFactory implements ModelFactory {
                final double y2,
                final double x3,
                final double y3) {
-    return CubicLagrange.make(x0,y0,x1,y1,x2,y2,x3,y3); }
+    return CubicLagrange.interpolateXY(x0,y0,x1,y1,x2,y2,x3,y3); }
 
   //--------------------------------------------------------------
   // ModelFactory methods

@@ -9,7 +9,7 @@ import mudstone.java.functions.Function;
  * other quadratic implementations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-26
+ * @version 2018-10-04
  */
 
 public final class QuadraticMonomialFactory implements ModelFactory {
@@ -18,7 +18,7 @@ public final class QuadraticMonomialFactory implements ModelFactory {
   // methods
   //--------------------------------------------------------------
 
-  private final static QuadraticMonomial
+  private final static ScalarFunctional
   interpolate (final double x0, 
                final double y0,
                final double x1, 

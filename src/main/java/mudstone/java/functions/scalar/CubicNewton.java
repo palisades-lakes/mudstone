@@ -211,22 +211,21 @@ public final class CubicNewton extends ScalarFunctional {
         _negativeLimitSlope = NEGATIVE_INFINITY; } } } 
 
   public static final ScalarFunctional 
-  make (final double x0, final double y0,
+  interpolateXY (final double x0, final double y0,
         final double x1, final double y1,
         final double x2, final double y2,
         final double x3, final double y3) {
     if ((y0==y1) && (y1==y0) && (y2==y3)) {
       return ConstantFunction.make(y0); }
-
     return new CubicNewton(x0,y0,x1,y1,x2,y2,x3,y3); }
 
   public static final ScalarFunctional 
-  make (final Function f, 
+  interpolateXY (final Function f, 
         final double x0, 
         final double x1, 
         final double x2, 
         final double x3) {
-    return make(
+    return interpolateXY(
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2),

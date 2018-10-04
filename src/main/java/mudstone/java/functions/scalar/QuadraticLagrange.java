@@ -14,7 +14,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-03
+ * @version 2018-10-04
  */
 
 public final class QuadraticLagrange extends ScalarFunctional {
@@ -97,7 +97,7 @@ public final class QuadraticLagrange extends ScalarFunctional {
     final double c1 = (x0-x1)*(y1-y2);
     final double numer = ((x1+x0)*c1)-((x1+x2)*c0); 
     return numer/(2.0*(c1-c0)); }
-  
+
   //--------------------------------------------------------------
 
   private QuadraticLagrange (final double x0, final double y0,
@@ -116,8 +116,8 @@ public final class QuadraticLagrange extends ScalarFunctional {
     // TODO: accurate 1st and 2nd derivative sign calculation?
     final double[] a = QuadraticUtils
       .interpolatingMonomialCoefficients(x0,y0,x1,y1,x2,y2);
-//    System.out.println(
-//      "QL[" + a[0] + " + " + a[1] + "*x + " + a[2] + "*x^2]");
+    //    System.out.println(
+    //      "QL[" + a[0] + " + " + a[1] + "*x + " + a[2] + "*x^2]");
     if (0.0 < a[2]) {
       _xmin = argmin(x0,y0,x1,y1,x2,y2);
       _positiveLimitValue = POSITIVE_INFINITY; 
@@ -151,39 +151,39 @@ public final class QuadraticLagrange extends ScalarFunctional {
         _negativeLimitSlope = 0.0; } } } 
 
   public static final ScalarFunctional 
-  make (final double x0, final double y0,
-        final double x1, final double y1,
-        final double x2, final double y2) {
-
+  interpolateXY (final double x0, final double y0,
+                 final double x1, final double y1,
+                 final double x2, final double y2) {
+    assert (x0!=x1) && (x1!=x2) && (x2!=x0);
     if ((y0==y1) && (y1==y2)) {
       return ConstantFunction.make(y0); }
 
     // TODO: not necessary to sort?
-    if (x0 < x1) {
-      if (x1 < x2) {
-        return new QuadraticLagrange(x0,y0,x1,y1,x2,y2); }
-      if (x0 < x2) {
-        return new QuadraticLagrange(x0,y0,x2,y2,x1,y1); } 
-      if (x2 < x0) {
-        return new QuadraticLagrange(x2,y2,x0,y0,x1,y1); } }
-
-    if (x1 < x0) {
-      if (x0 < x2) {
-        return new QuadraticLagrange(x1,y1,x0,y0,x2,y2); }
-      if (x1 < x2) {
-        return new QuadraticLagrange(x1,y1,x2,y2,x0,y0); } 
-      if (x2 < x1) {
-        return new QuadraticLagrange(x2,y2,x1,y1,x0,y0); } }
-
-    throw new IllegalArgumentException(
-      "Not distinct: " + x0 + ", " + x1 + ", " + x2); }
+    //if (x0 < x1) {
+    // if (x1 < x2) {
+    return new QuadraticLagrange(x0,y0,x1,y1,x2,y2); }
+  //      if (x0 < x2) {
+  //        return new QuadraticLagrange(x0,y0,x2,y2,x1,y1); } 
+  //      if (x2 < x0) {
+  //        return new QuadraticLagrange(x2,y2,x0,y0,x1,y1); } }
+  //
+  //    if (x1 < x0) {
+  //      if (x0 < x2) {
+  //        return new QuadraticLagrange(x1,y1,x0,y0,x2,y2); }
+  //      if (x1 < x2) {
+  //        return new QuadraticLagrange(x1,y1,x2,y2,x0,y0); } 
+  //      if (x2 < x1) {
+  //        return new QuadraticLagrange(x2,y2,x1,y1,x0,y0); } }
+  //
+  //    throw new IllegalArgumentException(
+  //      "Not distinct: " + x0 + ", " + x1 + ", " + x2); }
 
   public static final ScalarFunctional 
-  make (final Function f, 
-        final double x0, 
-        final double x1, 
-        final double x2) {
-    return make(
+  interpolateXY (final Function f, 
+                 final double x0, 
+                 final double x1, 
+                 final double x2) {
+    return interpolateXY(
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2));}

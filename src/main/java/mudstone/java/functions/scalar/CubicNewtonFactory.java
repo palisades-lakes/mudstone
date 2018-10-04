@@ -25,7 +25,7 @@ public final class CubicNewtonFactory implements ModelFactory {
                final double y2,
                final double x3,
                final double y3) {
-    return CubicNewton.make(x0,y0,x1,y1,x2,y2,x3,y3); }
+    return CubicNewton.interpolateXY(x0,y0,x1,y1,x2,y2,x3,y3); }
 
   //--------------------------------------------------------------
   // ModelFactory methods

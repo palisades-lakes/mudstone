@@ -13,7 +13,7 @@ import mudstone.java.functions.Function;
  * other quadratic implementations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-04
  */
 
 public final class QuadraticMonomialStandardizedFactory 
@@ -28,7 +28,7 @@ implements ModelFactory {
                                     final BigFraction b) {
     return a.multiply(new BigFraction(z)).add(b).doubleValue(); }
 
-  private final static QuadraticMonomialStandardized
+  private final static ScalarFunctional
   interpolate (final double x0, 
                final double y0,
                final double x1, 

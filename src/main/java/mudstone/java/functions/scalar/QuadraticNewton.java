@@ -14,7 +14,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-03
+ * @version 2018-10-04
  */
 
 public final class QuadraticNewton extends ScalarFunctional {
@@ -61,12 +61,12 @@ public final class QuadraticNewton extends ScalarFunctional {
   @Override
   public final double slope (final double x) {
     if (isFinite(x)) {
-//      return fma(_b2,fma(2.0,x,-(_x0+_x1)),_b1); }
-    final double dx0 = x-_x0;
-    final double dx1 = x-_x1;
-    return 
-      _b1 +
-      _b2*(dx0+dx1); }
+      //      return fma(_b2,fma(2.0,x,-(_x0+_x1)),_b1); }
+      final double dx0 = x-_x0;
+      final double dx1 = x-_x1;
+      return 
+        _b1 +
+        _b2*(dx0+dx1); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
     return _negativeLimitSlope; }
@@ -141,14 +141,14 @@ public final class QuadraticNewton extends ScalarFunctional {
         _negativeLimitValue = a[0]; 
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
-  
+
   // TODO: experiment with reordering x0,x1,x2
   // currrent form drops x2; better to retain xmin,xmax and drop 
   // inner sample point?
   public static final ScalarFunctional 
-  make (final double x0, final double y0,
-        final double x1, final double y1,
-        final double x2, final double y2) {
+  interpolateXY (final double x0, final double y0,
+                 final double x1, final double y1,
+                 final double x2, final double y2) {
 
     if ((y0==y1) && (y1==y2)) {
       return ConstantFunction.make(y0); }
@@ -158,11 +158,11 @@ public final class QuadraticNewton extends ScalarFunctional {
     return new QuadraticNewton(x0,y0,x1,y1,x2,y2); }
 
   public static final ScalarFunctional 
-  make (final Function f, 
-        final double x0, 
-        final double x1, 
-        final double x2) {
-    return make(
+  interpolateXY (final Function f, 
+                 final double x0, 
+                 final double x1, 
+                 final double x2) {
+    return interpolateXY(
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2));}

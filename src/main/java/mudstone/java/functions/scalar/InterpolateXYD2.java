@@ -17,7 +17,7 @@ import mudstone.java.functions.Function;
  * as the descriptions in typical textbooks.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-21
+ * @version 2018-10-04
  */
 
 public final class InterpolateXYD2 implements ModelFactory {
@@ -26,7 +26,7 @@ public final class InterpolateXYD2 implements ModelFactory {
   // ModelFactory methods
   //--------------------------------------------------------------
 
-  private final static CubicHermite
+  private final static ScalarFunctional
   interpolate (final double x0, 
                final double y0,
                final double d0, 
@@ -34,7 +34,7 @@ public final class InterpolateXYD2 implements ModelFactory {
                final double y1,
                final double d1) {
     assert x0 != x1;
-    return CubicHermite.make(x0,y0,d0,x1,y1,d1); }
+    return CubicHermite.interpolateXYD(x0,y0,d0,x1,y1,d1); }
 
   //--------------------------------------------------------------
   // ModelFactory methods

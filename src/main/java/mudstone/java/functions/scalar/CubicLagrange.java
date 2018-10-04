@@ -13,7 +13,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-03
+ * @version 2018-10-04
  */
 
 public final class CubicLagrange extends ScalarFunctional {
@@ -56,11 +56,11 @@ public final class CubicLagrange extends ScalarFunctional {
         (_b1*dx2*dx3*dx0) +
         (_b2*dx3*dx0*dx1) +
         (_b3*dx0*dx1*dx2); }
-//    return 
-//      fma(_b0,dx1*dx2*dx3,
-//        fma(_b1,dx2*dx0*dx3,
-//          fma(_b2,dx0*dx1*dx3,
-//            _b3*dx0*dx1*dx2))); }
+    //    return 
+    //      fma(_b0,dx1*dx2*dx3,
+    //        fma(_b1,dx2*dx0*dx3,
+    //          fma(_b2,dx0*dx1*dx3,
+    //            _b3*dx0*dx1*dx2))); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
     return _negativeLimitValue; }
@@ -77,11 +77,11 @@ public final class CubicLagrange extends ScalarFunctional {
         _b1*((dx2*dx3)+(dx3*dx0)+(dx0*dx2)) +
         _b2*((dx3*dx0)+(dx0*dx1)+(dx1*dx3)) +
         _b3*((dx0*dx1)+(dx1*dx2)+(dx2*dx0)); }
-//    return 
-//      fma(_b0,(dx1*dx2)+(dx2*dx3)+(dx3*dx1),
-//        fma(_b1,(dx2*dx3)+(dx3*dx0)+(dx0*dx2),
-//          fma(_b2,(dx3*dx0)+(dx0*dx1)+(dx1*dx3),
-//            _b3*(dx0*dx1)+(dx1*dx2)+(dx2*dx0)))); }
+    //    return 
+    //      fma(_b0,(dx1*dx2)+(dx2*dx3)+(dx3*dx1),
+    //        fma(_b1,(dx2*dx3)+(dx3*dx0)+(dx0*dx2),
+    //          fma(_b2,(dx3*dx0)+(dx0*dx1)+(dx1*dx3),
+    //            _b3*(dx0*dx1)+(dx1*dx2)+(dx2*dx0)))); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
     return _negativeLimitSlope; }
@@ -141,91 +141,91 @@ public final class CubicLagrange extends ScalarFunctional {
       (_b1*((x2*x3)+(x3*x0)+(x0*x2))) +
       (_b2*((x3*x0)+(x0*x1)+(x1*x3))) +
       (_b3*((x0*x1)+(x1*x2)+(x2*x0)));
-//    final double c = 
-//      -((_b0*x1*x2*x3) +
-//        (_b1*x2*x3*x0) +
-//        (_b2*x3*x0*x1) +
-//        (_b3*x0*x1*x2));
-//      System.out.println(
-//        "CL[" + c + " + " + a0 + "*x + " + a1/2 + "*x^2 + " + a2/3 + "*x^3]");
-      if (0.0 == a2) { // quadratic
-        if (0.0 < a1) { 
-          _xmin = -a0/a1; 
+    //    final double c = 
+    //      -((_b0*x1*x2*x3) +
+    //        (_b1*x2*x3*x0) +
+    //        (_b2*x3*x0*x1) +
+    //        (_b3*x0*x1*x2));
+    //      System.out.println(
+    //        "CL[" + c + " + " + a0 + "*x + " + a1/2 + "*x^2 + " + a2/3 + "*x^3]");
+    if (0.0 == a2) { // quadratic
+      if (0.0 < a1) { 
+        _xmin = -a0/a1; 
+        _positiveLimitValue = POSITIVE_INFINITY; 
+        _negativeLimitValue = POSITIVE_INFINITY; 
+        _positiveLimitSlope = POSITIVE_INFINITY; 
+        _negativeLimitSlope = NEGATIVE_INFINITY; }
+      else if (0.0 > a1) { // +/- infinity both minima
+        _xmin = POSITIVE_INFINITY;
+        _positiveLimitValue = NEGATIVE_INFINITY; 
+        _negativeLimitValue = NEGATIVE_INFINITY; 
+        _positiveLimitSlope = NEGATIVE_INFINITY; 
+        _negativeLimitSlope = POSITIVE_INFINITY; }
+      else { // affine
+        if (0.0 < a1) {
+          _xmin = NEGATIVE_INFINITY;
           _positiveLimitValue = POSITIVE_INFINITY; 
-          _negativeLimitValue = POSITIVE_INFINITY; 
-          _positiveLimitSlope = POSITIVE_INFINITY; 
-          _negativeLimitSlope = NEGATIVE_INFINITY; }
-        else if (0.0 > a1) { // +/- infinity both minima
+          _negativeLimitValue = NEGATIVE_INFINITY; 
+          _positiveLimitSlope = a0; 
+          _negativeLimitSlope = a0; }
+        else if (0.0 > a1) {
           _xmin = POSITIVE_INFINITY;
           _positiveLimitValue = NEGATIVE_INFINITY; 
-          _negativeLimitValue = NEGATIVE_INFINITY; 
-          _positiveLimitSlope = NEGATIVE_INFINITY; 
-          _negativeLimitSlope = POSITIVE_INFINITY; }
-        else { // affine
-          if (0.0 < a1) {
-            _xmin = NEGATIVE_INFINITY;
-            _positiveLimitValue = POSITIVE_INFINITY; 
-            _negativeLimitValue = NEGATIVE_INFINITY; 
-            _positiveLimitSlope = a0; 
-            _negativeLimitSlope = a0; }
-          else if (0.0 > a1) {
-            _xmin = POSITIVE_INFINITY;
-            _positiveLimitValue = NEGATIVE_INFINITY; 
-            _negativeLimitValue = POSITIVE_INFINITY; 
-            _positiveLimitSlope = a0; 
-            _negativeLimitSlope = a0; }
-          else { // constant
-            _xmin = NaN; 
-            _positiveLimitValue = y0; 
-            _negativeLimitValue = y0; 
-            _positiveLimitSlope = 0.0; 
-            _negativeLimitSlope = 0.0; } } }
-      else { // 0.0 != a, nontrivial cubic
-        final double[] roots = QuadraticUtils.roots(a0,a1,a2);
-        //System.out.println(Arrays.toString(roots));
-        assert 2 >= roots.length;
-        if (0 == roots.length) { // no critical points
-          if (0.0 < a2) { 
-            _xmin = NEGATIVE_INFINITY; }
-          else { // (0.0 > a2)
-            _xmin = POSITIVE_INFINITY; } } 
-        else if (2 == roots.length) {
-          if (2.0*a2*roots[0] + a1 > 0.0) { 
-            _xmin = roots[0]; }
-          else { // if (2.0*a2*roots[1] + a1 > 0.0) { 
-            _xmin = roots[1]; } }
-        else { // 1 == roots.length;
-          if (0.0 < a2) {
-            _xmin = NEGATIVE_INFINITY; }
-          else { // (0.0 > a2)
-            _xmin = POSITIVE_INFINITY; } }
-        if (0.0 < a2) {
-          _positiveLimitValue = POSITIVE_INFINITY; 
-          _negativeLimitValue = NEGATIVE_INFINITY; 
-          _positiveLimitSlope = POSITIVE_INFINITY; 
-          _negativeLimitSlope = POSITIVE_INFINITY; }
-        else { // 0.0 > a2
-          _positiveLimitValue = NEGATIVE_INFINITY; 
           _negativeLimitValue = POSITIVE_INFINITY; 
-          _positiveLimitSlope = NEGATIVE_INFINITY; 
-          _negativeLimitSlope = NEGATIVE_INFINITY; } } } 
+          _positiveLimitSlope = a0; 
+          _negativeLimitSlope = a0; }
+        else { // constant
+          _xmin = NaN; 
+          _positiveLimitValue = y0; 
+          _negativeLimitValue = y0; 
+          _positiveLimitSlope = 0.0; 
+          _negativeLimitSlope = 0.0; } } }
+    else { // 0.0 != a, nontrivial cubic
+      final double[] roots = QuadraticUtils.roots(a0,a1,a2);
+      //System.out.println(Arrays.toString(roots));
+      assert 2 >= roots.length;
+      if (0 == roots.length) { // no critical points
+        if (0.0 < a2) { 
+          _xmin = NEGATIVE_INFINITY; }
+        else { // (0.0 > a2)
+          _xmin = POSITIVE_INFINITY; } } 
+      else if (2 == roots.length) {
+        if (2.0*a2*roots[0] + a1 > 0.0) { 
+          _xmin = roots[0]; }
+        else { // if (2.0*a2*roots[1] + a1 > 0.0) { 
+          _xmin = roots[1]; } }
+      else { // 1 == roots.length;
+        if (0.0 < a2) {
+          _xmin = NEGATIVE_INFINITY; }
+        else { // (0.0 > a2)
+          _xmin = POSITIVE_INFINITY; } }
+      if (0.0 < a2) {
+        _positiveLimitValue = POSITIVE_INFINITY; 
+        _negativeLimitValue = NEGATIVE_INFINITY; 
+        _positiveLimitSlope = POSITIVE_INFINITY; 
+        _negativeLimitSlope = POSITIVE_INFINITY; }
+      else { // 0.0 > a2
+        _positiveLimitValue = NEGATIVE_INFINITY; 
+        _negativeLimitValue = POSITIVE_INFINITY; 
+        _positiveLimitSlope = NEGATIVE_INFINITY; 
+        _negativeLimitSlope = NEGATIVE_INFINITY; } } } 
 
   public static final ScalarFunctional 
-  make (final double x0, final double y0,
-        final double x1, final double y1,
-        final double x2, final double y2,
-        final double x3, final double y3) {
+  interpolateXY (final double x0, final double y0,
+                 final double x1, final double y1,
+                 final double x2, final double y2,
+                 final double x3, final double y3) {
     if ((y0==y1) && (y1==y0) && (y2==y3)) {
       return ConstantFunction.make(y0); }
     return new CubicLagrange(x0,y0,x1,y1,x2,y2,x3,y3); }
 
   public static final ScalarFunctional 
-  make (final Function f, 
-        final double x0, 
-        final double x1, 
-        final double x2, 
-        final double x3) {
-    return make(
+  interpolateXY (final Function f, 
+                 final double x0, 
+                 final double x1, 
+                 final double x2, 
+                 final double x3) {
+    return interpolateXY(
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2),

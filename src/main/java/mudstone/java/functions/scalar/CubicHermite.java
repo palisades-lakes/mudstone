@@ -18,7 +18,7 @@ import mudstone.java.functions.Domain;
  * at 2 points.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-29
+ * @version 2018-10-04
  */
 
 public final class CubicHermite extends ScalarFunctional {
@@ -95,16 +95,16 @@ public final class CubicHermite extends ScalarFunctional {
 
     final double t = (x-_x0)/_dx10;
     if (isFinite(x)) {
-//      return 
-//        _y0*h00(t) +
-//        _y1*h01(t) +
-//        _d0*_dx10*h10(t) +
-//        _d1*_dx10*h11(t); }
-    return 
-      fma(_y0,h00(t),
-      fma(_y1,h01(t),
-      _dx10*fma(_d0,h10(t),
-      _d1*h11(t)))); }
+      //      return 
+      //        _y0*h00(t) +
+      //        _y1*h01(t) +
+      //        _d0*_dx10*h10(t) +
+      //        _d1*_dx10*h11(t); }
+      return 
+        fma(_y0,h00(t),
+          fma(_y1,h01(t),
+            _dx10*fma(_d0,h10(t),
+              _d1*h11(t)))); }
     if (isNaN(x)) { return NaN; }
     if (POSITIVE_INFINITY == x) { return _positiveLimitValue; }
     return _negativeLimitValue; }
@@ -122,18 +122,18 @@ public final class CubicHermite extends ScalarFunctional {
     if (POSITIVE_INFINITY == x) { return _positiveLimitSlope; }
     return _negativeLimitSlope; }
 
-//  @Override
-//  public final double doubleArgmin (final Domain support) { 
-//    final Interval bounds = (Interval) support;
-//    if (bounds.contains(_xmin)) { return _xmin; }
-//    final double x0 = bounds.lower();
-//    final double x1 = nextUp(bounds.upper());
-//    // note: if xmin == xupper and it's a strict local minimum, 
-//    // that will be returned.
-//    final double y0 = doubleValue(x0);
-//    final double y1 = doubleValue(x1);
-//    if (y0 <= y1) { return x0; }
-//    return x1; }
+  //  @Override
+  //  public final double doubleArgmin (final Domain support) { 
+  //    final Interval bounds = (Interval) support;
+  //    if (bounds.contains(_xmin)) { return _xmin; }
+  //    final double x0 = bounds.lower();
+  //    final double x1 = nextUp(bounds.upper());
+  //    // note: if xmin == xupper and it's a strict local minimum, 
+  //    // that will be returned.
+  //    final double y0 = doubleValue(x0);
+  //    final double y1 = doubleValue(x1);
+  //    if (y0 <= y1) { return x0; }
+  //    return x1; }
 
   @Override
   public final double doubleArgmin (final Domain support) { 
@@ -246,11 +246,11 @@ public final class CubicHermite extends ScalarFunctional {
                         final double y1,
                         final double d1) {
     assert x0 != x1  : "Fail: " + x0 + " == " + x1 ;
-//    System.out.println("CH[" + 
-//      a0(x0,y0,d0,x1,y1,d1) + " + " + 
-//      a1(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ") + " +
-//      a2(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^2 + "+ 
-//      a3(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^3]");
+    //    System.out.println("CH[" + 
+    //      a0(x0,y0,d0,x1,y1,d1) + " + " + 
+    //      a1(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ") + " +
+    //      a2(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^2 + "+ 
+    //      a3(x0,y0,d0,x1,y1,d1) + "*(x-" + x0 + ")^3]");
 
     _x0 = x0;
     _dx10 = x1-x0;
@@ -305,13 +305,15 @@ public final class CubicHermite extends ScalarFunctional {
           _positiveLimitSlope = 0.0; 
           _negativeLimitSlope = 0.0; } } } 
 
-  public static final CubicHermite 
-  make (final double x0, final double y0, final double d0,
-        final double x1, final double y1, final double d1) {
+  public static final ScalarFunctional 
+  interpolateXYD (final double x0, final double y0, final double d0,
+                 final double x1, final double y1, final double d1) {
     // TODO: sorting not necessary?
-    if (x0 < x1) {
+    //if (x0 < x1) {
+    if ((y0==y1) && (0.0==d0) && (0.0==d1)) {
+      return ConstantFunction.make(y0); }
       return new CubicHermite(x0,y0,d0,x1,y1,d1); }
-    return new CubicHermite(x1,y1,d1,x0,y0,d0); }
+    //return new CubicHermite(x1,y1,d1,x0,y0,d0); }
 
   //--------------------------------------------------------------
 }

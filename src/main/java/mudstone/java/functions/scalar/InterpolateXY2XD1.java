@@ -24,7 +24,7 @@ import mudstone.java.functions.Function;
  * the true function to its approximations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-25
+ * @version 2018-10-04
  */
 
 public final class InterpolateXY2XD1 implements ModelFactory {
@@ -33,7 +33,7 @@ public final class InterpolateXY2XD1 implements ModelFactory {
   // methods
   //--------------------------------------------------------------
 
-  private final static QuadraticMonomialShifted 
+  private final static ScalarFunctional 
   interpolate (final double x0, 
                final double y0,
                final double x1, 
