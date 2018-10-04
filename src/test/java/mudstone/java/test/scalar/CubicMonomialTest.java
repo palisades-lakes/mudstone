@@ -14,14 +14,14 @@ import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 import static mudstone.java.test.scalar.Common.testFns;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Iterables;
 
 import mudstone.java.functions.Function;
-import mudstone.java.functions.scalar.CubicMonomialFactory;
-import mudstone.java.functions.scalar.ModelFactory;
+import mudstone.java.functions.scalar.CubicMonomial;
 
 //----------------------------------------------------------------
 /** Test monomial form cubics. 
@@ -31,32 +31,38 @@ import mudstone.java.functions.scalar.ModelFactory;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-02
+ * @version 2018-10-04
  */
 
-strictfp
 public final class CubicMonomialTest {
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void exactTests () {
-    final Iterable<ModelFactory> factories = 
-      List.of(CubicMonomialFactory.get());
+    final List<BiFunction> factories = 
+      List.of(CubicMonomial::interpolateXY);
     final Iterable<Function> functions = Iterables.concat(
       cubicCubics, quadraticCubics, affineCubics, constantCubics, 
       quadraticQuadratics, affineQuadratics, constantQuadratics);
-    for (final ModelFactory factory : factories) {
+    for (final BiFunction factory : factories) {
       for (final Function f : functions) {
+        //System.out.println();
+        //System.out.println(f);
         for (final double[] kn : knots) {
-          exact(f,factory,kn,expand(kn),2.0e2,2.0e2, 1.0e3); } } } }
+          //System.out.println(Arrays.toString(kn));
+          exact(f,factory,kn,expand(kn),1.0e5,5.0e5,3.0e6); } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void generalTests () {
-    final ModelFactory factory = CubicMonomialFactory.get();
+    final List<BiFunction> factories = 
+      List.of(CubicMonomial::interpolateXY);
+    for (final BiFunction factory : factories) {
       for (final Function f : testFns) {
         for (final double[] kn : knots) {
-          general(f,factory,kn,expand(kn),2.0e2,2.0e2, 2.0e7); } } } 
+          general(f,factory,kn,kn,new double[0],
+            expand(kn),1.0e0,1.0e0,1.0e0); } } } }
+  
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

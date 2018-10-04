@@ -181,7 +181,7 @@ public final class CubicLagrange extends ScalarFunctional {
           _positiveLimitSlope = 0.0; 
           _negativeLimitSlope = 0.0; } } }
     else { // 0.0 != a, nontrivial cubic
-      final double[] roots = QuadraticUtils.roots(a0,a1,a2);
+      final double[] roots = PolyUtils.roots(a0,a1,a2);
       //System.out.println(Arrays.toString(roots));
       assert 2 >= roots.length;
       if (0 == roots.length) { // no critical points
@@ -229,7 +229,21 @@ public final class CubicLagrange extends ScalarFunctional {
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2),
-      x2,f.doubleValue(x3));}
+      x3,f.doubleValue(x3));}
+
+  public static final ScalarFunctional 
+  interpolateXY (final Function f, 
+                  final double[] x) {
+    return interpolateXY(
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.doubleValue(x[2]),
+      x[3],f.doubleValue(x[3]));}
+
+  public static final ScalarFunctional 
+  interpolateXY (final Object f, 
+                  final Object x) {
+    return interpolateXY((Function) f, (double[]) x);}
 
   //--------------------------------------------------------------
 }

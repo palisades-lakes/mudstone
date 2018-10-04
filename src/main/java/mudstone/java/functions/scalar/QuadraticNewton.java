@@ -108,7 +108,7 @@ public final class QuadraticNewton extends ScalarFunctional {
     _b2 = (y20 - (_b1*x20))/(x20*x21);
 
     final double[] a = 
-      QuadraticUtils.interpolatingMonomialCoefficients(
+      PolyUtils.interpolatingMonomialCoefficients(
         x0,y0,x1,y1,x2,y2);
     if (0.0 < a[2]) {
       _xmin = 0.5*(x0+x1-(_b1/_b2)); 

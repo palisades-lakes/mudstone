@@ -12,6 +12,7 @@ import static java.lang.Math.sqrt;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import mudstone.java.functions.Domain;
+import mudstone.java.functions.Function;
 
 /** A cubic function from <b>R</b> to <b>R</b> 
  * in the Hermite basis. Convenient for matching value and slope
@@ -307,13 +308,25 @@ public final class CubicHermite extends ScalarFunctional {
 
   public static final ScalarFunctional 
   interpolateXYD (final double x0, final double y0, final double d0,
-                 final double x1, final double y1, final double d1) {
+                  final double x1, final double y1, final double d1) {
     // TODO: sorting not necessary?
     //if (x0 < x1) {
     if ((y0==y1) && (0.0==d0) && (0.0==d1)) {
       return ConstantFunction.make(y0); }
-      return new CubicHermite(x0,y0,d0,x1,y1,d1); }
-    //return new CubicHermite(x1,y1,d1,x0,y0,d0); }
+    return new CubicHermite(x0,y0,d0,x1,y1,d1); }
+  //return new CubicHermite(x1,y1,d1,x0,y0,d0); }
+
+  public static final ScalarFunctional 
+  interpolateXYD (final Function f, 
+                  final double[] x) {
+    return interpolateXYD(
+      x[0],f.doubleValue(x[0]),f.slope(x[0]),
+      x[1],f.doubleValue(x[1]),f.slope(x[1])); }
+
+  public static final ScalarFunctional 
+  interpolateXYD (final Object f, 
+                  final Object x) {
+    return interpolateXYD((Function) f,(double[]) x); }
 
   //--------------------------------------------------------------
 }

@@ -6,14 +6,14 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
-import static java.lang.StrictMath.sqrt;
 
 import mudstone.java.functions.Domain;
+import mudstone.java.functions.Function;
 
 /** A cubic function from <b>R</b> to <b>R</b> in monomial form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-04
  */
 
 public final class CubicMonomial extends ScalarFunctional {
@@ -72,88 +72,29 @@ public final class CubicMonomial extends ScalarFunctional {
       getClass().getSimpleName() + "[" + 
       _a0 + " + " +
       _a1 + "*x + " +
-      _a2 + "*x^2; " +
+      _a2 + "*x^2 + " +
       _a3 + "*x^3; " +
       _xmin + "]"; }
 
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
-  // TODO: use BigFraction for argmin accuracy?
-
-  private static final double 
-  secondDerivative (final double a2,
-                    final double a3,
-                    final double q) {
-    return (2.0*a2) +  (6.0*a3*q); }
-
-  private static final double argmin (final double a1) {
-    // assuming a3 and a2 are 0
-    if (0.0 < a1) { return Double.NEGATIVE_INFINITY; }
-    if (0.0 > a1) { return Double.POSITIVE_INFINITY; }
-    return Double.NaN; } 
-
-  private static final double argmin (final double a1,
-                                      final double a2) {
-    // assuming a3 is 0
-    if (0.0 < a2) { return -0.5*a1/a2; } 
-    if (0.0 > a2) { return Double.POSITIVE_INFINITY; } 
-    return argmin(a1); } 
-
-  // NOTE: a finite local minimum, if possible, rather than global
-  // minimum at +/- infinity.
 
   private static final double argmin (final double a1,
                                       final double a2,
                                       final double a3) {
-
-    if (0.0 == a3) { return argmin(a1,a2); }
-    final double threea3 = 3.0*a3;
-
-    if (0.0 == a2) {
-      if (0.0 == a1) { 
-        // ZERO is only critical point, not a min or max
-        if (0.0 < a3) { return NEGATIVE_INFINITY; }
-        if (0.0 > a3) { return POSITIVE_INFINITY; }
-        // can't get here
-        return NaN; }
-      final double sq = -a1/threea3;
-      if (0.0 >= sq) { // no critical points
-        if (0.0 < a3) { return NEGATIVE_INFINITY; }
-        if (0.0 > a3) { return POSITIVE_INFINITY; }
-        // can't get here
-        return NaN; }
-      // critical points are +/- sqrt()
-      // 2nd derivative is 6*a3*(critical point)
-      // so choose the critical point with the same sign as a3
-      if (0.0 < a3) { return sqrt(sq); }
-      if (0.0 > a3) { return -sqrt(sq); }
-      // can't get here
-      return NaN; }
-
-    if (0.0 == a1) { 
-      // critical points are 0 and (-2*a2)/(3*a3) with
-      // second derivatives 2*a2 and -2*a2\
-      if (0.0 < a2) { return 0.0; }
-      if (0.0 > a2) { return -2.0*a2/threea3; }
-      // can't get here
-      return NaN; }
-
-    // a3, a2 and a1 all non-zero
-    final double b2m4ac = (a2*a2) - (a1*threea3);
-    // complex roots, no critical points
-    if (0.0 > b2m4ac) {
-      if (0.0 > a3) { return POSITIVE_INFINITY; }
-      return NEGATIVE_INFINITY; }
-
-    final double ma2 = -a2;
-    final double sqrtb2m4ac = sqrt(b2m4ac);
-    final double q0 = (ma2 - sqrtb2m4ac)/threea3;
-    if (0.0 < secondDerivative(a2,a3,q0)) { return q0; }
-    final double q1 = (ma2+sqrtb2m4ac)/threea3;
-    if (0.0 < secondDerivative(a2,a3,q1)) { return q1; }
-    if (0.0 > a3) { return POSITIVE_INFINITY; }
-    return NEGATIVE_INFINITY; }
+    final double[] roots = PolyUtils.roots(a1,2.0*a2,3.0*a3);
+    //System.out.println(Arrays.toString(roots));
+    assert 2 >= roots.length;
+    if (0 == roots.length) { // no critical points
+      if (0.0 < a3) { return NEGATIVE_INFINITY; }
+      return POSITIVE_INFINITY; } 
+    else if (2 == roots.length) {
+      if (6.0*a3*roots[0] + 2.0*a2 > 0.0) { return roots[0]; }
+      return roots[1]; }
+    else { // 1 == roots.length;
+      if (0.0 < a3) { return NEGATIVE_INFINITY; }
+      return POSITIVE_INFINITY; } }
 
   //--------------------------------------------------------------
 
@@ -212,6 +153,30 @@ public final class CubicMonomial extends ScalarFunctional {
         return AffineFunctional1d.make(a0,a1); }
       return QuadraticMonomial.make(a0,a1,a2); }
     return new CubicMonomial(a0,a1,a2,a3); }
+
+  public static final ScalarFunctional 
+  interpolateXY (final double x0, final double y0, 
+                 final double x1, final double y1,
+                 final double x2, final double y2,
+                 final double x3, final double y3) {
+    final double[] a = 
+      PolyUtils.interpolatingMonomialCoefficients(
+        x0,y0,x1,y1,x2,y2,x3,y3);
+    return make(a[0],a[1],a[2],a[3]); }
+
+  public static final ScalarFunctional 
+  interpolateXY (final Function f,
+                 final double[] x) {
+    return interpolateXY(
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.doubleValue(x[2]),
+      x[3],f.doubleValue(x[3])); }
+
+  public static final ScalarFunctional 
+  interpolateXY (final Object f,
+                 final Object x) {
+    return interpolateXY((Function) f, (double[]) x); }
 
   //--------------------------------------------------------------
 }

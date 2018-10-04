@@ -7,10 +7,10 @@ import static org.apache.commons.math3.fraction.BigFraction.*;
 /** Utilities related to quadratic polynomials.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-01
+ * @version 2018-10-04
  */
 
-public final class QuadraticUtils  {
+public final class PolyUtils  {
 
   //--------------------------------------------------------------
   /** Return a <code>BigFraction[]</code> containing the real 
@@ -54,11 +54,11 @@ public final class QuadraticUtils  {
     assert 2 >= r.length;
     if (2 == r.length) { 
       r[0] = -fma(a2,r[0]*r[0],a0)/a1;
-//      r[0] = -fma(a2,r[0]*r[0],a0)/a1;
-//      r[0] = -fma(a2,r[0]*r[0],a0)/a1;
+      //      r[0] = -fma(a2,r[0]*r[0],a0)/a1;
+      //      r[0] = -fma(a2,r[0]*r[0],a0)/a1;
       r[1] = -fma(a2,r[1]*r[1],a0)/a1;
-//      r[1] = -fma(a2,r[1]*r[1],a0)/a1;
-//      r[1] = -fma(a2,r[1]*r[1],a0)/a1; 
+      //      r[1] = -fma(a2,r[1]*r[1],a0)/a1;
+      //      r[1] = -fma(a2,r[1]*r[1],a0)/a1; 
     }
     return r; }
 
@@ -84,6 +84,7 @@ public final class QuadraticUtils  {
   //--------------------------------------------------------------
   // use BigFraction to be better at detecting affine and constant
   // functions
+  // TODO: how does double calculationn compare?
 
   /** Return the monomial coefficients for a parabola that 
    * interpolates <code>(x0,y0), (x1,y1), x2,y2)</code>.
@@ -130,11 +131,109 @@ public final class QuadraticUtils  {
         a10.add(a11).add(a12).doubleValue(),
         a20.add(a21).add(a22).negate().doubleValue(), }; }
 
+  public static final double[] 
+    interpolatingMonomialCoefficients (final double x0, 
+                                       final double y0,
+                                       final double x1, 
+                                       final double y1,
+                                       final double x2, 
+                                       final double y2,
+                                       final double x3, 
+                                       final double y3) {
+    final BigFraction qx0 = new BigFraction(x0);
+    final BigFraction qx1 = new BigFraction(x1);
+    final BigFraction qx2 = new BigFraction(x2);
+    final BigFraction qx3 = new BigFraction(x3);
+    final BigFraction x01 = qx0.subtract(qx1);
+    final BigFraction x02 = qx0.subtract(qx2);
+    final BigFraction x03 = qx0.subtract(qx3);
+    final BigFraction l0 = new BigFraction(y0)
+      .divide(x01.multiply(x02).multiply(x03));
+    final BigFraction x12 = qx1.subtract(qx2);
+    final BigFraction x13 = qx1.subtract(qx3);
+    final BigFraction l1 = new BigFraction(y1).negate()
+      .divide(x01.multiply(x12).multiply(x13));
+    final BigFraction x23 = qx2.subtract(qx3);
+    final BigFraction l2 = new BigFraction(y2)
+      .divide(x23.multiply(x12).multiply(x02));
+    final BigFraction l3 = new BigFraction(y3).negate()
+      .divide(x23.multiply(x03).multiply(x13));
+
+      final double[] a = new double[4];
+      a[3] = l0.add(l1).add(l2).add(l3).doubleValue();
+      a[2] = 
+        (l0.multiply(qx1.add(qx2).add(qx3)))
+        .add
+        (l1.multiply(qx2.add(qx3).add(qx0)))
+        .add
+        (l2.multiply(qx3.add(qx0).add(qx1)))
+        .add
+        (l3.multiply(qx0.add(qx1).add(qx2)))
+        .negate().doubleValue();
+      a[1] =
+        (l0.multiply(qx1.multiply(qx2).add(qx2.multiply(qx3)).add(qx3.multiply(qx1)))) 
+        .add
+        (l1.multiply(qx2.multiply(qx3).add(qx3.multiply(qx0)).add(qx0.multiply(qx2)))) 
+        .add
+        (l2.multiply(qx3.multiply(qx0).add(qx0.multiply(qx1)).add(qx1.multiply(qx3)))) 
+        .add
+        (l3.multiply(qx0.multiply(qx1).add(qx1.multiply(qx2)).add(qx2.multiply(qx0)))) 
+        .doubleValue();
+      a[0] =
+        (l0.multiply(qx1).multiply(qx2).multiply(qx3)) 
+        .add
+        (l1.multiply(qx2).multiply(qx3).multiply(qx0)) 
+        .add
+        (l2.multiply(qx3).multiply(qx0).multiply(qx1))
+        .add
+        (l3.multiply(qx0).multiply(qx1).multiply(qx2))
+        .negate().doubleValue();
+      return a; }
+
+  //  public static final double[] 
+  //    interpolatingMonomialCoefficients (final double x0, 
+  //                                       final double y0,
+  //                                       final double x1, 
+  //                                       final double y1,
+  //                                       final double x2, 
+  //                                       final double y2,
+  //                                       final double x3, 
+  //                                       final double y3) {
+  //    final double x01 = x0-x1;
+  //    final double x02 = x0-x2;
+  //    final double x03 = x0-x3;
+  //    final double l0 = y0/(x01*x02*x03);
+  //    final double x12 = x1-x2;
+  //    final double x13 = x1-x3;
+  //    final double l1 = -y1/(x01*x12*x13);
+  //    final double x23 = x2-x3;
+  //    final double l2 = y2/(x23*x12*x02);
+  //    final double l3 = -y3/(x23*x03*x13);
+  //
+  //    final double[] a = new double[4];
+  //    a[3] = l0+l1+l2+l3;
+  //    a[2] = 
+  //      -((l0*(x1+x2+x3)) +
+  //        (l1*(x2+x3+x0)) +
+  //        (l2*(x3+x0+x1)) +
+  //        (l3*(x0+x1+x2)));
+  //    a[1] =
+  //      (l0*((x1*x2)+(x2*x3)+(x3*x1))) +
+  //      (l1*((x2*x3)+(x3*x0)+(x0*x2))) +
+  //      (l2*((x3*x0)+(x0*x1)+(x1*x3))) +
+  //      (l3*((x0*x1)+(x1*x2)+(x2*x0)));
+  //    a[0] =
+  //      -((l0*x1*x2*x3) +
+  //        (l1*x2*x3*x0) +
+  //        (l2*x3*x0*x1) +
+  //        (l3*x0*x1*x2));
+  //    return a; }
+
   //--------------------------------------------------------------
   // disabled constructor
   //--------------------------------------------------------------
 
-  private QuadraticUtils () {
+  private PolyUtils () {
     throw new UnsupportedOperationException(
       "can't instantiate" + getClass()); }
 

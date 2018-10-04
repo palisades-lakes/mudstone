@@ -27,7 +27,7 @@ public final class QuadraticMonomialFactory implements ModelFactory {
                final double y2) {
     return 
       QuadraticMonomial.make(
-        QuadraticUtils.interpolatingMonomialCoefficients(
+        PolyUtils.interpolatingMonomialCoefficients(
           x0,y0,x1,y1,x2,y2)); }
 
   //--------------------------------------------------------------

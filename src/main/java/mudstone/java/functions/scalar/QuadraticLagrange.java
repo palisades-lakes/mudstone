@@ -114,7 +114,7 @@ public final class QuadraticLagrange extends ScalarFunctional {
     _b2 = y2/((x2-x0)*(x2-x1));
 
     // TODO: accurate 1st and 2nd derivative sign calculation?
-    final double[] a = QuadraticUtils
+    final double[] a = PolyUtils
       .interpolatingMonomialCoefficients(x0,y0,x1,y1,x2,y2);
     //    System.out.println(
     //      "QL[" + a[0] + " + " + a[1] + "*x + " + a[2] + "*x^2]");
@@ -187,6 +187,19 @@ public final class QuadraticLagrange extends ScalarFunctional {
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2));}
+
+  public static final ScalarFunctional 
+  interpolateXY (final Function f, 
+                 final double[] x) {
+    return interpolateXY(
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.doubleValue(x[2]));}
+
+  public static final ScalarFunctional 
+  interpolateXY (final Object f, 
+                 final Object x) {
+    return interpolateXY((Function) f, (double[]) x);}
 
   //--------------------------------------------------------------
 }

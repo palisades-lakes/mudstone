@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Doubles;
@@ -194,6 +195,8 @@ public final class Common {
     assertEquals(xf,xg,zeta,
       () -> { 
         return 
+          "\n" + f +
+          "\n" + g +
           "\nargmin: |" + xf + "-" + xg +"|=" +
           abs(xf-xg) + ">" + zeta + 
           "\n by " + abs(xf-xg)/zeta + " xulps" + "\n"; }); }
@@ -241,6 +244,31 @@ public final class Common {
 
   //--------------------------------------------------------------
   /** any input function; any model function. 
+   * */
+
+  public static final Function general (final Function f,
+                                        final BiFunction factory,
+                                        final double[] xs,
+                                        final double[] matchY,
+                                        final double[] matchD,
+                                        final Domain support, 
+                                        final double xulps, 
+                                        final double yulps, 
+                                        final double dulps) {
+    //    System.out.println(f);
+    checkArgmin(f,support,5.0e2*min(1.0e1,xulps),dulps);
+    final Function g = (Function) factory.apply(f,xs);
+    //    System.out.println(g);
+    checkArgmin(g,support,5.0e2*min(1.0e1,xulps),dulps);
+    //    System.out.println(Arrays.toString(xs));
+    for (final double xi : matchY) {
+      assertEqualValue(f,g,xi,yulps); }
+    for (final double xi : matchD) {
+      assertEqualSlope(f,g,xi,dulps); } 
+    return g; }
+
+  //--------------------------------------------------------------
+  /** any input function; any model function. 
    * @param support TODO*/
 
   public static final Function general (final Function f,
@@ -277,6 +305,43 @@ public final class Common {
                                   final double dulps) {
     final Function g = 
       general(f,factory,xs,support,xulps,yulps, dulps);
+    assertLocalMin(
+      g,f.doubleArgmin(support),support,
+      5.0e2*min(1.0e1,xulps),dulps);
+    final double x0 = xs[0];
+    final double x1 = xs[1];
+    final double x2 = xs[2];
+    final double[] xx = 
+      new double[] { x0, x1, x2,
+                     0.5*(x0+x1), 0.5*(x1+x2), 0.5*(x2+x0),
+                     (x0+x1), (x1+x2), (x2+x0), 
+                     (x0+x1+x2)/3.0,
+                     x0+x1+x2,
+                     x0 + (x1-x0)*GOLDEN_RATIO,
+                     x1 + (x2-x1)*GOLDEN_RATIO,
+                     x2 + (x0-x2)*GOLDEN_RATIO,
+                     f.doubleArgmin(support),
+                     g.doubleArgmin(support), };
+    assertEqualArgmin(f,g,support,xulps);
+    for (final double xi : xx) {
+      assertEqualValue(f,g,xi,yulps);
+      assertEqualSlope(f,g,xi,dulps); } }
+
+  //--------------------------------------------------------------
+  /** for cases where model should reproduce test function
+   * 'exactly' (up to floating point precision).
+   * @param support TODO
+   */
+
+  public static final void exact (final Function f,
+                                  final BiFunction factory,
+                                  final double[] xs,
+                                  final Domain support,
+                                  final double xulps,
+                                  final double yulps, 
+                                  final double dulps) {
+    final Function g = 
+      general(f,factory,xs,xs,xs,support, xulps, yulps, dulps);
     assertLocalMin(
       g,f.doubleArgmin(support),support,
       5.0e2*min(1.0e1,xulps),dulps);
