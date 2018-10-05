@@ -6,6 +6,9 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import java.util.List;
+import java.util.function.BiFunction;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.Vektor;
@@ -16,7 +19,7 @@ import mudstone.java.functions.Vektor;
  * @version 2018-10-05
  */
 
-public final class AffineFunctional1d extends ScalarFunctional {
+public final class AffineFunctional1d extends Polynomial {
 
   //--------------------------------------------------------------
   // fields
@@ -29,6 +32,13 @@ public final class AffineFunctional1d extends ScalarFunctional {
   private final double _slope;
   public final double slope () { return _slope; }
 
+  //--------------------------------------------------------------
+  // Polynomial methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final int degree () { return 1; }
+  
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
@@ -125,6 +135,10 @@ public final class AffineFunctional1d extends ScalarFunctional {
                   final Object x) {
     return interpolateXY((Function) f, (double[]) x); }
 
+  public static final List<BiFunction> INTERPOLATORS =
+    List.of(
+      AffineFunctional1d::interpolateXY,
+      AffineFunctional1d::interpolateXYD);
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

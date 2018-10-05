@@ -22,31 +22,28 @@ import org.junit.jupiter.api.Test;
 import com.google.common.collect.Iterables;
 
 import mudstone.java.functions.Function;
-import mudstone.java.functions.scalar.AffineFunctional1d;
+import mudstone.java.functions.scalar.ConstantFunction;
 
 //----------------------------------------------------------------
-/** Test affine interpolants. 
+/** Test constant 'interpolants'. 
  * <p>
  * <pre>
- * mvn -q -Dtest=mudstone/java/test/scalar/AffineFunctional1dTest test > AffineFunctional1dTest.txt
+ * mvn -q -Dtest=mudstone/java/test/scalar/ConstantFunctionTest test > ConstantFunctionTest.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
  * @version 2018-10-05
  */
 
-public final class AffineFunctional1dTest {
+public final class ConstantFunctionTest {
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void exactTests () {
     final List<BiFunction> factories = 
-      List.of(
-        AffineFunctional1d::interpolateXY,
-        AffineFunctional1d::interpolateXYD);
+      List.of(ConstantFunction::interpolateXY);
     final Iterable<Function> functions = Iterables.concat(
-      affineCubics, constantCubics, 
-      affineQuadratics, constantQuadratics);
+      constantCubics, constantQuadratics);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         //System.out.println();
@@ -59,23 +56,10 @@ public final class AffineFunctional1dTest {
   @Test
   public final void generalTestsXY () {
     final List<BiFunction> factories = 
-      List.of(AffineFunctional1d::interpolateXY);
+      List.of(ConstantFunction::interpolateXY);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, quadraticCubics, quadraticQuadratics, testFns);
-    for (final BiFunction factory : factories) {
-      for (final Function f : functions) {
-        for (final double[] kn : knots) {
-          final double[] kn2 = Arrays.copyOf(kn,2);
-          general(f,factory,kn2,kn2,new double[0],
-            expand(kn),1.0e0,3.0e1,1.0e0); } } } }
-
-  @SuppressWarnings({ "static-method" })
-  @Test
-  public final void generalTestsXYD () {
-    final List<BiFunction> factories = 
-      List.of(AffineFunctional1d::interpolateXYD);
-    final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, quadraticCubics, quadraticQuadratics, testFns);
+      cubicCubics, quadraticCubics, affineCubics, 
+      quadraticQuadratics, affineQuadratics, testFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[] kn : knots) {

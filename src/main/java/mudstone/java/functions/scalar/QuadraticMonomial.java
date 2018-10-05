@@ -14,10 +14,10 @@ import mudstone.java.functions.Function;
  * form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-04
+ * @version 2018-10-05
  */
 
-public final class QuadraticMonomial extends ScalarFunctional {
+public final class QuadraticMonomial extends Polynomial {
 
   //--------------------------------------------------------------
   // fields
@@ -35,6 +35,13 @@ public final class QuadraticMonomial extends ScalarFunctional {
   private final double _positiveLimitSlope;
   private final double _negativeLimitSlope;
 
+  //--------------------------------------------------------------
+  // Polynomial methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final int degree () { return 2; }
+  
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------

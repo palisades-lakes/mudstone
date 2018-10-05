@@ -13,10 +13,10 @@ import mudstone.java.functions.Function;
 /** A cubic function from <b>R</b> to <b>R</b> in monomial form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-04
+ * @version 2018-10-05
  */
 
-public final class CubicMonomial extends ScalarFunctional {
+public final class CubicMonomial extends Polynomial {
 
   //--------------------------------------------------------------
   // fields
@@ -35,6 +35,13 @@ public final class CubicMonomial extends ScalarFunctional {
   private final double _positiveLimitSlope;
   private final double _negativeLimitSlope;
 
+  //--------------------------------------------------------------
+  // Polynomial methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final int degree () { return 3; }
+  
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------

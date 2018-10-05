@@ -20,11 +20,11 @@ import mudstone.java.functions.Function;
  * to a given codomain interval.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-04
+ * @version 2018-10-05
  */
 
 public final class QuadraticMonomialStandardized 
-extends ScalarFunctional {
+extends Polynomial {
 
   //--------------------------------------------------------------
   // fields
@@ -53,6 +53,13 @@ extends ScalarFunctional {
   private final double _positiveLimitSlope;
   private final double _negativeLimitSlope;
 
+  //--------------------------------------------------------------
+  // Polynomial methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final int degree () { return 2; }
+  
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------

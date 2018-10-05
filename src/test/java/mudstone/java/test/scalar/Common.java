@@ -21,12 +21,13 @@ import mudstone.java.test.functions.scalar.QQuadratic;
 import mudstone.java.test.functions.scalar.Square;
 
 //----------------------------------------------------------------
-/** Shared tests for scalar functions
+/** Shared tests for scalar functions.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-04
+ * @version 2018-10-05
  */
 
+@SuppressWarnings("unchecked")
 strictfp
 public final class Common {
 
@@ -92,7 +93,6 @@ public final class Common {
       //    Runge.get(),
       //      SemiCubic.get(),
       //      Sin.get(),
-      //      Square.get()
       );
 
   //--------------------------------------------------------------

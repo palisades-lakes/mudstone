@@ -10,10 +10,10 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-03
+ * @version 2018-10-05
  */
 
-public final class ConstantFunction extends ScalarFunctional {
+public final class ConstantFunction extends Polynomial {
 
   //--------------------------------------------------------------
   // fields
@@ -21,6 +21,13 @@ public final class ConstantFunction extends ScalarFunctional {
 
   private final double _y;
 
+  //--------------------------------------------------------------
+  // Polynomial methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final int degree () { return 0; }
+  
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
@@ -33,7 +40,7 @@ public final class ConstantFunction extends ScalarFunctional {
   public final double slope (final double x) {
     if (isNaN(x)) { return NaN; }
     return 0.0; }
-  
+
   @Override
   public final double doubleArgmin (final Domain support) { 
     return NaN; }
@@ -52,15 +59,20 @@ public final class ConstantFunction extends ScalarFunctional {
 
   private ConstantFunction (final double y) {
     _y = y; }
-  
+
   public static final ConstantFunction 
   make (final double y) {
     return new ConstantFunction(y); }
 
   public static final ConstantFunction 
-  make (final Function f, 
-        final double x) {
-    return make(f.doubleValue(x));}
+  interpolateXY (final Function f, 
+                 final double[] x) {
+    return make(f.doubleValue(x[0]));}
+
+  public static final ConstantFunction 
+  interpolateXY (final Object f, 
+                 final Object x) {
+    return interpolateXY((Function) f, (double[]) x); } 
 
   //--------------------------------------------------------------
 }
