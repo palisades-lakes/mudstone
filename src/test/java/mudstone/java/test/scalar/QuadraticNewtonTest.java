@@ -32,7 +32,7 @@ import mudstone.java.functions.scalar.QuadraticNewton;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-04
+ * @version 2018-10-05
  */
 
 public final class QuadraticNewtonTest {
@@ -43,6 +43,7 @@ public final class QuadraticNewtonTest {
     final List<BiFunction> factories = 
       List.of(QuadraticNewton::interpolateXY);
     final Iterable<Function> functions = Iterables.concat(
+      quadraticCubics, affineCubics, constantCubics,
       quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
@@ -58,8 +59,7 @@ public final class QuadraticNewtonTest {
     final List<BiFunction> factories = 
       List.of(QuadraticNewton::interpolateXY);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, quadraticCubics, affineCubics, constantCubics, 
-      testFns);
+      cubicCubics, testFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[] kn : knots) {
