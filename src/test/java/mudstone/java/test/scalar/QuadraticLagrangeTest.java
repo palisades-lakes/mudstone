@@ -35,10 +35,7 @@ import mudstone.java.functions.scalar.QuadraticLagrange;
  * @version 2018-10-04
  */
 
-strictfp
 public final class QuadraticLagrangeTest {
-
-  //--------------------------------------------------------------
 
   @SuppressWarnings({ "static-method" })
   @Test

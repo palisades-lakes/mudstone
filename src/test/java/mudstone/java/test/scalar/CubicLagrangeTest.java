@@ -62,6 +62,7 @@ public final class CubicLagrangeTest {
         for (final double[] kn : knots) {
           general(f,factory,kn,kn,new double[0],
             expand(kn),1.0e0, 1.0e0, 1.0e0); } } } }
+
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

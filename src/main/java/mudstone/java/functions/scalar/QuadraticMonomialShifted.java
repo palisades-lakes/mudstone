@@ -8,6 +8,7 @@ import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
 import mudstone.java.functions.Domain;
+import mudstone.java.functions.Function;
 
 /** A quadratic function from <b>R</b> to <b>R</b> in monomial 
  * form.
@@ -133,6 +134,73 @@ public final class QuadraticMonomialShifted extends ScalarFunctional {
         return ConstantFunction.make(a0); }
       return AffineFunctional1d.make(fma(-a1,xorigin,a0),a1); }
     return new QuadraticMonomialShifted(a0,a1,a2,xorigin); }
+
+  //--------------------------------------------------------------
+
+  public static final ScalarFunctional 
+  interpolateXY2D1 (final double x0, 
+                    final double y0,
+                    final double x1, 
+                    final double y1,
+                    final double x2,
+                    final double d2) {
+    assert x0 != x1;
+    // TODO: use BigFraction to compute monomial coefficients?
+    final double u0 = x0-x2;
+    final double u02 = u0*u0;
+    final double u1 = x1-x2;
+    final double u12 = u1*u1;
+    final double du = u1-u0;
+    final double du2 = u12-u02;
+    final double a0 = ((fma(-d2,u0,y0)*u12)-(fma(-d2,u1,y1)*u02))/du2;
+    final double a1 = d2;
+    final double a2 = fma(-d2,du,y1-y0)/du2; 
+    return make(a0,a1,a2,x2); }
+
+  public static final ScalarFunctional 
+  interpolateXY2D1 (final Function f,
+                    final double[] x) {
+    return interpolateXY2D1(
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.slope(x[2])); }
+
+  public static final ScalarFunctional 
+  interpolateXY2D1 (final Object f,
+                    final Object x) {
+    return interpolateXY2D1((Function) f, (double[]) x); }
+
+  //--------------------------------------------------------------
+
+  public static final ScalarFunctional 
+  interpolateXD2Y1 (final double x0, 
+                    final double d0,
+                    final double x1, 
+                    final double d1,
+                    final double x2,
+                    final double y2) {
+    assert x0 != x1;
+    final double a0 = y2;
+    final double z0 = x0-x2;
+    final double z1 = x1-x2;
+    final double dz = z1-z0; // =x1-x0
+    final double dd = d1-d0;
+    final double a1 = (d0*z1-d1*z0)/dz;
+    final double a2 = 0.5*dd/dz;
+    return make(a0,a1,a2,x2); }
+
+  public static final ScalarFunctional
+  interpolateXD2Y1 (final Function f,
+                    final double[] x) {
+    return interpolateXD2Y1(
+      x[0],f.slope(x[0]),
+      x[1],f.slope(x[1]),
+      x[2],f.doubleValue(x[2])); }
+
+  public static final ScalarFunctional 
+  interpolateXD2Y1 (final Object f,
+                    final Object x) {
+    return interpolateXD2Y1((Function) f, (double[]) x); }
 
   //--------------------------------------------------------------
 }

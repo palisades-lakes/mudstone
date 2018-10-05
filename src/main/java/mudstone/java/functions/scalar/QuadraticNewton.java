@@ -142,6 +142,8 @@ public final class QuadraticNewton extends ScalarFunctional {
         _positiveLimitSlope = 0.0; 
         _negativeLimitSlope = 0.0; } } } 
 
+  //--------------------------------------------------------------
+
   // TODO: experiment with reordering x0,x1,x2
   // currrent form drops x2; better to retain xmin,xmax and drop 
   // inner sample point?
@@ -166,6 +168,19 @@ public final class QuadraticNewton extends ScalarFunctional {
       x0,f.doubleValue(x0),
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2));}
+
+  public static final ScalarFunctional 
+  interpolateXY (final Function f, 
+                 final double[] x) {
+    return interpolateXY(
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.doubleValue(x[2]));}
+
+  public static final ScalarFunctional 
+  interpolateXY (final Object f, 
+                 final Object x) {
+    return interpolateXY((Function) f, (double[]) x); }
 
   //--------------------------------------------------------------
 }

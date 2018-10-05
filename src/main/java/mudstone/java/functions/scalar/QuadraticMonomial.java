@@ -8,6 +8,7 @@ import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
 import mudstone.java.functions.Domain;
+import mudstone.java.functions.Function;
 
 /** A quadratic function from <b>R</b> to <b>R</b> in monomial 
  * form.
@@ -125,10 +126,30 @@ public final class QuadraticMonomial extends ScalarFunctional {
       if (0.0==a1) { return ConstantFunction.make(a0); }
       return AffineFunctional1d.make(a0,a1); }
     return new QuadraticMonomial(a0,a1,a2); }
+ 
+  //--------------------------------------------------------------
 
   public static final ScalarFunctional 
-  make (final double[] a) {
-    return QuadraticMonomial.make(a[0],a[1],a[2]); }
+  interpolateXY (final double x0, final double y0, 
+                 final double x1, final double y1,
+                 final double x2, final double y2) {
+    final double[] a = 
+      PolyUtils.interpolatingMonomialCoefficients(
+        x0,y0,x1,y1,x2,y2);
+    return make(a[0],a[1],a[2]); }
+
+  public static final ScalarFunctional 
+  interpolateXY (final Function f,
+                 final double[] x) {
+    return interpolateXY(
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.doubleValue(x[2])); }
+
+  public static final ScalarFunctional 
+  interpolateXY (final Object f,
+                 final Object x) {
+    return interpolateXY((Function) f, (double[]) x); }
 
   //--------------------------------------------------------------
 }

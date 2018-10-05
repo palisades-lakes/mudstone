@@ -6,8 +6,13 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
+import org.apache.commons.math3.fraction.BigFraction;
 
 import mudstone.java.functions.Domain;
+import mudstone.java.functions.Function;
 
 /** A quadratic function from <b>R</b> to <b>R</b> in monomial 
  * form composed implicitly with standardizing affine functions
@@ -159,6 +164,79 @@ extends ScalarFunctional {
       return AffineFunctional1d.make(c0,c1); }
     return 
       new QuadraticMonomialStandardized(a0,a1,a2,ax,bx,ay,by); }
+
+  //--------------------------------------------------------------
+
+  private static final double qfma (final BigFraction a,
+                                    final double z,
+                                    final BigFraction b) {
+    return a.multiply(new BigFraction(z)).add(b).doubleValue(); }
+
+  public final static ScalarFunctional
+  interpolateXY (final double x0, 
+                 final double y0,
+                 final double x1, 
+                 final double y1,
+                 final double x2,
+                 final double y2) {
+
+    // TODO: better to use centered (-1,1) standardization?
+
+    // transform x range to (0,1)
+    // final double xmin = min(x0,min(x1,x2));
+    // final double xmax = max(x0,max(x1,x2));
+    // final double ax = xmax-xmin);
+    // final double bx = -ax*xmin;
+
+    final BigFraction xmin = new BigFraction(min(x0,min(x1,x2)));
+    final BigFraction xmax = new BigFraction(max(x0,max(x1,x2)));
+    final BigFraction ax = xmax.subtract(xmin).reciprocal();
+    final BigFraction bx = ax.negate().multiply(xmin);
+
+    // transform y range to (0,1)
+    // final double ymin = min(y0,min(y1,y2));
+    // final double ymax = max(y0,max(y1,y2));
+    // final double ay = 1.0/(ymax-ymin);
+    // final double by = -ay*ymin;
+
+    final BigFraction ymin = new BigFraction(min(y0,min(y1,y2)));
+    final BigFraction ymax = new BigFraction(max(y0,max(y1,y2)));
+    final BigFraction ay;
+    final BigFraction by;
+    if (ymin.equals(ymax) ) {
+      ay = BigFraction.ZERO;
+      by = ymin; }
+    else {
+      ay = ymax.subtract(ymin).reciprocal();
+      by = ay.negate().multiply(ymin); }
+
+    // monomial coefficients for interpolating points 
+    // (0,1) -> (0,1)
+    final double[] a = 
+      PolyUtils.interpolatingMonomialCoefficients(
+        qfma(ax,x0,bx),qfma(ay,y0,by),
+        qfma(ax,x1,bx),qfma(ay,y1,by),
+        qfma(ax,x2,bx),qfma(ay,y2,by));
+
+    // need y transform from (0,1) to y range
+    return make(
+      a[0],a[1],a[2],
+      ax.doubleValue(),bx.doubleValue(),
+      ymax.subtract(ymin).doubleValue(),ymin.doubleValue()); }
+
+  public static final ScalarFunctional 
+  interpolateXY (final Function f,
+                 final double[] x) {
+    return interpolateXY(
+      x[0],f.doubleValue(x[0]),
+      x[1],f.doubleValue(x[1]),
+      x[2],f.doubleValue(x[2])); }
+
+  public static final ScalarFunctional 
+  interpolateXY (final Object f,
+                 final Object x) {
+    return interpolateXY((Function) f, (double[]) x); }
+
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------
