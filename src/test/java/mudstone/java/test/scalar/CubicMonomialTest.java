@@ -8,7 +8,7 @@ import static mudstone.java.test.scalar.Common.cubicCubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
-import static mudstone.java.test.scalar.Common.knots;
+import static mudstone.java.test.scalar.Common.oldKnots;
 import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 import static mudstone.java.test.scalar.Common.testFns;
@@ -48,7 +48,7 @@ public final class CubicMonomialTest {
       for (final Function f : functions) {
         //System.out.println();
         //System.out.println(f);
-        for (final double[] kn : knots) {
+        for (final double[] kn : oldKnots) {
           //System.out.println(Arrays.toString(kn));
           exact(f,factory,kn,expand(kn),1.0e5,5.0e5,3.0e6); } } } }
 
@@ -59,7 +59,7 @@ public final class CubicMonomialTest {
       List.of(CubicMonomial::interpolateXY);
     for (final BiFunction factory : factories) {
       for (final Function f : testFns) {
-        for (final double[] kn : knots) {
+        for (final double[] kn : oldKnots) {
           general(f,factory,kn,kn,new double[0],
             expand(kn),1.0e0,1.0e0,1.0e0); } } } }
   

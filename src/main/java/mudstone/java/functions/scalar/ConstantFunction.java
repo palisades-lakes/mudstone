@@ -10,7 +10,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-06
  */
 
 public final class ConstantFunction extends Polynomial {
@@ -65,14 +65,15 @@ public final class ConstantFunction extends Polynomial {
     return new ConstantFunction(y); }
 
   public static final ConstantFunction 
-  interpolateXY (final Function f, 
-                 final double[] x) {
-    return make(f.doubleValue(x[0]));}
+  interpolate (final Function f, 
+                 final double[][] x) {
+    assert validKnots(x,0);
+    return make(f.doubleValue(x[0][0]));}
 
   public static final ConstantFunction 
-  interpolateXY (final Object f, 
+  interpolate (final Object f, 
                  final Object x) {
-    return interpolateXY((Function) f, (double[]) x); } 
+    return interpolate((Function) f, (double[][]) x); } 
 
   //--------------------------------------------------------------
 }

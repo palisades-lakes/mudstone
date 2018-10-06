@@ -7,6 +7,8 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import java.util.Arrays;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
@@ -14,7 +16,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-06
  */
 
 public final class QuadraticLagrange extends Polynomial {
@@ -45,7 +47,7 @@ public final class QuadraticLagrange extends Polynomial {
 
   @Override
   public final int degree () { return 2; }
-  
+
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
@@ -195,18 +197,27 @@ public final class QuadraticLagrange extends Polynomial {
       x1,f.doubleValue(x1),
       x2,f.doubleValue(x2));}
 
-  public static final ScalarFunctional 
-  interpolateXY (final Function f, 
-                 final double[] x) {
-    return interpolateXY(
-      x[0],f.doubleValue(x[0]),
-      x[1],f.doubleValue(x[1]),
-      x[2],f.doubleValue(x[2]));}
+  // only interpolates 3 values for now.
+  public static final boolean 
+  supportedKnots (final double[][] knots) {
+    return (3==knots[0].length) && (0== knots[1].length); }
 
   public static final ScalarFunctional 
-  interpolateXY (final Object f, 
-                 final Object x) {
-    return interpolateXY((Function) f, (double[]) x);}
+  interpolate (final Function f, 
+               final double[][] x) {
+    assert validKnots(x,2) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    assert supportedKnots(x) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    return interpolateXY(
+      x[0][0],f.doubleValue(x[0][0]),
+      x[0][1],f.doubleValue(x[0][1]),
+      x[0][2],f.doubleValue(x[0][2]));}
+
+  public static final ScalarFunctional 
+  interpolate (final Object f, 
+               final Object x) {
+    return interpolate((Function) f, (double[][]) x);}
 
   //--------------------------------------------------------------
 }

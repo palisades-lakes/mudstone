@@ -9,6 +9,8 @@ import static java.lang.Math.fma;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+import java.util.Arrays;
+
 import org.apache.commons.math3.fraction.BigFraction;
 
 import mudstone.java.functions.Domain;
@@ -20,7 +22,7 @@ import mudstone.java.functions.Function;
  * to a given codomain interval.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-06
  */
 
 public final class QuadraticMonomialStandardized 
@@ -231,6 +233,8 @@ extends Polynomial {
       ax.doubleValue(),bx.doubleValue(),
       ymax.subtract(ymin).doubleValue(),ymin.doubleValue()); }
 
+  //--------------------------------------------------------------
+
   public static final ScalarFunctional 
   interpolateXY (final Function f,
                  final double[] x) {
@@ -239,10 +243,27 @@ extends Polynomial {
       x[1],f.doubleValue(x[1]),
       x[2],f.doubleValue(x[2])); }
 
+  // only interpolates 3 values for now.
+  public static final boolean 
+  supportedKnots (final double[][] knots) {
+    return (3==knots[0].length) && (0== knots[1].length); }
+
   public static final ScalarFunctional 
-  interpolateXY (final Object f,
-                 final Object x) {
-    return interpolateXY((Function) f, (double[]) x); }
+  interpolate (final Function f, 
+               final double[][] x) {
+    assert validKnots(x,2) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    assert supportedKnots(x) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    return interpolateXY(
+      x[0][0],f.doubleValue(x[0][0]),
+      x[0][1],f.doubleValue(x[0][1]),
+      x[0][2],f.doubleValue(x[0][2]));}
+
+  public static final ScalarFunctional 
+  interpolate (final Object f, 
+               final Object x) {
+    return interpolate((Function) f, (double[][]) x);}
 
   //--------------------------------------------------------------
 }

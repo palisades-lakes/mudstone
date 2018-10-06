@@ -6,9 +6,6 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
-import java.util.List;
-import java.util.function.BiFunction;
-
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.Vektor;
@@ -16,7 +13,7 @@ import mudstone.java.functions.Vektor;
 /** An affine function from <b>R</b> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-06
  */
 
 public final class AffineFunctional1d extends Polynomial {
@@ -38,7 +35,7 @@ public final class AffineFunctional1d extends Polynomial {
 
   @Override
   public final int degree () { return 1; }
-  
+
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
@@ -102,26 +99,19 @@ public final class AffineFunctional1d extends Polynomial {
 
   public static final ScalarFunctional 
   interpolateXYD (final Function f,
-                  final double[] x) {
-    final double x0 = x[0];
+                  final double x0,
+                  final double x1) {
+    // usually x0 == x1
     final double y0 = f.doubleValue(x0);
-    final double a1 = f.slope(x0);
+    final double a1 = f.slope(x1);
     if (0.0==a1) { return ConstantFunction.make(y0); }
     final double a0 = fma(-a1,x0,y0);
     return new AffineFunctional1d(a0,a1); }
 
   public static final ScalarFunctional 
-  interpolateXYD (final Object f,
-                  final Object x) {
-    return interpolateXYD((Function) f, (double[]) x); }
-
-  //--------------------------------------------------------------
-
-  public static final ScalarFunctional 
   interpolateXY (final Function f,
-                  final double[] x) {
-    final double x0 = x[0];
-    final double x1 = x[1];
+                 final double x0,
+                 final double x1) {
     final double y0 = f.doubleValue(x0);
     final double y1 = f.doubleValue(x1);
     if (y0==y1) { return ConstantFunction.make(y0); }
@@ -131,14 +121,18 @@ public final class AffineFunctional1d extends Polynomial {
     return new AffineFunctional1d(a0,a1); }
 
   public static final ScalarFunctional 
-  interpolateXY (final Object f,
-                  final Object x) {
-    return interpolateXY((Function) f, (double[]) x); }
+  interpolate (final Function f,
+               final double[][] knots) {
+    assert validKnots(knots,1);
+    if (2 == knots[0].length) {
+      return interpolateXY(f,knots[0][0],knots[0][1]); }
+    return interpolateXYD(f,knots[0][0],knots[1][0]); }
 
-  public static final List<BiFunction> INTERPOLATORS =
-    List.of(
-      AffineFunctional1d::interpolateXY,
-      AffineFunctional1d::interpolateXYD);
+  public static final ScalarFunctional 
+  interpolate (final Object f,
+               final Object x) {
+    return interpolate((Function) f, (double[][]) x); }
+
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

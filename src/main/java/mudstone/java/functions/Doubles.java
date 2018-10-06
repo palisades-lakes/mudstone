@@ -11,7 +11,7 @@ import static java.lang.Math.ulp;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-06
  */
 
 public final class Doubles {
@@ -61,6 +61,15 @@ public final class Doubles {
     return xmin; }
   
   //--------------------------------------------------------------
+  
+  public static final double min (final double[][] x) {
+    double xmin = POSITIVE_INFINITY;
+    for (final double[] xi : x) { 
+      final double ximin = min(xi);
+      if (ximin < xmin) { xmin=ximin; } }
+    return xmin; }
+  
+  //--------------------------------------------------------------
 
   public static final double max (final double[] x) {
     final int n = x.length;
@@ -68,6 +77,15 @@ public final class Doubles {
     for (int i=0;i<n;i++) { 
       // NaN elements will be ignored.
       if (x[i] > xmax) { xmax=x[i]; } }
+    return xmax; }
+  
+  //--------------------------------------------------------------
+  
+  public static final double max (final double[][] x) {
+    double xmax = POSITIVE_INFINITY;
+    for (final double[] xi : x) { 
+      final double ximax = max(xi);
+      if (ximax < xmax) { xmax=ximax; } }
     return xmax; }
   
   //--------------------------------------------------------------

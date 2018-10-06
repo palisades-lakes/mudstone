@@ -8,12 +8,12 @@ import static mudstone.java.test.scalar.Common.cubicCubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
-import static mudstone.java.test.scalar.Common.knots;
 import static mudstone.java.test.scalar.Common.quadraticCubics;
+import static mudstone.java.test.scalar.Common.quadraticKnots;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
+import static mudstone.java.test.scalar.Common.quadraticTestPts;
 import static mudstone.java.test.scalar.Common.testFns;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Iterables;
 
+import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.QuadraticMonomialShifted;
 
@@ -32,7 +33,7 @@ import mudstone.java.functions.scalar.QuadraticMonomialShifted;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-06
  */
 
 public final class QuadraticMonomialShiftedTest {
@@ -40,10 +41,9 @@ public final class QuadraticMonomialShiftedTest {
   @SuppressWarnings({ "static-method" })
   @Test
   public final void exactTests () {
+    final Domain support = expand(quadraticTestPts);
     final List<BiFunction> factories = 
-      List.of(
-        QuadraticMonomialShifted::interpolateXY2D1,
-        QuadraticMonomialShifted::interpolateXD2Y1);
+      List.of(QuadraticMonomialShifted::interpolate);
     final Iterable<Function> functions = Iterables.concat(
       quadraticCubics, affineCubics, constantCubics,
       quadraticQuadratics, affineQuadratics, constantQuadratics);
@@ -51,44 +51,29 @@ public final class QuadraticMonomialShiftedTest {
       for (final Function f : functions) {
         //System.out.println();
         //System.out.println(f);
-        for (final double[] kn : knots) {
-          //System.out.println(Arrays.toString(kn));
-          exact(f,factory,kn,expand(kn),2.0e2,4.0e4,6.0e2); } } } }
+        for (final double[][] kn : quadraticKnots) {
+          if (QuadraticMonomialShifted.supportedKnots(kn)) {
+//            System.out.println(
+//              Arrays.toString(kn[0]) + 
+//              ", " + 
+//              Arrays.toString(kn[1]));
+             exact(f,factory,kn,quadraticTestPts,support,
+              7.0e5,2.0e7,2.0e7); } } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
-  public final void generalTestsXD2Y1 () {
+  public final void generalTests () {
+    final Domain support = expand(quadraticTestPts);
     final List<BiFunction> factories = 
-      List.of(
-        QuadraticMonomialShifted::interpolateXD2Y1);
+      List.of(QuadraticMonomialShifted::interpolate);
     final Iterable<Function> functions = Iterables.concat(
       cubicCubics, testFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
-        for (final double[] kn : knots) {
-          general(f,factory,
-            kn,
-            Arrays.copyOfRange(kn,2,3),
-            Arrays.copyOf(kn,2),
-            expand(kn),1.0e0,5.0e5,3.0e4); } } } }
-
-  @SuppressWarnings({ "static-method" })
-  @Test
-  public final void generalTestsXY2D1 () {
-    final List<BiFunction> factories = 
-      List.of(
-        QuadraticMonomialShifted::interpolateXY2D1);
-    final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, quadraticCubics, affineCubics, constantCubics, 
-      testFns);
-    for (final BiFunction factory : factories) {
-      for (final Function f : functions) {
-        for (final double[] kn : knots) {
-          general(f,factory,
-            kn,
-            Arrays.copyOf(kn,2),
-            Arrays.copyOfRange(kn,2,3),
-            expand(kn),1.0e0,6.0e6,2.0e5); } } } }
+        for (final double[][] kn : quadraticKnots) {
+          if (QuadraticMonomialShifted.supportedKnots(kn)) {
+            general(f,factory,kn,support,
+              1.0e0,7.0e5,4.0e4); } } } } }
 
   //--------------------------------------------------------------
 }
