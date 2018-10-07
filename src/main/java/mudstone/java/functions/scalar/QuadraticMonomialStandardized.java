@@ -222,7 +222,7 @@ extends Polynomial {
     // monomial coefficients for interpolating points 
     // (0,1) -> (0,1)
     final double[] a = 
-      PolyUtils.interpolatingMonomialCoefficients(
+      Polynomial.interpolatingMonomialCoefficients(
         qfma(ax,x0,bx),qfma(ay,y0,by),
         qfma(ax,x1,bx),qfma(ay,y1,by),
         qfma(ax,x2,bx),qfma(ay,y2,by));

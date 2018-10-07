@@ -7,13 +7,15 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import java.util.Arrays;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
 /** A cubic function from <b>R</b> to <b>R</b> in monomial form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-06
  */
 
 public final class CubicMonomial extends Polynomial {
@@ -90,7 +92,7 @@ public final class CubicMonomial extends Polynomial {
   private static final double argmin (final double a1,
                                       final double a2,
                                       final double a3) {
-    final double[] roots = PolyUtils.roots(a1,2.0*a2,3.0*a3);
+    final double[] roots = Polynomial.roots(a1,2.0*a2,3.0*a3);
     //System.out.println(Arrays.toString(roots));
     assert 2 >= roots.length;
     if (0 == roots.length) { // no critical points
@@ -167,23 +169,35 @@ public final class CubicMonomial extends Polynomial {
                  final double x2, final double y2,
                  final double x3, final double y3) {
     final double[] a = 
-      PolyUtils.interpolatingMonomialCoefficients(
+      Polynomial.interpolatingMonomialCoefficients(
         x0,y0,x1,y1,x2,y2,x3,y3);
     return make(a[0],a[1],a[2],a[3]); }
 
-  public static final ScalarFunctional 
-  interpolateXY (final Function f,
-                 final double[] x) {
-    return interpolateXY(
-      x[0],f.doubleValue(x[0]),
-      x[1],f.doubleValue(x[1]),
-      x[2],f.doubleValue(x[2]),
-      x[3],f.doubleValue(x[3])); }
+  // only interpolates 3 values for now.
+  public static final boolean 
+  supportedKnots (final double[][] knots) {
+    return 
+      (4==knots[0].length) 
+      && 
+      (0==knots[1].length); }
 
   public static final ScalarFunctional 
-  interpolateXY (final Object f,
-                 final Object x) {
-    return interpolateXY((Function) f, (double[]) x); }
+  interpolate (final Function f, 
+               final double[][] x) {
+    assert validKnots(x,3) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    assert supportedKnots(x) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    return interpolateXY(
+      x[0][0],f.doubleValue(x[0][0]),
+      x[0][1],f.doubleValue(x[0][1]),
+      x[0][2],f.doubleValue(x[0][2]),
+      x[0][3],f.doubleValue(x[0][3]));}
+
+  public static final ScalarFunctional 
+  interpolate (final Object f, 
+               final Object x) {
+    return interpolate((Function) f, (double[][]) x);}
 
   //--------------------------------------------------------------
 }

@@ -104,6 +104,32 @@ public final class Common {
   public static final double[] quadraticTestPts =
     testPts(quadraticKnots);
 
+  public static final List<double[][]> cubicKnots =
+    List.of(
+      new double[][] {{ 0.99e0,1.00e0,1.01e0,1.02e0},{}},
+      new double[][] {{-0.99e0,1.00e0,1.01e0,1.02e0},{}},
+      new double[][] {{-1.00e2,0.00e0,1.00e0,2.00e2},{}},
+      new double[][] {{-1.00e2,0.90e2,0.95e2,1.00e2},{}},
+      new double[][] {{ 0.99e2,1.00e0,1.01e0,1.02e0},{}},
+      new double[][] {{-0.99e2,1.00e0,1.01e0,1.02e0},{}},
+      new double[][] {{ 0.99e0,1.00e0,1.01e0,1.02e0},{}},
+      new double[][] {{-1.00e2,0.00e0,1.00e0,2.00e2},{}},
+      new double[][] {{-1.00e2,0.90e2,0.95e2,1.00e2},{}});
+
+  public static final double[] cubicTestPts =
+    testPts(cubicKnots);
+
+  public static final List<double[][]> hermiteKnots =
+    List.of(
+      new double[][] {{ 0.99e0,1.00e0},{ 0.99e0,1.00e0}},
+      new double[][] {{-0.99e0,1.00e0},{-0.99e0,1.00e0}},
+      new double[][] {{ 0.90e1,1.00e1},{ 0.90e1,1.00e1}},
+      new double[][] {{-1.00e2,0.01e0},{-1.00e2,0.01e0}},
+      new double[][] {{-1.00e2,1.00e2},{-1.00e2,1.00e2}});
+
+  public static final double[] hermiteTestPts =
+    testPts(hermiteKnots);
+
   public static final Iterable<double[]> oldKnots =
     List.of(
       new double[] {-1.0,0.0,1.0,2.0},

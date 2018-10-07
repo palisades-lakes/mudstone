@@ -9,6 +9,8 @@ import static java.lang.Math.abs;
 import static java.lang.Math.fma;
 import static java.lang.Math.sqrt;
 
+import java.util.Arrays;
+
 import org.apache.commons.math3.fraction.BigFraction;
 
 import mudstone.java.functions.Domain;
@@ -330,10 +332,33 @@ public final class CubicHermite extends Polynomial {
       x[0],f.doubleValue(x[0]),f.slope(x[0]),
       x[1],f.doubleValue(x[1]),f.slope(x[1])); }
 
+  // only interpolates 3 values for now.
+  public static final boolean 
+  supportedKnots (final double[][] knots) {
+    return 
+      (2==knots[0].length) 
+      && 
+      (2==knots[1].length)
+      &&
+      (knots[0][0]==knots[1][0])
+      &&
+      (knots[0][1]==knots[1][1]); }
+
   public static final ScalarFunctional 
-  interpolateXYD (final Object f, 
-                  final Object x) {
-    return interpolateXYD((Function) f,(double[]) x); }
+  interpolate (final Function f, 
+               final double[][] x) {
+    assert validKnots(x,3) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    assert supportedKnots(x) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    return interpolateXYD(
+      x[0][0],f.doubleValue(x[0][0]),f.slope(x[0][0]),
+      x[0][1],f.doubleValue(x[0][1]),f.slope(x[0][1]));}
+
+  public static final ScalarFunctional 
+  interpolate (final Object f, 
+               final Object x) {
+    return interpolate((Function) f, (double[][]) x);}
 
   //--------------------------------------------------------------
 }

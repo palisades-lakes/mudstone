@@ -143,7 +143,7 @@ public final class QuadraticMonomial extends Polynomial {
                  final double x1, final double y1,
                  final double x2, final double y2) {
     final double[] a = 
-      PolyUtils.interpolatingMonomialCoefficients(
+      Polynomial.interpolatingMonomialCoefficients(
         x0,y0,x1,y1,x2,y2);
     return make(a[0],a[1],a[2]); }
 

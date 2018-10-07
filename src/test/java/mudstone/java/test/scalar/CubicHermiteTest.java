@@ -8,7 +8,8 @@ import static mudstone.java.test.scalar.Common.cubicCubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
-import static mudstone.java.test.scalar.Common.oldKnots;
+import static mudstone.java.test.scalar.Common.hermiteKnots;
+import static mudstone.java.test.scalar.Common.hermiteTestPts;
 import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 import static mudstone.java.test.scalar.Common.testFns;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Iterables;
 
+import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.CubicHermite;
 
@@ -31,41 +33,46 @@ import mudstone.java.functions.scalar.CubicHermite;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-04
+ * @version 2018-10-06
  */
 
 public final class CubicHermiteTest {
 
-  //--------------------------------------------------------------
-
-
-  @SuppressWarnings({ "static-method" })
+   @SuppressWarnings({ "static-method" })
   @Test
   public final void exactTests () {
+    final Domain support = expand(hermiteTestPts);
     final List<BiFunction> factories = 
-      List.of(CubicHermite::interpolateXYD);
+      List.of(CubicHermite::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, quadraticCubics, affineCubics, constantCubics, 
+      cubicCubics, quadraticCubics, affineCubics, constantCubics,
       quadraticQuadratics, affineQuadratics, constantQuadratics);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         //System.out.println();
         //System.out.println(f);
-        for (final double[] kn : oldKnots) {
-          //System.out.println(Arrays.toString(kn));
-          exact(f,factory,kn,expand(kn),4.0e5,4.0e6,4.0e7); } } } }
+        for (final double[][] kn : hermiteKnots) {
+          if (CubicHermite.supportedKnots(kn)) {
+            //System.out.println(
+            //  Arrays.toString(kn[0]) + 
+            //  ", " + 
+            //  Arrays.toString(kn[1]));
+            exact(f,factory,kn,hermiteTestPts,support,
+              4.0e5,2.0e9,3.0e9); } } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void generalTests () {
+    final Domain support = expand(hermiteTestPts);
     final List<BiFunction> factories = 
-      List.of(CubicHermite::interpolateXYD);
+      List.of(CubicHermite::interpolate);
+    final Iterable<Function> functions = Iterables.concat(testFns);
     for (final BiFunction factory : factories) {
-      for (final Function f : testFns) {
-        for (final double[] kn : oldKnots) {
-          general(f,factory,kn,kn,new double[0],
-            expand(kn),1.0e0,1.0e0,1.0e0); } } } }
-
+      for (final Function f : functions) {
+        for (final double[][] kn : hermiteKnots) {
+          if (CubicHermite.supportedKnots(kn)) {
+            general(f,factory,kn,support,
+              1.0e0,1.0e0,1.0e0); } } } } }
 
   //--------------------------------------------------------------
 }

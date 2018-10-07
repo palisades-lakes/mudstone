@@ -123,7 +123,7 @@ public final class QuadraticLagrange extends Polynomial {
     _b2 = y2/((x2-x0)*(x2-x1));
 
     // TODO: accurate 1st and 2nd derivative sign calculation?
-    final double[] a = PolyUtils
+    final double[] a = Polynomial
       .interpolatingMonomialCoefficients(x0,y0,x1,y1,x2,y2);
     //    System.out.println(
     //      "QL[" + a[0] + " + " + a[1] + "*x + " + a[2] + "*x^2]");
