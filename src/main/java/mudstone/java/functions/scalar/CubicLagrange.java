@@ -6,6 +6,8 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 
+import java.util.Arrays;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
@@ -188,7 +190,7 @@ public final class CubicLagrange extends Polynomial {
           _positiveLimitSlope = 0.0; 
           _negativeLimitSlope = 0.0; } } }
     else { // 0.0 != a, nontrivial cubic
-      final double[] roots = PolyUtils.roots(a0,a1,a2);
+      final double[] roots = Polynomial.roots(a0,a1,a2);
       //System.out.println(Arrays.toString(roots));
       assert 2 >= roots.length;
       if (0 == roots.length) { // no critical points
@@ -238,19 +240,31 @@ public final class CubicLagrange extends Polynomial {
       x2,f.doubleValue(x2),
       x3,f.doubleValue(x3));}
 
-  public static final ScalarFunctional 
-  interpolateXY (final Function f, 
-                  final double[] x) {
-    return interpolateXY(
-      x[0],f.doubleValue(x[0]),
-      x[1],f.doubleValue(x[1]),
-      x[2],f.doubleValue(x[2]),
-      x[3],f.doubleValue(x[3]));}
+  // only interpolates 3 values for now.
+  public static final boolean 
+  supportedKnots (final double[][] knots) {
+    return 
+      (4==knots[0].length) 
+      && 
+      (0==knots[1].length); }
 
   public static final ScalarFunctional 
-  interpolateXY (final Object f, 
-                  final Object x) {
-    return interpolateXY((Function) f, (double[]) x);}
+  interpolate (final Function f, 
+               final double[][] x) {
+    assert validKnots(x,3) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    assert supportedKnots(x) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    return interpolateXY(
+      x[0][0],f.doubleValue(x[0][0]),
+      x[0][1],f.doubleValue(x[0][1]),
+      x[0][2],f.doubleValue(x[0][2]),
+      x[0][3],f.doubleValue(x[0][3]));}
+
+  public static final ScalarFunctional 
+  interpolate (final Object f, 
+               final Object x) {
+    return interpolate((Function) f, (double[][]) x);}
 
   //--------------------------------------------------------------
 }

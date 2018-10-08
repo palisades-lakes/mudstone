@@ -7,6 +7,8 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import java.util.Arrays;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 
@@ -14,7 +16,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-06
  */
 
 public final class CubicNewton extends Polynomial {
@@ -178,7 +180,7 @@ public final class CubicNewton extends Polynomial {
           _positiveLimitSlope = 0.0; 
           _negativeLimitSlope = 0.0; } } }
     else { // 0.0 != a, nontrivial cubic
-      final double[] roots = PolyUtils.roots(c,b,a);
+      final double[] roots = Polynomial.roots(c,b,a);
       //            final BigFraction[] roots = 
       //              QuadraticUtils.roots(
       //                new BigFraction(c),
@@ -226,31 +228,31 @@ public final class CubicNewton extends Polynomial {
       return ConstantFunctional.make(y0); }
     return new CubicNewton(x0,y0,x1,y1,x2,y2,x3,y3); }
 
-  public static final ScalarFunctional 
-  interpolateXY (final Function f, 
-                 final double x0, 
-                 final double x1, 
-                 final double x2, 
-                 final double x3) {
-    return interpolateXY(
-      x0,f.doubleValue(x0),
-      x1,f.doubleValue(x1),
-      x2,f.doubleValue(x2),
-      x3,f.doubleValue(x3)); }
+  // only interpolates 3 values for now.
+  public static final boolean 
+  supportedKnots (final double[][] knots) {
+    return 
+      (4==knots[0].length) 
+      && 
+      (0==knots[1].length); }
 
   public static final ScalarFunctional 
-  interpolateXY (final Function f, 
-                 final double[] x) {
+  interpolate (final Function f, 
+               final double[][] x) {
+    assert validKnots(x,3) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
+    assert supportedKnots(x) : 
+      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
     return interpolateXY(
-      x[0],f.doubleValue(x[0]),
-      x[1],f.doubleValue(x[1]),
-      x[2],f.doubleValue(x[2]),
-      x[3],f.doubleValue(x[3])); }
+      x[0][0],f.doubleValue(x[0][0]),
+      x[0][1],f.doubleValue(x[0][1]),
+      x[0][2],f.doubleValue(x[0][2]),
+      x[0][3],f.doubleValue(x[0][3]));}
 
   public static final ScalarFunctional 
-  interpolateXY (final Object f, 
-                 final Object x) {
-    return interpolateXY((Function) f, (double[]) x); }
+  interpolate (final Object f, 
+               final Object x) {
+    return interpolate((Function) f, (double[][]) x);}
 
   //--------------------------------------------------------------
 }
