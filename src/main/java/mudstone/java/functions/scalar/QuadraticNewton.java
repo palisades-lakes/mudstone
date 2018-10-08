@@ -162,7 +162,7 @@ public final class QuadraticNewton extends Polynomial {
                  final double x2, final double y2) {
 
     if ((y0==y1) && (y1==y2)) {
-      return ConstantFunction.make(y0); }
+      return ConstantFunctional.make(y0); }
 
     assert (x0 != x1) && (x1 != x2) && (x2 != x0);
 

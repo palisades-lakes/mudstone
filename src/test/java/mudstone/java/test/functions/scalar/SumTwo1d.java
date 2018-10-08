@@ -1,7 +1,7 @@
 package mudstone.java.test.functions.scalar;
 
 import mudstone.java.functions.Function;
-import mudstone.java.functions.scalar.AffineFunctional1d;
+import mudstone.java.functions.scalar.AffineFunctional;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -35,7 +35,7 @@ public final class SumTwo1d extends ScalarFunctional {
 
   @Override
   public final Function tangentAt (final double x) {
-    return AffineFunctional1d.make(doubleValue(x),slope(x)); }
+    return AffineFunctional.make(doubleValue(x),slope(x)); }
 
   //--------------------------------------------------------------
   // construction

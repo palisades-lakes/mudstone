@@ -156,8 +156,8 @@ public final class CubicMonomial extends Polynomial {
         final double a3) {
     if (0.0==a3) {
       if (0.0==a2) {
-        if (0.0==a1) { return ConstantFunction.make(a0); }
-        return AffineFunctional1d.make(a0,a1); }
+        if (0.0==a1) { return ConstantFunctional.make(a0); }
+        return AffineFunctional.make(a0,a1); }
       return QuadraticMonomial.make(a0,a1,a2); }
     return new CubicMonomial(a0,a1,a2,a3); }
 

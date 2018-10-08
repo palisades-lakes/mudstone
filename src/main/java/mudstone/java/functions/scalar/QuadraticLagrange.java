@@ -165,7 +165,7 @@ public final class QuadraticLagrange extends Polynomial {
                  final double x2, final double y2) {
     assert (x0!=x1) && (x1!=x2) && (x2!=x0);
     if ((y0==y1) && (y1==y2)) {
-      return ConstantFunction.make(y0); }
+      return ConstantFunctional.make(y0); }
 
     // TODO: not necessary to sort?
     //if (x0 < x1) {

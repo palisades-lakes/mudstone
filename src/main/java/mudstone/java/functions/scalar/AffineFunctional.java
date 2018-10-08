@@ -13,10 +13,10 @@ import mudstone.java.functions.Vektor;
 /** An affine function from <b>R</b> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-07
  */
 
-public final class AffineFunctional1d extends Polynomial {
+public final class AffineFunctional extends Polynomial {
 
   //--------------------------------------------------------------
   // fields
@@ -85,15 +85,15 @@ public final class AffineFunctional1d extends Polynomial {
   // construction
   //--------------------------------------------------------------
 
-  private AffineFunctional1d (final double translation,
+  private AffineFunctional (final double translation,
                               final double slope) {
     _slope = slope; 
     _translation = translation; }
 
-  public static final AffineFunctional1d 
+  public static final AffineFunctional 
   make (final double translation,
         final double slope) {
-    return new AffineFunctional1d(translation,slope); }
+    return new AffineFunctional(translation,slope); }
 
   //--------------------------------------------------------------
 
@@ -104,9 +104,9 @@ public final class AffineFunctional1d extends Polynomial {
     // usually x0 == x1
     final double y0 = f.doubleValue(x0);
     final double a1 = f.slope(x1);
-    if (0.0==a1) { return ConstantFunction.make(y0); }
+    if (0.0==a1) { return ConstantFunctional.make(y0); }
     final double a0 = fma(-a1,x0,y0);
-    return new AffineFunctional1d(a0,a1); }
+    return new AffineFunctional(a0,a1); }
 
   public static final ScalarFunctional 
   interpolateXY (final Function f,
@@ -114,11 +114,11 @@ public final class AffineFunctional1d extends Polynomial {
                  final double x1) {
     final double y0 = f.doubleValue(x0);
     final double y1 = f.doubleValue(x1);
-    if (y0==y1) { return ConstantFunction.make(y0); }
+    if (y0==y1) { return ConstantFunctional.make(y0); }
     // TODO: BigFraction?
     final double a1 = (y1-y0)/(x1-x0);
     final double a0 = ((y0*x1)-(y1*x0))/(x1-x0);
-    return new AffineFunctional1d(a0,a1); }
+    return new AffineFunctional(a0,a1); }
 
   public static final ScalarFunctional 
   interpolate (final Function f,

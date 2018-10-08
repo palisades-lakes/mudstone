@@ -139,8 +139,8 @@ public final class QuadraticMonomialShifted extends Polynomial {
         final double a2, 
         final double xorigin) {
     if (0.0==a2) {
-      if (0.0==a1) { return ConstantFunction.make(a0); }
-      return AffineFunctional1d.make(fma(-a1,xorigin,a0),a1); }
+      if (0.0==a1) { return ConstantFunctional.make(a0); }
+      return AffineFunctional.make(fma(-a1,xorigin,a0),a1); }
     return new QuadraticMonomialShifted(a0,a1,a2,xorigin); }
 
   //--------------------------------------------------------------

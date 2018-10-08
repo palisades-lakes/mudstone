@@ -319,7 +319,7 @@ public final class CubicHermite extends Polynomial {
     // TODO: sorting not necessary?
     //if (x0 < x1) {
     if ((y0==y1) && (0.0==d0) && (0.0==d1)) {
-      return ConstantFunction.make(y0); }
+      return ConstantFunctional.make(y0); }
     return new CubicHermite(x0,y0,d0,x1,y1,d1); }
   //return new CubicHermite(x1,y1,d1,x0,y0,d0); }
 

@@ -5,7 +5,7 @@ import static java.lang.Math.*;
 
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
-import mudstone.java.functions.scalar.AffineFunctional1d;
+import mudstone.java.functions.scalar.AffineFunctional;
 import mudstone.java.functions.scalar.ScalarFunctional;
 
 //----------------------------------------------------------------
@@ -35,7 +35,7 @@ public final class Runge extends ScalarFunctional {
 
   @Override
   public final Function tangentAt (final double x) {
-    return AffineFunctional1d.make(doubleValue(x),slope(x)); }
+    return AffineFunctional.make(doubleValue(x),slope(x)); }
   
   @Override
   public final double doubleArgmin (final Domain support) { 

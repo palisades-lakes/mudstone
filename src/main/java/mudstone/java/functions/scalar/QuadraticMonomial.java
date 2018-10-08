@@ -132,8 +132,8 @@ public final class QuadraticMonomial extends Polynomial {
         final double a1,
         final double a2) {
     if (0.0==a2) {
-      if (0.0==a1) { return ConstantFunction.make(a0); }
-      return AffineFunctional1d.make(a0,a1); }
+      if (0.0==a1) { return ConstantFunctional.make(a0); }
+      return AffineFunctional.make(a0,a1); }
     return new QuadraticMonomial(a0,a1,a2); }
  
   //--------------------------------------------------------------

@@ -167,10 +167,10 @@ extends Polynomial {
         final double by) {
     if (0.0==a2) {
       if (0.0==a1) { 
-        return ConstantFunction.make(fma(ay,a0,by)); }
+        return ConstantFunctional.make(fma(ay,a0,by)); }
       final double c0 = fma(ay,fma(a1,bx,a0),by);
       final double c1 = a1*ax*ay;
-      return AffineFunctional1d.make(c0,c1); }
+      return AffineFunctional.make(c0,c1); }
     return 
       new QuadraticMonomialStandardized(a0,a1,a2,ax,bx,ay,by); }
 

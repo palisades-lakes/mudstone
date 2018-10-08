@@ -1,11 +1,11 @@
 package mudstone.java.test.scalar;
 
 import static mudstone.java.test.scalar.Common.affineCubics;
+import static mudstone.java.test.scalar.Common.affineKnots;
 import static mudstone.java.test.scalar.Common.affineQuadratics;
+import static mudstone.java.test.scalar.Common.affineTestPts;
 import static mudstone.java.test.scalar.Common.constantCubics;
-import static mudstone.java.test.scalar.Common.constantKnots;
 import static mudstone.java.test.scalar.Common.constantQuadratics;
-import static mudstone.java.test.scalar.Common.constantTestPts;
 import static mudstone.java.test.scalar.Common.cubicCubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
@@ -23,51 +23,51 @@ import com.google.common.collect.Iterables;
 
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
-import mudstone.java.functions.scalar.ConstantFunction;
+import mudstone.java.functions.scalar.AffineFunctional;
 
 //----------------------------------------------------------------
-/** Test constant 'interpolants'. 
+/** Test affine interpolants. 
  * <p>
  * <pre>
- * mvn -q -Dtest=mudstone/java/test/scalar/ConstantFunctionTest test > ConstantFunctionTest.txt
+ * mvn -q -Dtest=mudstone/java/test/scalar/AffineFunctional1dTest test > AffineFunctional1dTest.txt
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
  * @version 2018-10-06
  */
 
-public final class ConstantFunctionTest {
+public final class AffineFunctionalTest {
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void exactTests () {
-    final Domain support = expand(constantTestPts);
+    final Domain support = expand(affineTestPts);
     final List<BiFunction> factories = 
-      List.of(ConstantFunction::interpolate);
+      List.of(AffineFunctional::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      constantCubics, constantQuadratics);
+      affineCubics, constantCubics, 
+      affineQuadratics, constantQuadratics);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         //System.out.println();
         //System.out.println(f);
-        for (final double[][] kn : constantKnots) {
+        for (final double[][] kn : affineKnots) {
           //System.out.println(Arrays.toString(kn));
-          exact(f,factory,kn,constantTestPts,support,
-            1.0e0,1.0e0,1.0e0); } } } }
+          exact(f,factory,kn,affineTestPts,support,
+            1.0e0,4.0e2,3.0e2); } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
   public final void generalTests () {
-    final Domain support = expand(constantTestPts);
+    final Domain support = expand(affineTestPts);
     final List<BiFunction> factories = 
-      List.of(ConstantFunction::interpolate);
+      List.of(AffineFunctional::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, quadraticCubics, affineCubics, 
-      quadraticQuadratics, affineQuadratics, testFns);
+      cubicCubics, quadraticCubics, quadraticQuadratics, testFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
-        for (final double[][] kn : constantKnots) {
-          general(f,factory,kn,support,1.0e0,1.0e0,1.0e0); } } } }
+        for (final double[][] kn : affineKnots) {
+          general(f,factory,kn,support,1.0e0,2.0e2,1.0e0); } } } }
 
   //--------------------------------------------------------------
 }
