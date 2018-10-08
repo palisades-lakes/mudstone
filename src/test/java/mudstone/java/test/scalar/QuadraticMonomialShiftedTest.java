@@ -33,7 +33,7 @@ import mudstone.java.functions.scalar.QuadraticMonomialShifted;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-08
  */
 
 public final class QuadraticMonomialShiftedTest {
@@ -58,7 +58,7 @@ public final class QuadraticMonomialShiftedTest {
 //              ", " + 
 //              Arrays.toString(kn[1]));
              exact(f,factory,kn,quadraticTestPts,support,
-              7.0e5,2.0e7,2.0e7); } } } } }
+              7.0e5,3.0e7,2.0e7); } } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test

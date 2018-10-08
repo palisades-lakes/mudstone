@@ -33,7 +33,7 @@ import mudstone.java.functions.scalar.QuadraticMonomialStandardized;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-08
  */
 
 public final class QuadraticMonomialStandardizedTest {
@@ -73,7 +73,7 @@ public final class QuadraticMonomialStandardizedTest {
         for (final double[][] kn : quadraticKnots) {
           if (QuadraticMonomialStandardized.supportedKnots(kn)) {
             general(f,factory,kn,support,
-              1.0e0,3.0e5,8.0e3); } } } } }
+              1.0e0,4.0e5,8.0e3); } } } } }
 
   //--------------------------------------------------------------
 }

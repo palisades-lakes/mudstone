@@ -33,7 +33,7 @@ import mudstone.java.functions.scalar.QuadraticNewton;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-08
  */
 
 public final class QuadraticNewtonTest {
@@ -73,7 +73,7 @@ public final class QuadraticNewtonTest {
         for (final double[][] kn : quadraticKnots) {
           if (QuadraticNewton.supportedKnots(kn)) {
             general(f,factory,kn,support,
-              1.0e0,1.0e0,2.0e0); } } } } }
+              1.0e0,1.0e5,2.0e0); } } } } }
 
   //--------------------------------------------------------------
 }
