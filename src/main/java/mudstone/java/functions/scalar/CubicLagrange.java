@@ -15,7 +15,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-08
  */
 
 public final class CubicLagrange extends Polynomial {
@@ -48,7 +48,7 @@ public final class CubicLagrange extends Polynomial {
 
   @Override
   public final int degree () { return 3; }
-  
+
   //--------------------------------------------------------------
   // Function methods
   //--------------------------------------------------------------
@@ -240,10 +240,12 @@ public final class CubicLagrange extends Polynomial {
       x2,f.doubleValue(x2),
       x3,f.doubleValue(x3));}
 
-  // only interpolates 3 values for now.
+  // only interpolates 4 values for now.
   public static final boolean 
-  supportedKnots (final double[][] knots) {
-    return 
+  validKnots (final double[][] knots) {
+    return
+      validKnots(knots,3)
+      && 
       (4==knots[0].length) 
       && 
       (0==knots[1].length); }
@@ -251,9 +253,7 @@ public final class CubicLagrange extends Polynomial {
   public static final ScalarFunctional 
   interpolate (final Function f, 
                final double[][] x) {
-    assert validKnots(x,3) : 
-      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
-    assert supportedKnots(x) : 
+    assert validKnots(x) : 
       Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
     return interpolateXY(
       x[0][0],f.doubleValue(x[0][0]),

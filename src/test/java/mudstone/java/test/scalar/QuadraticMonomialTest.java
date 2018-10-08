@@ -52,7 +52,7 @@ public final class QuadraticMonomialTest {
         //System.out.println();
         //System.out.println(f);
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticMonomial.supportedKnots(kn)) {
+          if (QuadraticMonomial.validKnots(kn)) {
 //            System.out.println(
 //              Arrays.toString(kn[0]) + 
 //              ", " + 
@@ -71,7 +71,7 @@ public final class QuadraticMonomialTest {
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticMonomial.supportedKnots(kn)) {
+          if (QuadraticMonomial.validKnots(kn)) {
             general(f,factory,kn,support,
               1.0e0,2.0e0,4.0e4); } } } } }
 

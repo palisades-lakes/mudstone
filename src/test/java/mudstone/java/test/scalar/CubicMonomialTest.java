@@ -52,7 +52,7 @@ public final class CubicMonomialTest {
         //System.out.println();
 //        System.out.println(f);
         for (final double[][] kn : cubicKnots) {
-          if (CubicMonomial.supportedKnots(kn)) {
+          if (CubicMonomial.validKnots(kn)) {
 //            System.out.println(
 //              Arrays.toString(kn[0]) + 
 //              ", " + 
@@ -70,7 +70,7 @@ public final class CubicMonomialTest {
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : cubicKnots) {
-          if (CubicMonomial.supportedKnots(kn)) {
+          if (CubicMonomial.validKnots(kn)) {
             general(f,factory,kn,support,
               1.0e0,1.0e0,1.0e0); } } } } }
 

@@ -53,7 +53,7 @@ public final class CubicNewtonTest {
         //System.out.println();
 //        System.out.println(f);
         for (final double[][] kn : cubicKnots) {
-          if (CubicNewton.supportedKnots(kn)) {
+          if (CubicNewton.validKnots(kn)) {
 //            System.out.println(
 //              Arrays.toString(kn[0]) + 
 //              ", " + 
@@ -71,7 +71,7 @@ public final class CubicNewtonTest {
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : cubicKnots) {
-          if (CubicNewton.supportedKnots(kn)) {
+          if (CubicNewton.validKnots(kn)) {
             general(f,factory,kn,support,
               1.0e0,1.0e0,1.0e0); } } } } }
 

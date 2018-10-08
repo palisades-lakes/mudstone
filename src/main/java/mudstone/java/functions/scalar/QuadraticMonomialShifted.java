@@ -16,7 +16,7 @@ import mudstone.java.functions.Function;
  * form.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-08
  */
 
 public final class QuadraticMonomialShifted extends Polynomial {
@@ -153,10 +153,10 @@ public final class QuadraticMonomialShifted extends Polynomial {
                     final double x2,
                     final double d2) {
     assert x0 != x1;
-//    System.out.println(
-//      "\nxy: " + x0 + "," + y0 +
-//      "\nxy: " + x1 + "," + y1 +
-//      "\nxd: " + x2 + "," + d2);
+    //    System.out.println(
+    //      "\nxy: " + x0 + "," + y0 +
+    //      "\nxy: " + x1 + "," + y1 +
+    //      "\nxd: " + x2 + "," + d2);
     // TODO: use BigFraction to compute monomial coefficients?
     final double u0 = x0-x2;
     final double u02 = u0*u0;
@@ -164,19 +164,19 @@ public final class QuadraticMonomialShifted extends Polynomial {
     final double u12 = u1*u1;
     final double du = u1-u0;
     final double du2 = u12-u02;
-//    System.out.println(
-//      "\nfma(-d2,u0,y0): " + fma(-d2,u0,y0) +
-//      "\nfma(-d2,u1,y1): " + fma(-d2,u1,y1) +
-//      "\ndu2: " + du2);
+    //    System.out.println(
+    //      "\nfma(-d2,u0,y0): " + fma(-d2,u0,y0) +
+    //      "\nfma(-d2,u1,y1): " + fma(-d2,u1,y1) +
+    //      "\ndu2: " + du2);
     final double a0 = 
       ((fma(-d2,u0,y0)*u12)
         -
         (fma(-d2,u1,y1)*u02))
       /du2;
     final double a1 = d2;
-//    System.out.println("du: " + du);
-//    System.out.println("d2*du: " + (d2*du));
-//    System.out.println("y1-y0: " + (y1-y0));
+    //    System.out.println("du: " + du);
+    //    System.out.println("d2*du: " + (d2*du));
+    //    System.out.println("y1-y0: " + (y1-y0));
     final double a2 = fma(-d2,du,y1-y0)/du2; 
     return make(a0,a1,a2,x2); }
 
@@ -199,18 +199,18 @@ public final class QuadraticMonomialShifted extends Polynomial {
 
   // only 1,2 and 2,1 interpolation for now.
   public static final boolean 
-  supportedKnots (final double[][] knots) {
+  validKnots (final double[][] knots) {
     return 
-      ((2==knots[0].length) && (1==knots[1].length))
-      ||
-      ((1==knots[0].length) && (2==knots[1].length)); }
+      validKnots(knots,2)
+      && 
+      (((2==knots[0].length) && (1==knots[1].length))
+        ||
+        ((1==knots[0].length) && (2==knots[1].length))); }
 
   public static final ScalarFunctional
   interpolate (final Function f,
                final double[][] x) {
-    assert validKnots(x,2) : 
-      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
-    assert supportedKnots(x) : 
+    assert validKnots(x) : 
       Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
     if ((2==x[0].length) && (1==x[1].length)) {
       return interpolateXY2D1(

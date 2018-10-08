@@ -52,7 +52,7 @@ public final class CubicHermiteTest {
         //System.out.println();
         //System.out.println(f);
         for (final double[][] kn : hermiteKnots) {
-          if (CubicHermite.supportedKnots(kn)) {
+          if (CubicHermite.validKnots(kn)) {
             //System.out.println(
             //  Arrays.toString(kn[0]) + 
             //  ", " + 
@@ -70,7 +70,7 @@ public final class CubicHermiteTest {
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : hermiteKnots) {
-          if (CubicHermite.supportedKnots(kn)) {
+          if (CubicHermite.validKnots(kn)) {
             general(f,factory,kn,support,
               1.0e0,1.0e0,1.0e0); } } } } }
 

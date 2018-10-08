@@ -132,6 +132,7 @@ public final class Common {
   public static final double[] hermiteTestPts =
     testPts(hermiteKnots);
 
+  
   //--------------------------------------------------------------
   // test functions
   //--------------------------------------------------------------

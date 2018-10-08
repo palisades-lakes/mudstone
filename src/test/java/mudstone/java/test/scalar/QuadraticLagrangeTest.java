@@ -52,7 +52,7 @@ public final class QuadraticLagrangeTest {
         //System.out.println();
         //System.out.println(f);
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticLagrange.supportedKnots(kn)) {
+          if (QuadraticLagrange.validKnots(kn)) {
             //System.out.println(Arrays.toString(kn));
             exact(f,factory,kn,quadraticTestPts,support,
               6.0e5,2.0e8,4.0e7); } } } } }
@@ -68,7 +68,7 @@ public final class QuadraticLagrangeTest {
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticLagrange.supportedKnots(kn)) {
+          if (QuadraticLagrange.validKnots(kn)) {
             general(f,factory,kn,support,
               2.0e0,1.0e0,2.0e6); } } } } }
 

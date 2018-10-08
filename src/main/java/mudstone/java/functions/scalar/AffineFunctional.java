@@ -13,7 +13,7 @@ import mudstone.java.functions.Vektor;
 /** An affine function from <b>R</b> to <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-07
+ * @version 2018-10-08
  */
 
 public final class AffineFunctional extends Polynomial {
@@ -120,10 +120,14 @@ public final class AffineFunctional extends Polynomial {
     final double a0 = ((y0*x1)-(y1*x0))/(x1-x0);
     return new AffineFunctional(a0,a1); }
 
+  public static final boolean
+  validKnots (final double[][] knots) {
+    return validKnots(knots,1); }
+  
   public static final ScalarFunctional 
   interpolate (final Function f,
                final double[][] knots) {
-    assert validKnots(knots,1);
+    assert validKnots(knots);
     if (2 == knots[0].length) {
       return interpolateXY(f,knots[0][0],knots[0][1]); }
     return interpolateXYD(f,knots[0][0],knots[1][0]); }

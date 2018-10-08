@@ -16,7 +16,7 @@ import mudstone.java.functions.Function;
  * form.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-08
  */
 
 public final class CubicNewton extends Polynomial {
@@ -228,10 +228,12 @@ public final class CubicNewton extends Polynomial {
       return ConstantFunctional.make(y0); }
     return new CubicNewton(x0,y0,x1,y1,x2,y2,x3,y3); }
 
-  // only interpolates 3 values for now.
+  // only interpolates 4 values for now.
   public static final boolean 
-  supportedKnots (final double[][] knots) {
-    return 
+  validKnots (final double[][] knots) {
+    return
+      validKnots(knots,3)
+      && 
       (4==knots[0].length) 
       && 
       (0==knots[1].length); }
@@ -239,9 +241,7 @@ public final class CubicNewton extends Polynomial {
   public static final ScalarFunctional 
   interpolate (final Function f, 
                final double[][] x) {
-    assert validKnots(x,3) : 
-      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
-    assert supportedKnots(x) : 
+    assert validKnots(x) : 
       Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
     return interpolateXY(
       x[0][0],f.doubleValue(x[0][0]),

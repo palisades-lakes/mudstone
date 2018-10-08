@@ -52,7 +52,7 @@ public final class QuadraticNewtonTest {
         //System.out.println();
         //System.out.println(f);
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticNewton.supportedKnots(kn)) {
+          if (QuadraticNewton.validKnots(kn)) {
 //            System.out.println(
 //              Arrays.toString(kn[0]) + 
 //              ", " + 
@@ -71,7 +71,7 @@ public final class QuadraticNewtonTest {
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticNewton.supportedKnots(kn)) {
+          if (QuadraticNewton.validKnots(kn)) {
             general(f,factory,kn,support,
               1.0e0,1.0e5,2.0e0); } } } } }
 

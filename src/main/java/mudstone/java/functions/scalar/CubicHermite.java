@@ -21,7 +21,7 @@ import mudstone.java.functions.Function;
  * at 2 points.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-05
+ * @version 2018-10-08
  */
 
 public final class CubicHermite extends Polynomial {
@@ -334,8 +334,10 @@ public final class CubicHermite extends Polynomial {
 
   // only interpolates 3 values for now.
   public static final boolean 
-  supportedKnots (final double[][] knots) {
+  validKnots (final double[][] knots) {
     return 
+      validKnots(knots,3)
+      && 
       (2==knots[0].length) 
       && 
       (2==knots[1].length)
@@ -347,9 +349,7 @@ public final class CubicHermite extends Polynomial {
   public static final ScalarFunctional 
   interpolate (final Function f, 
                final double[][] x) {
-    assert validKnots(x,3) : 
-      Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
-    assert supportedKnots(x) : 
+    assert validKnots(x) : 
       Arrays.toString(x[0]) + ", " + Arrays.toString(x[1]);
     return interpolateXYD(
       x[0][0],f.doubleValue(x[0][0]),f.slope(x[0][0]),

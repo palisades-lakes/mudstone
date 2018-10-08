@@ -52,7 +52,7 @@ public final class QuadraticMonomialShiftedTest {
         //System.out.println();
         //System.out.println(f);
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticMonomialShifted.supportedKnots(kn)) {
+          if (QuadraticMonomialShifted.validKnots(kn)) {
 //            System.out.println(
 //              Arrays.toString(kn[0]) + 
 //              ", " + 
@@ -71,7 +71,7 @@ public final class QuadraticMonomialShiftedTest {
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : quadraticKnots) {
-          if (QuadraticMonomialShifted.supportedKnots(kn)) {
+          if (QuadraticMonomialShifted.validKnots(kn)) {
             general(f,factory,kn,support,
               1.0e0,7.0e5,4.0e4); } } } } }
 
