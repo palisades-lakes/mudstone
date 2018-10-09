@@ -210,6 +210,7 @@ public abstract class Polynomial extends ScalarFunctional {
                                           final int degree) {
     final int nv = countDistinct(knots[0]);
     final int ns = countDistinct(knots[1]);
+    //System.out.println(nv + "," + ns);
     return 
       (nv>=1) 
       &&

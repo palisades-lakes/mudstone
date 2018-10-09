@@ -12,7 +12,7 @@ import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticKnots;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 import static mudstone.java.test.scalar.Common.quadraticTestPts;
-import static mudstone.java.test.scalar.Common.testFns;
+import static mudstone.java.test.scalar.Common.otherFns;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -33,7 +33,7 @@ import mudstone.java.functions.scalar.QuadraticMonomial;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-08
  */
 
 public final class QuadraticMonomialTest {
@@ -67,13 +67,13 @@ public final class QuadraticMonomialTest {
     final List<BiFunction> factories = 
       List.of(QuadraticMonomial::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, testFns);
+      cubicCubics, otherFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : quadraticKnots) {
           if (QuadraticMonomial.validKnots(kn)) {
             general(f,factory,kn,support,
-              1.0e0,2.0e0,4.0e4); } } } } }
+              1.0e0,3.0e0,4.0e4); } } } } }
 
   //--------------------------------------------------------------
 }

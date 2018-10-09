@@ -17,13 +17,14 @@ import java.util.stream.DoubleStream;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
+import com.google.common.collect.Iterables;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Doubles;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.Interval;
 import mudstone.java.test.functions.scalar.QCubic;
 import mudstone.java.test.functions.scalar.QQuadratic;
-import mudstone.java.test.functions.scalar.Square;
 
 //----------------------------------------------------------------
 /** Shared tests for scalar functions.
@@ -89,16 +90,16 @@ public final class Common {
     List.of(
       new double[][] {{-1.0e2,0.0,1.0e2},{}},
       new double[][] {{0.999,1.000,1.001},{}},
-      new double[][] {{-1.0e2,0.99e2,1.0e2},{}},
-      new double[][] {{0.999,1.000,},{1.001}},
+      //new double[][] {{-1.0e2,0.99e2,1.0e2},{}},
+      //new double[][] {{0.999,1.000,},{1.001}},
       new double[][] {{0.998,1.001},{1.000}},
       new double[][] {{1.0e2,0.99e2},{1.0e2}},
       new double[][] {{-1.0e2,0.0},{1.0e2}},
-      new double[][] {{-1.00e2,0.99e2},{0.0}},
+      //new double[][] {{-1.00e2,0.99e2},{0.0}},
       new double[][] {{-1.0e2,0.0},{0.0}},
       new double[][] {{-1.0e2,0.99e2},{1.0e2}},
-      new double[][] {{-1.0e2,1.0e2},{0.99e2}},
-      new double[][] {{-1.0e2,0.99e2},{0.99e2}},
+      //new double[][] {{-1.0e2,1.0e2},{0.99e2}},
+      //new double[][] {{-1.0e2,0.99e2},{0.99e2}},
       new double[][] {{0.999,},{1.000,1.001}},
       new double[][] {{-1.0e2},{0.0,-1.0e2}},
       new double[][] {{-1.0e2},{0.99e2,1.0e2}});
@@ -109,11 +110,11 @@ public final class Common {
   public static final List<double[][]> cubicKnots =
     List.of(
       new double[][] {{ 0.99e0,1.00e0,1.01e0,1.02e0},{}},
-      new double[][] {{-0.99e0,1.00e0,1.01e0,1.02e0},{}},
+      //new double[][] {{-0.99e0,1.00e0,1.01e0,1.02e0},{}},
       new double[][] {{-1.00e2,0.00e0,1.00e0,2.00e2},{}},
-      new double[][] {{-1.00e2,0.90e2,0.95e2,1.00e2},{}},
-      new double[][] {{ 0.99e2,1.00e0,1.01e0,1.02e0},{}},
-      new double[][] {{-0.99e2,1.00e0,1.01e0,1.02e0},{}},
+      //new double[][] {{-1.00e2,0.90e2,0.95e2,1.00e2},{}},
+      //new double[][] {{ 0.99e2,1.00e0,1.01e0,1.02e0},{}},
+      //new double[][] {{-0.99e2,1.00e0,1.01e0,1.02e0},{}},
       new double[][] {{ 0.99e0,1.00e0,1.01e0,1.02e0},{}},
       new double[][] {{-1.00e2,0.00e0,1.00e0,2.00e2},{}},
       new double[][] {{-1.00e2,0.90e2,0.95e2,1.00e2},{}});
@@ -125,14 +126,43 @@ public final class Common {
     List.of(
       new double[][] {{ 0.99e0,1.00e0},{ 0.99e0,1.00e0}},
       new double[][] {{-0.99e0,1.00e0},{-0.99e0,1.00e0}},
-      new double[][] {{ 0.90e1,1.00e1},{ 0.90e1,1.00e1}},
+      //new double[][] {{ 0.90e1,1.00e1},{ 0.90e1,1.00e1}},
       new double[][] {{-1.00e2,0.01e0},{-1.00e2,0.01e0}},
       new double[][] {{-1.00e2,1.00e2},{-1.00e2,1.00e2}});
 
   public static final double[] hermiteTestPts =
     testPts(hermiteKnots);
 
+  public static final Iterable<double[][]> allKnots =
+    Iterables.concat(
+      constantKnots,affineKnots,quadraticKnots,cubicKnots);
   
+//  private static final String hexString (final double x) {
+//    return 
+//      Long.toHexString(Double.doubleToLongBits(x))
+//      .toUpperCase(); }
+  
+  // hack for shorter names
+  private static final String hexString (final double x) {
+    return 
+      Integer.toHexString(Float.floatToIntBits((float) x))
+      .toUpperCase(); }
+  
+  public static final String knotString (final double[][] knots) {
+    final StringBuilder b = new StringBuilder();
+    if (0 < knots[0].length) {
+      b.append(hexString(knots[0][0])); 
+      for (int i=1;i<knots[0].length;i++) {
+        b.append(".");
+        b.append(hexString(knots[0][i])); } }
+    if (0 < knots[1].length) {
+      b.append("-");
+      b.append(hexString(knots[1][0])); 
+      for (int i=1;i<knots[1].length;i++) {
+        b.append(".");
+        b.append(hexString(knots[1][i])); } }
+    return b.toString(); }
+
   //--------------------------------------------------------------
   // test functions
   //--------------------------------------------------------------
@@ -144,10 +174,16 @@ public final class Common {
         new BigFraction(-11,7),
         new BigFraction(17,13),
         new BigFraction(-13,11)),
-      QCubic.make(1.0,-1.0,1.0,-1.0),
-      QCubic.make(1.0,-1.0,-1.0,1.0),
-      QCubic.make(1.0,1.0,1.0,1.0),
-      QCubic.make(1.0,-1.0,1.0,1.0));
+      QCubic.make(
+        new BigFraction(5,3),
+        new BigFraction(-11,7),
+        new BigFraction(-17,13),
+        new BigFraction(13,11))//,
+      //QCubic.make(1.0,-1.0,1.0,-1.0),
+      //QCubic.make(1.0,-1.0,-1.0,1.0),
+      //QCubic.make(1.0,1.0,1.0,1.0),
+      //QCubic.make(1.0,-1.0,1.0,1.0)
+);
 
   public static final Iterable<Function> quadraticCubics = 
     List.of(
@@ -156,7 +192,7 @@ public final class Common {
         new BigFraction(-11,7),
         new BigFraction(17,13),
         new BigFraction(0)),
-      QCubic.make(1.0,1.0,-1.0,0.0),
+      //QCubic.make(1.0,1.0,-1.0,0.0),
       QCubic.make(1.0,-1.0,-1.0,0.0),
       QCubic.make(1.0,1.0,1.0,0.0),
       QCubic.make(1.0,-1.0,1.0,0.0));
@@ -175,11 +211,10 @@ public final class Common {
         new BigFraction(5,3),
         new BigFraction(17,13),
         new BigFraction(-13,11)),
-      QQuadratic.make(1.0,1.0,-1.0),
+      //QQuadratic.make(1.0,1.0,-1.0),
       QQuadratic.make(1.0,-1.0,-1.0),
       QQuadratic.make(1.0,1.0,1.0),
-      QQuadratic.make(1.0,-1.0,1.0),
-      Square.get());
+      QQuadratic.make(1.0,-1.0,1.0));
 
   public static final Iterable<Function> affineQuadratics = 
     List.of(
@@ -189,13 +224,26 @@ public final class Common {
   public static final Iterable<Function> constantQuadratics = 
     List.of(QQuadratic.make(1.0,0.0,0.0));
 
-  public static final Iterable<Function> testFns =
+  public static final Iterable<Function> otherFns =
     List.of(
       //      Math832.get(),
+      // Square.get(),
       //      Quintic.get(),
       //    Runge.get(),
       //      SemiCubic.get(),
       //      Sin.get(),
+      );
+
+  public static final Iterable<Function> testFns =
+    Iterables.concat(
+      otherFns,
+      cubicCubics//,
+//      quadraticCubics,
+//      affineCubics,
+//      constantCubics,
+//      quadraticQuadratics,
+//      affineQuadratics,
+//      constantQuadratics
       );
 
   //--------------------------------------------------------------

@@ -12,7 +12,7 @@ import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticKnots;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 import static mudstone.java.test.scalar.Common.quadraticTestPts;
-import static mudstone.java.test.scalar.Common.testFns;
+import static mudstone.java.test.scalar.Common.otherFns;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -67,13 +67,13 @@ public final class QuadraticNewtonTest {
     final List<BiFunction> factories = 
       List.of(QuadraticNewton::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, testFns);
+      cubicCubics, otherFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : quadraticKnots) {
           if (QuadraticNewton.validKnots(kn)) {
             general(f,factory,kn,support,
-              1.0e0,1.0e5,2.0e0); } } } } }
+              1.0e0,1.0e5,3.0e0); } } } } }
 
   //--------------------------------------------------------------
 }

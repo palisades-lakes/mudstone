@@ -12,7 +12,7 @@ import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
 import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
-import static mudstone.java.test.scalar.Common.testFns;
+import static mudstone.java.test.scalar.Common.otherFns;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -67,7 +67,7 @@ public final class CubicNewtonTest {
     final Domain support = expand(cubicTestPts);
     final List<BiFunction> factories = 
       List.of(CubicNewton::interpolate);
-    final Iterable<Function> functions = Iterables.concat(testFns);
+    final Iterable<Function> functions = Iterables.concat(otherFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : cubicKnots) {

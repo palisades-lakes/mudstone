@@ -12,7 +12,7 @@ import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
 import static mudstone.java.test.scalar.Common.quadraticCubics;
 import static mudstone.java.test.scalar.Common.quadraticQuadratics;
-import static mudstone.java.test.scalar.Common.testFns;
+import static mudstone.java.test.scalar.Common.otherFns;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -33,7 +33,7 @@ import mudstone.java.functions.scalar.ConstantFunctional;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-08
  */
 
 public final class ConstantFunctionalTest {
@@ -63,11 +63,11 @@ public final class ConstantFunctionalTest {
       List.of(ConstantFunctional::interpolate);
     final Iterable<Function> functions = Iterables.concat(
       cubicCubics, quadraticCubics, affineCubics, 
-      quadraticQuadratics, affineQuadratics, testFns);
+      quadraticQuadratics, affineQuadratics, otherFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : constantKnots) {
-          general(f,factory,kn,support,1.0e0,1.0e0,1.0e0); } } } }
+          general(f,factory,kn,support,1.0e0,1.0e0,3.0e0); } } } }
 
   //--------------------------------------------------------------
 }

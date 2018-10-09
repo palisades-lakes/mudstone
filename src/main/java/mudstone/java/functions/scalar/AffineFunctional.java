@@ -6,6 +6,8 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isNaN;
 import static java.lang.Math.fma;
 
+import java.util.Arrays;
+
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.Vektor;
@@ -127,7 +129,10 @@ public final class AffineFunctional extends Polynomial {
   public static final ScalarFunctional 
   interpolate (final Function f,
                final double[][] knots) {
-    assert validKnots(knots);
+    assert validKnots(knots) :
+      Arrays.toString(knots[0]) + 
+      ", " + 
+      Arrays.toString(knots[1]);
     if (2 == knots[0].length) {
       return interpolateXY(f,knots[0][0],knots[0][1]); }
     return interpolateXYD(f,knots[0][0],knots[1][0]); }

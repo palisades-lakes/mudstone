@@ -5,6 +5,7 @@ import static java.lang.Double.NaN;
 import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
+import static java.lang.StrictMath.abs;
 import static org.apache.commons.math3.fraction.BigFraction.ZERO;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -21,7 +22,7 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-08
  */
 
 public final class QQuadratic extends ScalarFunctional {
@@ -42,6 +43,27 @@ public final class QQuadratic extends ScalarFunctional {
   private final double _negativeLimitValue;
   private final double _positiveLimitSlope;
   private final double _negativeLimitSlope;
+
+  //--------------------------------------------------------------
+  // ScalarFunctional methods
+  //--------------------------------------------------------------
+  
+  private static final String safeString (final BigFraction bf) {
+    final BigFraction q = bf.reduce();
+    final long n = q.getNumeratorAsLong();
+    final long d = q.getDenominatorAsLong();
+    if (0L == n) { return "0"; }
+    if (d == n) { return "1"; }
+    if (d == -n) { return "m1"; }
+    if (0L > n) { return "m" + abs(n) + "_" + d; }
+    return n + "_" + d; }
+  
+  @Override
+  public final String safeName () {
+    return "Q2." + 
+      safeString(_a0) + "." +
+      safeString(_a1) + "." +
+      safeString(_a2); }
 
   //--------------------------------------------------------------
   // Function methods
