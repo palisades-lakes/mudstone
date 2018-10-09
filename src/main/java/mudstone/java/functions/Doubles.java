@@ -82,10 +82,10 @@ public final class Doubles {
   //--------------------------------------------------------------
   
   public static final double max (final double[][] x) {
-    double xmax = POSITIVE_INFINITY;
+    double xmax = NEGATIVE_INFINITY;
     for (final double[] xi : x) { 
       final double ximax = max(xi);
-      if (ximax < xmax) { xmax=ximax; } }
+      if (ximax > xmax) { xmax=ximax; } }
     return xmax; }
   
   //--------------------------------------------------------------

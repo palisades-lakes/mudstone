@@ -7,10 +7,28 @@ package mudstone.java.functions.scalar;
  * TODO: how to handle closed [-infinity,infinity]?
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-09
  */
 public final class HalfOpenInterval extends Interval {
 
+  //--------------------------------------------------------------
+  // Interval methods
+  //--------------------------------------------------------------
+
+  @Override
+  public final Interval cover (final double x) {
+    assert (! Double.isNaN(x));
+    if (contains(x)) { return this; }
+    if (x < lower()) { return make(x,upper()); }
+    return ClosedInterval.make(lower(),x); }
+  
+  @Override
+  public final Interval expand (final double r) {
+    assert r > 0.0;
+    final double w = width();
+    final double dx = r*w*0.5;
+    return make(lower()-dx,upper()+dx); }
+  
   //--------------------------------------------------------------
   // Domain methods
   //--------------------------------------------------------------

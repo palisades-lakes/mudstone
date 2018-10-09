@@ -9,7 +9,7 @@ import mudstone.java.functions.Doubles;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-09
  */
 public abstract class Interval implements Domain {
 
@@ -23,6 +23,21 @@ public abstract class Interval implements Domain {
   private final double _upper;
   public final double upper () { return _upper; }
 
+  //--------------------------------------------------------------
+  // methods
+  //--------------------------------------------------------------
+  /** Extend the interval to cover <code>x</code>.
+   */
+  public abstract Interval cover (final double x);
+  
+  /** Expand the interval symmetrically so that the new width is
+   * <code>1+r</code> times the old width.
+   */
+  public abstract Interval expand (final double r);
+  
+  // TODO: subtract an ulp for HalfOpen?
+  public final double width () { return upper() - lower(); }
+  
   //--------------------------------------------------------------
   // Domain methods
   //--------------------------------------------------------------

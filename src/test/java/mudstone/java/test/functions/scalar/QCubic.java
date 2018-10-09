@@ -8,16 +8,15 @@ import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
 import static java.lang.StrictMath.abs;
 import static java.lang.StrictMath.sqrt;
-
-import org.apache.commons.math3.fraction.BigFraction;
-
 import static org.apache.commons.math3.fraction.BigFraction.TWO;
 import static org.apache.commons.math3.fraction.BigFraction.ZERO;
+
+import org.apache.commons.math3.fraction.BigFraction;
 
 import mudstone.java.functions.Domain;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.AffineFunctional;
-import mudstone.java.functions.scalar.ScalarFunctional;
+import mudstone.java.functions.scalar.Polynomial;
 
 //----------------------------------------------------------------
 /** 'Exact' cubic polynomial implemented with rational numbers.
@@ -27,11 +26,11 @@ import mudstone.java.functions.scalar.ScalarFunctional;
  * Immutable.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-08
+ * @version 2018-10-09
  */
 
 strictfp
-public final class QCubic extends ScalarFunctional {
+public final class QCubic extends Polynomial {
 
   //--------------------------------------------------------------
   // fields
@@ -51,6 +50,13 @@ public final class QCubic extends ScalarFunctional {
   private final double _positiveLimitSlope;
   private final double _negativeLimitSlope;
 
+  //--------------------------------------------------------------
+  // Polynomial methods
+  //--------------------------------------------------------------
+  
+  @Override
+  public final int degree () { return 3; }
+  
   //--------------------------------------------------------------
   // ScalarFunctional methods
   //--------------------------------------------------------------

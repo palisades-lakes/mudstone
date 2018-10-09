@@ -6,7 +6,7 @@
   
   {:doc "data files for R plots of interpolators"
    :author "palisades dot lakes at gmail dot com"
-   :version "2018-10-08"}
+   :version "2018-10-09"}
   
   (:require [clojure.java.io :as io]
             [clojure.string :as s])
@@ -15,19 +15,13 @@
     [java.lang Math]
     [java.lang.reflect Method]
     [java.util Arrays]
+    [mudstone.java.functions Doubles]
     [mudstone.java.functions.scalar 
-     Interval
-     ConstantFunctional
-     AffineFunctional
-     QuadraticLagrange
-     QuadraticMonomial
-     QuadraticMonomialShifted
-     QuadraticMonomialStandardized
-     QuadraticNewton
-     CubicHermite
-     CubicLagrange
-     CubicMonomial
-     CubicNewton
+     ClosedInterval Interval 
+     ConstantFunctional AffineFunctional QuadraticLagrange 
+     QuadraticMonomial QuadraticMonomialShifted 
+     QuadraticMonomialStandardized QuadraticNewton
+     CubicHermite CubicLagrange CubicMonomial CubicNewton
      ScalarFunctional]
     [mudstone.java.test.scalar Common]))
 
@@ -36,22 +30,9 @@
 (def interpolators
   [#_ConstantFunctional
    #_AffineFunctional
-   QuadraticLagrange
-   QuadraticMonomial
-   QuadraticMonomialShifted
-   QuadraticMonomialStandardized
-   QuadraticNewton
-   CubicHermite
-   CubicLagrange
-   CubicMonomial
-   CubicNewton])
-
-;;----------------------------------------------------------------
-
-;(defn- ^String hex [^double x]
-;  (.toUpperCase
-;    (Long/toHexString
-;      (Double/doubleToLongBits x))))
+   QuadraticLagrange QuadraticMonomial QuadraticMonomialShifted
+   QuadraticMonomialStandardized QuadraticNewton
+   CubicHermite CubicLagrange CubicMonomial CubicNewton])
 
 ;;----------------------------------------------------------------
 
@@ -83,85 +64,125 @@
   (s/join "." [(.safeName testf) (Common/knotString knots)]))
 
 ;;----------------------------------------------------------------
+;; Either "valueKnot" or "slopeKnot".
 
-(defn- write-micro-file [^ScalarFunctional testf
-                         ^"[[D" knots 
-                         ^ScalarFunctional interpolant]
-  (when (Double/isFinite (.doubleArgmin testf Interval/ALL))
-    (let [file (io/file 
-                 "plots" "interpolate" 
-                 (s/join "." [(prefix testf knots) 
-                              (.getSimpleName (class interpolant))
-                              "micro" "tsv"]))
-          _(println (.getPath file))
-          _(io/make-parents file)
-          xmin (double (.doubleArgmin testf Interval/ALL))
-          n (int 255)
-          n2 (inc (* 2 n))
-          x0 (double 
-               (loop [i (int 0)
-                      x (double xmin)]
-                 (if (< i n) 
-                   (recur (inc i) (Math/nextDown x))
-                   x)))
-          tname (.safeName testf)
-          iname (.getSimpleName (class interpolant))]
-      (with-open [^PrintWriter w (PrintWriter. (io/writer file))]
-        (.println w (s/join "\t" ["function" "x" "y"]))
-        (dotimes [i (alength ^"[D" (aget knots 0))]
-          (let [x (double (aget knots 0 i))]
-            (.println w 
-              (s/join "\t"
-                      ["valueKnot" x (.doubleValue testf x)]))))
-        (dotimes [i (alength ^"[D" (aget knots 1))]
-          (let [x (double (aget knots 1 i))]
-            (.println w 
-              (s/join "\t" ["slopeKnot" x (.slope testf x)]))))
-        (loop [i (int 0)
-               x (double x0)]
-          (when (<= i n2)
-            (.println w 
-              (s/join "\t" [tname x (.doubleValue testf x)]))
-            (recur (inc i) (Math/nextUp x))))
-        (loop [i (int 0)
-               x (double x0)]
-          (when (<= i n2)
-            (.println w 
-              (s/join "\t" [iname x (.doubleValue interpolant x)]))
-            (recur (inc i) (Math/nextUp x))))))))
+(defn- append-knots [^String kind 
+                     ^ScalarFunctional f
+                     ^doubles knots 
+                     ^PrintWriter w]
+  (dotimes [i (alength knots)]
+    (let [x (double (aget knots i))]
+      (.write w (s/join "\t" [kind x (.doubleValue f x)]))
+      (.write w "\n"))))
 
 ;;----------------------------------------------------------------
 
-(doseq [^ScalarFunctional testf (take 3 Common/testFns)
-        ^"[[D" knots Common/allKnots
-        ^Class interpolator (take 3 interpolators)]
-  (when (valid-knots? interpolator knots)
-    (let [interpolant (interpolate interpolator testf knots)]
-      (write-micro-file testf knots interpolant))))
+(defn- append-xfx 
+  ([^String fname ^ScalarFunctional f xs ^PrintWriter w]
+    (doseq [x xs]
+      (let [x (double x)]
+        (.write w (s/join "\t" [fname x (.doubleValue f x)]))
+        (.write w "\n"))))
+  ([^ScalarFunctional f xs ^PrintWriter w]
+    (append-xfx (.safeName f) f xs w)))
+;;----------------------------------------------------------------
+;; return a sequence of n equally spaced values that go 
+;; approximately from xmin to xmax
+
+(defn- xcover [^Interval support ^long n]
+  (let [xmin (.lower support)
+        xmax (.upper support)
+        dx (/ (- xmax xmin) (dec n))
+        step (fn ^double [^double x] (+ x dx))]
+    (filter #(.contains support (double %))
+            (take n (iterate step (- xmin dx))))))
+
+;;----------------------------------------------------------------
+
+(defn- write-macro-file [^ScalarFunctional testf
+                         ^"[[D" knots 
+                         interpolants]
+  (when (and (Double/isFinite (.doubleArgmin testf Interval/ALL))
+             (not (empty? interpolants)))
+    (println testf)
+    (let [file (io/file 
+                 "data" "interpolate" "macro"
+                 (s/join "." [(prefix testf knots) 
+                              "macro" "tsv"]))
+          _(println (.getPath file))
+          _(io/make-parents file)
+          _(println (Arrays/toString ^doubles (aget knots 0)))
+          _(println (Arrays/toString ^doubles (aget knots 1)))
+          argmin (.doubleArgmin testf Interval/ALL)
+          ^Interval support (.expand
+                              (.cover (ClosedInterval/make 
+                                        (double (Doubles/min knots))
+                                        (double (Doubles/max knots)))
+                                argmin)
+                              0.5)
+          xs (xcover support (long 511))]
+      (with-open [^PrintWriter w (PrintWriter. (io/writer file))]
+        (.write w (s/join "\t" ["functional" "x" "y"]))
+        (.write w "\n")
+        (append-knots "argmin" testf (double-array 1 argmin) w)
+        (append-knots "valueKnot" testf (aget knots 0) w)
+        (append-knots "slopeKnot" testf (aget knots 1) w)
+        (append-xfx "testf" testf xs w)
+        (doseq [^ScalarFunctional interpolant interpolants]
+          (append-xfx interpolant xs w))))))
+
+;;----------------------------------------------------------------
+;; return the result of calling (Math/nextDown .) n times,
+;; starting from x
+
+(defn- next-down [^double x ^long n]
+  (loop [i 0
+         x x]
+    (if (< i n)
+      (recur (inc i) (Math/nextDown x))
+      x)))
+
+;;----------------------------------------------------------------
+;; return the sequence of values resulting from calling 
+;; (Math/nextUp x) n times, starting from x
+
+(defn- next-up-sequence [^double x ^long n]
+  (take n 
+        (iterate (fn ^double [^double xi] (Math/nextUp xi))
+                 (Math/nextDown x))))
+
+;;----------------------------------------------------------------
+
+(doseq [^ScalarFunctional testf Common/testFns
+        ^"[[D" knots Common/allKnots]
+  (let [interpolants (map #(interpolate % testf knots)
+                          (filter #(valid-knots? % knots)
+                                  interpolators))]
+    (write-macro-file testf knots interpolants)))
 
 #_(let [^ints files (int-array 1)]
-  (doseq [^ScalarFunctional testf (take 1 Common/testFns)
-          ^"[[D" knots (take 1 Common/allKnots)]
-    (println)
-    (println (.toString testf))
-    (println (.safeName testf))
-    (println (Arrays/toString ^doubles (aget knots 0))
-             (Arrays/toString ^doubles (aget knots 1)))
-    (println (Common/knotString knots))
-    (let [^ints counter (int-array 1)]
-      (doseq [^Class interpolator (take 1 interpolators)]
-        (when (valid-knots? interpolator knots)
-          (let [interpolant (interpolate interpolator testf knots)]
-            (when (= interpolator (class interpolant))
-              (aset-int counter 0 (inc (aget counter 0)))
-              (println (.getSimpleName interpolator))
-              (println (.toString interpolant))))))
-      (when (< 0 (aget counter 0))
-        (println (s/join "." 
-                         [(.safeName testf)  
-                          (Common/knotString knots)
-                          "micro"
-                          "tsv"])) 
-        (println "interpolants:" (aget counter 0))
-        (aset-int files 0 (inc (aget files 0))))))
-  (println "files:" (aget files 0)))
+    (doseq [^ScalarFunctional testf (take 1 Common/testFns)
+            ^"[[D" knots (take 1 Common/allKnots)]
+      (println)
+      (println (.toString testf))
+      (println (.safeName testf))
+      (println (Arrays/toString ^doubles (aget knots 0))
+               (Arrays/toString ^doubles (aget knots 1)))
+      (println (Common/knotString knots))
+      (let [^ints counter (int-array 1)]
+        (doseq [^Class interpolator (take 1 interpolators)]
+          (when (valid-knots? interpolator knots)
+            (let [interpolant (interpolate interpolator testf knots)]
+              (when (= interpolator (class interpolant))
+                (aset-int counter 0 (inc (aget counter 0)))
+                (println (.getSimpleName interpolator))
+                (println (.toString interpolant))))))
+        (when (< 0 (aget counter 0))
+          (println (s/join "." 
+                           [(.safeName testf)  
+                            (Common/knotString knots)
+                            "micro"
+                            "tsv"])) 
+          (println "interpolants:" (aget counter 0))
+          (aset-int files 0 (inc (aget files 0))))))
+    (println "files:" (aget files 0)))
