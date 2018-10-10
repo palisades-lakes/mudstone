@@ -12,7 +12,7 @@ import org.apache.commons.math3.fraction.BigFraction;
 /** Base for polynomials on <b>R</b>.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-06
+ * @version 2018-10-10
  */
 
 @SuppressWarnings("unchecked")
@@ -24,6 +24,47 @@ public abstract class Polynomial extends ScalarFunctional {
 
   public abstract int degree ();
 
+  //--------------------------------------------------------------
+  /** Check if an arbitrary precision quadratic polynomial 
+   * over the rationals ({@link BigFraction}) can match the given 
+   * value and slope at <code>x0</code> and <code>x1</code>.
+   */
+  public static final boolean 
+  isQQuadraticXYD2 (final BigFraction x0,
+    final BigFraction y0,
+    final BigFraction d0,
+    final BigFraction x1,
+    final BigFraction y1,
+    final BigFraction d1) {
+    return 
+      y1.subtract(y0)
+      .multiply(2)
+      .equals(
+        d1.subtract(d0)
+        .multiply(
+          x1.subtract(x0))); }
+  
+  /** Check if an arbitrary precision quadratic polynomial 
+   * over the rationals ({@link BigFraction}) can match the given 
+   * value and slope at <code>x0</code> and <code>x1</code>.
+   */
+  
+  public static final boolean 
+  isQQuadraticXYD2 (final double x0,
+    final double y0,
+    final double d0,
+    final double x1,
+    final double y1,
+    final double d1) {
+    return 
+      isQQuadraticXYD2(
+        new BigFraction(x0),
+        new BigFraction(y0),
+        new BigFraction(d0),
+        new BigFraction(x1),
+        new BigFraction(y1),
+        new BigFraction(d1)); }
+  
   //--------------------------------------------------------------
 
   public static final double[] 
