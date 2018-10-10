@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import mudstone.java.functions.scalar.Interval;
+import mudstone.java.functions.scalar.Polynomial;
 import mudstone.java.test.functions.scalar.QQuadratic;
 
 //----------------------------------------------------------------
@@ -15,7 +16,7 @@ import mudstone.java.test.functions.scalar.QQuadratic;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-09
  */
 
 strictfp
@@ -28,7 +29,7 @@ public final class QQuadraticTest {
   @Test
   public final void q111 () {
 
-    final QQuadratic f = QQuadratic.make(1.0,-1.0,1.0);
+    final Polynomial f = QQuadratic.make(1.0,-1.0,1.0);
     Common.checkArgmin(f,Interval.ALL,1.0e0, 1.0e1);
 
     assertEquals(7.0,f.doubleValue(-2.0));
@@ -52,7 +53,7 @@ public final class QQuadraticTest {
   @Test
   public final void q011 () {
 
-    final QQuadratic f = QQuadratic.make(0.0,-1.0,1.0);
+    final Polynomial f = QQuadratic.make(0.0,-1.0,1.0);
     Common.checkArgmin(f,Interval.ALL,1.0e0, 1.0e0);
 
     assertEquals(6.0,f.doubleValue(-2.0));
@@ -76,7 +77,7 @@ public final class QQuadraticTest {
   @Test
   public final void q110 () {
 
-    final QQuadratic f = QQuadratic.make(1.0,1.0,0.0);
+    final Polynomial f = QQuadratic.make(1.0,1.0,0.0);
     Common.checkArgmin(f,Interval.ALL, 1.0e0, 1.0e0);
 
     assertEquals(-1.0,f.doubleValue(-2.0));
@@ -100,7 +101,7 @@ public final class QQuadraticTest {
   @Test
   public final void q100 () {
 
-    final QQuadratic f = QQuadratic.make(1.0,0.0,0.0);
+    final Polynomial f = QQuadratic.make(1.0,0.0,0.0);
     // constant, so argmin is NaN
     Common.checkArgmin(f,Interval.ALL,1.0, 1.0e0);
 

@@ -1,18 +1,15 @@
 package mudstone.java.test.scalar;
 
-import static mudstone.java.test.scalar.Common.affineCubics;
 import static mudstone.java.test.scalar.Common.affineKnots;
-import static mudstone.java.test.scalar.Common.affineQuadratics;
 import static mudstone.java.test.scalar.Common.affineTestPts;
-import static mudstone.java.test.scalar.Common.constantCubics;
-import static mudstone.java.test.scalar.Common.constantQuadratics;
-import static mudstone.java.test.scalar.Common.cubicCubics;
+import static mudstone.java.test.scalar.Common.affines;
+import static mudstone.java.test.scalar.Common.constants;
+import static mudstone.java.test.scalar.Common.cubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
-import static mudstone.java.test.scalar.Common.quadraticCubics;
-import static mudstone.java.test.scalar.Common.quadraticQuadratics;
 import static mudstone.java.test.scalar.Common.otherFns;
+import static mudstone.java.test.scalar.Common.quadratics;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -33,7 +30,7 @@ import mudstone.java.functions.scalar.AffineFunctional;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-10-08
+ * @version 2018-10-09
  */
 
 public final class AffineFunctionalTest {
@@ -45,8 +42,7 @@ public final class AffineFunctionalTest {
     final List<BiFunction> factories = 
       List.of(AffineFunctional::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      affineCubics, constantCubics, 
-      affineQuadratics, constantQuadratics);
+      affines, constants);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         //System.out.println();
@@ -63,7 +59,7 @@ public final class AffineFunctionalTest {
     final List<BiFunction> factories = 
       List.of(AffineFunctional::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, quadraticCubics, quadraticQuadratics, otherFns);
+      cubics,  quadratics, otherFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : affineKnots) {

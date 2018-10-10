@@ -32,8 +32,8 @@ public final class ModelFactoriesTest {
 //  @Test
 //  public final void quadraticTests () {
 //    final Iterable<Function> functions = Iterables.concat(
-//      quadraticCubics, affineCubics, constantCubics, 
-//      quadraticQuadratics, affineQuadratics, constantQuadratics);
+//         
+//      quadraticQuadratics, affineQuadratics, constants);
 //    for (final ModelFactory factory : quadraticFactories) {
 //      //System.out.println(factory);
 //      for (final Function f : functions) {
@@ -46,8 +46,8 @@ public final class ModelFactoriesTest {
 //  @Test
 //  public final void cubicTests () {
 //    final Iterable<Function> functions = Iterables.concat(
-//      cubicCubics, quadraticCubics, affineCubics, constantCubics, 
-//      quadraticQuadratics, affineQuadratics, constantQuadratics);
+//      cubicCubics,    
+//      quadraticQuadratics, affineQuadratics, constants);
 //    for (final ModelFactory factory : cubicFactories) {
 //      //System.out.println(factory);
 //      for (final Function f : functions) {

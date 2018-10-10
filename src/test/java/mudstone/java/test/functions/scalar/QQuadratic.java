@@ -5,7 +5,6 @@ import static java.lang.Double.NaN;
 import static java.lang.Double.POSITIVE_INFINITY;
 import static java.lang.Double.isFinite;
 import static java.lang.Double.isNaN;
-import static java.lang.StrictMath.abs;
 import static org.apache.commons.math3.fraction.BigFraction.ZERO;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -47,24 +46,14 @@ public final class QQuadratic extends Polynomial {
   //--------------------------------------------------------------
   // Polynomial methods
   //--------------------------------------------------------------
-  
+
   @Override
   public final int degree () { return 2; }
-  
- //--------------------------------------------------------------
+
+  //--------------------------------------------------------------
   // ScalarFunctional methods
   //--------------------------------------------------------------
-  
-  private static final String safeString (final BigFraction bf) {
-    final BigFraction q = bf.reduce();
-    final long n = q.getNumeratorAsLong();
-    final long d = q.getDenominatorAsLong();
-    if (0L == n) { return "0"; }
-    if (d == n) { return "1"; }
-    if (d == -n) { return "m1"; }
-    if (0L > n) { return "m" + abs(n) + "_" + d; }
-    return n + "_" + d; }
-  
+
   @Override
   public final String safeName () {
     return "Q2." + 
@@ -143,7 +132,10 @@ public final class QQuadratic extends Polynomial {
   @Override
   public String toString () {
     return 
-      "Q2[" + _a0 + " + " + _a1 + "*x + " + _a2 + "*x^2; " + 
+      "Q2[" + 
+      _a0.toString().replace(" ","") + " + " + 
+      _a1.toString().replace(" ","") + "*x + " + 
+      _a2.toString().replace(" ","") + "*x^2; " + 
       _xmin + "]"; }
 
   //--------------------------------------------------------------
@@ -154,7 +146,8 @@ public final class QQuadratic extends Polynomial {
                       final BigFraction a1,
                       final BigFraction a2) { 
     super(); 
-    _a0 = a0; _a1 = a1; _a2 = a2; 
+    assert ! a2.equals(ZERO);
+   _a0 = a0; _a1 = a1; _a2 = a2; 
     // limiting values:
     final int a2sign = a2.compareTo(ZERO);
     if (0 < a2sign) {
@@ -192,14 +185,16 @@ public final class QQuadratic extends Polynomial {
 
   //--------------------------------------------------------------
 
-  public static final QQuadratic make (final BigFraction a0,
+  public static final Polynomial make (final BigFraction a0,
                                        final BigFraction a1,
                                        final BigFraction a2) { 
+    if (ZERO.equals(a2)) { return QAffine.make(a0,a1); }
     return new QQuadratic(a0,a1,a2); }
 
-  public static final QQuadratic make (final double a0,
+  public static final Polynomial make (final double a0,
                                        final double a1,
                                        final double a2) { 
+    if (0.0==a2) { return QAffine.make(a0,a1); }
     return new QQuadratic(
       new BigFraction(a0),
       new BigFraction(a1),

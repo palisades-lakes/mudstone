@@ -23,6 +23,8 @@ import mudstone.java.functions.Domain;
 import mudstone.java.functions.Doubles;
 import mudstone.java.functions.Function;
 import mudstone.java.functions.scalar.Interval;
+import mudstone.java.test.functions.scalar.QAffine;
+import mudstone.java.test.functions.scalar.QConstant;
 import mudstone.java.test.functions.scalar.QCubic;
 import mudstone.java.test.functions.scalar.QQuadratic;
 
@@ -136,18 +138,18 @@ public final class Common {
   public static final Iterable<double[][]> allKnots =
     Iterables.concat(
       constantKnots,affineKnots,quadraticKnots,cubicKnots);
-  
-//  private static final String hexString (final double x) {
-//    return 
-//      Long.toHexString(Double.doubleToLongBits(x))
-//      .toUpperCase(); }
-  
+
+  //  private static final String hexString (final double x) {
+  //    return 
+  //      Long.toHexString(Double.doubleToLongBits(x))
+  //      .toUpperCase(); }
+
   // hack for shorter names
   private static final String hexString (final double x) {
     return 
       Integer.toHexString(Float.floatToIntBits((float) x))
       .toUpperCase(); }
-  
+
   public static final String knotString (final double[][] knots) {
     final StringBuilder b = new StringBuilder();
     if (0 < knots[0].length) {
@@ -166,8 +168,8 @@ public final class Common {
   //--------------------------------------------------------------
   // test functions
   //--------------------------------------------------------------
-  
-  public static final Iterable<Function> cubicCubics = 
+
+  public static final Iterable<Function> cubics = 
     List.of(
       QCubic.make(
         new BigFraction(5,3),
@@ -183,29 +185,9 @@ public final class Common {
       //QCubic.make(1.0,-1.0,-1.0,1.0),
       //QCubic.make(1.0,1.0,1.0,1.0),
       //QCubic.make(1.0,-1.0,1.0,1.0)
-);
+      );
 
-  public static final Iterable<Function> quadraticCubics = 
-    List.of(
-      QCubic.make(
-        new BigFraction(5,3),
-        new BigFraction(-11,7),
-        new BigFraction(17,13),
-        new BigFraction(0)),
-      //QCubic.make(1.0,1.0,-1.0,0.0),
-      QCubic.make(1.0,-1.0,-1.0,0.0),
-      QCubic.make(1.0,1.0,1.0,0.0),
-      QCubic.make(1.0,-1.0,1.0,0.0));
-
-  public static final Iterable<Function> affineCubics = 
-    List.of(
-      QCubic.make(1.0,1.0,0.0,0.0),
-      QCubic.make(1.0,-1.0,0.0,0.0));
-
-  public static final Iterable<Function> constantCubics = 
-    List.of(QCubic.make(1.0,0.0,0.0,0.0));
-
-  public static final Iterable<Function> quadraticQuadratics = 
+  public static final Iterable<Function> quadratics = 
     List.of(
       QQuadratic.make(
         new BigFraction(5,3),
@@ -216,13 +198,15 @@ public final class Common {
       QQuadratic.make(1.0,1.0,1.0),
       QQuadratic.make(1.0,-1.0,1.0));
 
-  public static final Iterable<Function> affineQuadratics = 
+  public static final Iterable<Function> affines = 
     List.of(
-      QQuadratic.make(1.0,1.0,0.0),
-      QQuadratic.make(1.0,-1.0,0.0));
+      //QAffine.make(new BigFraction(13,11),new BigFraction(11,7)),
+      //QAffine.make(new BigFraction(13,11),new BigFraction(-11,7)),
+      QAffine.make(1.0,1.0),
+      QAffine.make(1.0,-1.0));
 
-  public static final Iterable<Function> constantQuadratics = 
-    List.of(QQuadratic.make(1.0,0.0,0.0));
+  public static final Iterable<Function> constants = 
+    List.of(QConstant.make(new BigFraction(13,11)));
 
   public static final Iterable<Function> otherFns =
     List.of(
@@ -237,13 +221,13 @@ public final class Common {
   public static final Iterable<Function> testFns =
     Iterables.concat(
       otherFns,
-      cubicCubics//,
-//      quadraticCubics,
-//      affineCubics,
-//      constantCubics,
-//      quadraticQuadratics,
-//      affineQuadratics,
-//      constantQuadratics
+      cubics//,
+      //      
+      //      
+      //      
+      //      quadraticQuadratics,
+      //      affineQuadratics,
+      //      constants
       );
 
   //--------------------------------------------------------------

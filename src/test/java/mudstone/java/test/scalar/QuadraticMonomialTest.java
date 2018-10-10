@@ -1,18 +1,16 @@
 package mudstone.java.test.scalar;
 
-import static mudstone.java.test.scalar.Common.affineCubics;
-import static mudstone.java.test.scalar.Common.affineQuadratics;
-import static mudstone.java.test.scalar.Common.constantCubics;
-import static mudstone.java.test.scalar.Common.constantQuadratics;
-import static mudstone.java.test.scalar.Common.cubicCubics;
+
+import static mudstone.java.test.scalar.Common.affines;
+import static mudstone.java.test.scalar.Common.constants;
+import static mudstone.java.test.scalar.Common.cubics;
 import static mudstone.java.test.scalar.Common.exact;
 import static mudstone.java.test.scalar.Common.expand;
 import static mudstone.java.test.scalar.Common.general;
-import static mudstone.java.test.scalar.Common.quadraticCubics;
-import static mudstone.java.test.scalar.Common.quadraticKnots;
-import static mudstone.java.test.scalar.Common.quadraticQuadratics;
-import static mudstone.java.test.scalar.Common.quadraticTestPts;
 import static mudstone.java.test.scalar.Common.otherFns;
+import static mudstone.java.test.scalar.Common.quadraticKnots;
+import static mudstone.java.test.scalar.Common.quadraticTestPts;
+import static mudstone.java.test.scalar.Common.quadratics;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -45,8 +43,8 @@ public final class QuadraticMonomialTest {
     final List<BiFunction> factories = 
       List.of(QuadraticMonomial::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      quadraticCubics, affineCubics, constantCubics,
-      quadraticQuadratics, affineQuadratics, constantQuadratics);
+        
+      quadratics, affines, constants);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         //System.out.println();
@@ -58,7 +56,7 @@ public final class QuadraticMonomialTest {
 //              ", " + 
 //              Arrays.toString(kn[1]));
             exact(f,factory,kn,quadraticTestPts,support,
-              6.0e5,2.0e7,3.0e7); } } } } }
+              6.0e5,3.0e7,4.0e7); } } } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
@@ -67,7 +65,7 @@ public final class QuadraticMonomialTest {
     final List<BiFunction> factories = 
       List.of(QuadraticMonomial::interpolate);
     final Iterable<Function> functions = Iterables.concat(
-      cubicCubics, otherFns);
+      cubics, otherFns);
     for (final BiFunction factory : factories) {
       for (final Function f : functions) {
         for (final double[][] kn : quadraticKnots) {

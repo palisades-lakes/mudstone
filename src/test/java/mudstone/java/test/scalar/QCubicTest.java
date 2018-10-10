@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import mudstone.java.functions.scalar.Interval;
+import mudstone.java.functions.scalar.Polynomial;
 import mudstone.java.test.functions.scalar.QCubic;
 
 //----------------------------------------------------------------
@@ -17,7 +18,7 @@ import mudstone.java.test.functions.scalar.QCubic;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2018-10-09
  */
 
 strictfp
@@ -30,7 +31,7 @@ public final class QCubicTest {
   @Test
   public final void q0101 () {
 
-    final QCubic f = QCubic.make(0.0,-1.0,0.0,1.0);
+    final Polynomial f = QCubic.make(0.0,-1.0,0.0,1.0);
     Common.checkArgmin(f,Interval.ALL,1.0e0,1.0e0);
 
     Assertions.assertEquals(-6.0,f.doubleValue(-2.0));
@@ -55,7 +56,7 @@ public final class QCubicTest {
   @Test
   public final void q1110 () {
 
-    final QCubic f = QCubic.make(1.0,-1.0,1.0,0.0);
+    final Polynomial f = QCubic.make(1.0,-1.0,1.0,0.0);
     Common.checkArgmin(f,Interval.ALL, 1.0e0, 1.0e0);
 
     Assertions.assertEquals(7.0,f.doubleValue(-2.0));
@@ -79,7 +80,7 @@ public final class QCubicTest {
   @Test
   public final void q1100 () {
 
-    final QCubic f = QCubic.make(1.0,1.0,0.0,0.0);
+    final Polynomial f = QCubic.make(1.0,1.0,0.0,0.0);
     Common.checkArgmin(f,Interval.ALL, 1.0e0, 1.0e0);
 
     Assertions.assertEquals(-1.0,f.doubleValue(-2.0));
@@ -103,7 +104,7 @@ public final class QCubicTest {
   @Test
   public final void q1000 () {
 
-    final QCubic f = QCubic.make(1.0,0.0,0.0,0.0);
+    final Polynomial f = QCubic.make(1.0,0.0,0.0,0.0);
     Common.checkArgmin(f,Interval.ALL, 1.0e0, 1.0e0);
 
     Assertions.assertEquals(1.0,f.doubleValue(-2.0));
