@@ -62,6 +62,11 @@
  </build>
  <dependencies>
   <dependency>
+   <groupId>expresso</groupId>
+   <artifactId>expresso</artifactId>
+   <version>0.2.2</version>
+  </dependency>
+  <dependency>
    <groupId>org.apache.commons</groupId>
    <artifactId>commons-math3</artifactId>
    <version>${commons-math3-version}</version>
