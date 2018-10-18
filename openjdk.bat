@@ -1,6 +1,6 @@
 @echo off
 :: palisades.lakes (at) gmail (dot) com
-:: 2018-09-03
+:: 2018-10-18
 
 ::set GC=-XX:+AggressiveHeap -XX:+UseStringDeduplication 
 set GC=
@@ -20,7 +20,7 @@ set XMX=-Xms12g -Xmx12g -Xmn5g
 set OPENS=--add-opens java.base/java.lang=ALL-UNNAMED
 set CP=-cp ./src/scripts/java;lib/*
 
-set JAVA_HOME=%JAVA10%
+set JAVA_HOME=%JAVA11%
 set JAVA="%JAVA_HOME%\bin\java"
 
 set CMD=%JAVA% %THRUPUT% -ea -dsa %GC% %XMX% %COMPRESSED% %TRACE% %OPENS% %CP% %*
