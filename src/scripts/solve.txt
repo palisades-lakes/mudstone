@@ -1,0 +1,99 @@
+Code in various sumbolic algebra systems
+
+Reduce: http://www.reduce-algebra.com/
+
+use PSL Reduce to cut and paste results
+on factor;
+on horner;
+on revpri;
+load_package "rlfi";
+on latex;
+
+linelength(62);
+
+solve({y0 = a0 + a1 * x0,
+       y1 = a0 + a1 * x1},
+      {a0,a1});
+    
+    =>
+      
+{{a0=(x0*y1 - x1*y0)/(x0 - x1),
+  a1=(y0 - y1)/(x0 - x1)}}$
+      
+solve({y0 = a0 + a1 * x0 + a2 * x0^2,
+       y1 = a0 + a1 * x1 + a2 * x1^2,
+       y2 = a0 + a1 * x2 + a2 * x2^2},
+      {a0,a1,a2});
+
+solve({y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       y2 = a0 + a1 * x2 + a2 * x2^2 + a3 * x2^3,
+       y3 = a0 + a1 * x3 + a2 * x3^2 + a3 * x3^3},
+      {a0,a1,a2,a3});
+
+solve({y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       d2 = a1 + 2 * a2 * x2 + 3 * a3 * x2^2,
+       d3 = a1 + 2 * a2 * x3 + 3 * a3 * x3^2},
+      {a0,a1,a2,a3});
+
+solve({y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       d0 = a1 + 2 * a2 * x0 + 3 * a3 * x0^2,
+       d1 = a1 + 2 * a2 * x1 + 3 * a3 * x1^2},
+      {a0,a1,a2,a3});
+
+{{
+a0=( - (d0*x1 + d1*x0)*(x0 - x1)*x0*x1 + x0**3*y1 - 3*x0**2*x1*y1 
+    + 3*x0*x1**2*y0 - x1**3*y0)
+/
+(x0**3 - 3*x0**2*x1 + 3*x0*x1**2 - x1**3),
+
+a1=(((x0 + 2*x1)*(x0 - x1)*d1 - 6*(y0 - y1)*x1)*x0 + (2*x0 + x1)*(x0 - x1)*d0*x1
+)
+/
+(x0**3 - 3*x0**2*x1 + 3*x0*x1**2 - x1**3),
+a2=( - ((x0 + 2*x1)*(x0 - x1)*d0 - 3*(x0 + x1)*(y0 - y1)) - (2*x0 + x1)*(x0 - x1
+)*d1)/(x0**3 - 3*x0**2*x1 + 3*x0*x1**2 - x1**3),
+a3=((d0 + d1)*(x0 - x1) - 2*(y0 - y1))/(x0**3 - 3*x0**2*x1 + 3*x0*x1**2 - x1**3)
+}}$
+      
+Jasymca: https://webuser.hs-furtwangen.de/~dersch/jasymca4/j.html
+
+algsys([y0=(a0+a1*x0),
+        y1=(a0+a1*x1)],
+       [a0,a1]);
+       
+=> com.console.client.ParseException: Unknown symbol: a1
+
+Yacas: http://www.yacas.org/yacas_online/yacas_online.html
+
+solve({y0 == a0 + a1 * x0,
+       y1 == a0 + a1 * x1},
+      {a0,a1})   
+
+=> Equation matrix
+  y0 == a0 + a1 * x0, y1 == a0 + a1 * x1
+  a0,                 a1                   
+         
+
+OldSolve({y0 == a0 + a1 * x0,
+       y1 == a0 + a1 * x1},
+      {a0,a1})        
+=> a0 = y0 - a1*x1, a1 = a1
+
+OldSolve({y0 == a0 + a1 * x0,
+       y1 - y0  == a1 * (x1 - x0)},
+      {a0,a1})        
+       
+ => a0 = y0 - a1*x1, a1 = (y1  - y0) / (x1 - x0)
+ 
+OldSolve({y0 == a0 + a1 * x0,
+       y1 - y0  == a1 * (x1 - x0)},
+      {a1,a0})        
+
+=> a1 = (y0-a0)/x0, a0 = y0 - x0*(y1-y0)/(x1-x0)       
+ 
+>>> Not very useful!
+
+       
