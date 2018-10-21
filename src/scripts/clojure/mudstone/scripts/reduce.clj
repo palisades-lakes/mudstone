@@ -1,0 +1,49 @@
+;; clj src/scripts/clojure/mudstone/scripts/reduce.clj
+(set! *warn-on-reflection* true)
+(set! *unchecked-math* :warn-on-boxed)
+;;----------------------------------------------------------------
+(ns mudstone.scripts.reduce
+  
+  {:doc "fix reduce latex output"
+   :author "palisades dot lakes at gmail dot com"
+   :version "2018-10-21"}
+  
+  (:require [clojure.java.io :as io]
+            [clojure.string :as s]))
+;;----------------------------------------------------------------
+
+(defn frac [^String line]
+  (s/replace 
+    line
+    #"^( .+) & = \\left\((.+)\\right\)[\s]*/[\s]*\\left\((.+?)\\right\)[\s]*(\\?\\?)[\s]*$"
+    "$1 & = \\\\frac\n{$2}\n{$3} $4") )
+
+(let [text (slurp "docs/interpolation/monomial.tex")
+      text (s/replace text "{equation}" "{align}")
+      text (s/replace text "\\left\\{" "")
+      text (s/replace text "\\right\\}" "")
+      text (s/replace text "\r" "")
+      text (s/replace text "\n" " ")
+      text (s/replace text "\\begin{align}" "\n\\begin{align}\n")
+      text (s/replace text "\\end{align}" "\n\\end{align}\n\n")
+      text (s/replace text "," " \\\\\n  ")
+      text (s/replace text "=" " & = ")
+      text (s/replace text "-" " - ")
+      text (s/replace text #"([axyd]{1})([0123]{1})" "$1_$2")
+      #_(println text)
+      text (s/join 
+             "\n"
+             (mapv 
+               frac 
+               (filter 
+                 #(not 
+                    (or (s/includes? % "***")
+                        (s/includes? % "\\documentstyle")
+                        (s/includes? % "\\begin{doc")
+                        (s/includes? % "\\end{doc")
+                        (s/includes? % "end$")
+                        ))
+                 (s/split-lines text))))
+      #_(println text)
+      ]
+  (spit "docs/interpolation/monomial1.tex" text))
