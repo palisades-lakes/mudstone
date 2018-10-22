@@ -12,38 +12,59 @@
             [clojure.string :as s]))
 ;;----------------------------------------------------------------
 
-(defn frac [^String line]
+(defn- frac [^String line]
   (s/replace 
     line
     #"^( .+) & = \\left\((.+)\\right\)[\s]*/[\s]*\\left\((.+?)\\right\)[\s]*(\\?\\?)[\s]*$"
     "$1 & = \\\\frac\n{$2}\n{$3} $4") )
 
-(let [text (slurp "docs/interpolation/monomial.tex")
-      text (s/replace text "{equation}" "{align}")
-      text (s/replace text "\\left\\{" "")
-      text (s/replace text "\\right\\}" "")
-      text (s/replace text "\r" "")
-      text (s/replace text "\n" " ")
-      text (s/replace text "\\begin{align}" "\n\\begin{align}\n")
-      text (s/replace text "\\end{align}" "\n\\end{align}\n\n")
-      text (s/replace text "," " \\\\\n  ")
-      text (s/replace text "=" " & = ")
-      text (s/replace text "-" " - ")
-      text (s/replace text #"([axyd]{1})([0123]{1})" "$1_$2")
-      #_(println text)
-      text (s/join 
-             "\n"
-             (mapv 
-               frac 
-               (filter 
-                 #(not 
-                    (or (s/includes? % "***")
-                        (s/includes? % "\\documentstyle")
-                        (s/includes? % "\\begin{doc")
-                        (s/includes? % "\\end{doc")
-                        (s/includes? % "end$")
-                        ))
-                 (s/split-lines text))))
-      #_(println text)
-      ]
-  (spit "docs/interpolation/monomial1.tex" text))
+;;----------------------------------------------------------------
+
+(defn- repair [^String fpath]
+  (println fpath)
+  (let [f (io/file fpath)
+        parent (.getParent f)
+        fname (s/join "." (butlast (s/split (.getName f) #"\.")))
+        text (slurp f)
+        text (s/replace text #"\$$" "")
+        text (s/replace text "{equation}" "{align}")
+        text (s/replace text "\\left\\{" "")
+        text (s/replace text "\\right\\}" "")
+        text (s/replace text "\r" "")
+        text (s/replace text "\n" " ")
+        text (s/replace text "\\begin{align}" "\n\\begin{align}\n")
+        text (s/replace text "\\end{align}" "\n\\end{align}\n\n")
+        text (s/replace text "," " \\\\\n  ")
+        text (s/replace text "=" " & = ")
+        text (s/replace text "-" " - ")
+        text (s/replace text #"([axyd]{1})([0123]{1})" "$1_$2")
+        #_(println text)
+        text (s/join 
+               "\n"
+               (mapv 
+                 frac 
+                 (filter 
+                   #(not 
+                      (or (s/includes? % "***")
+                          (s/includes? % "\\documentstyle")
+                          (s/includes? % "\\begin{doc")
+                          (s/includes? % "\\end{doc")
+                          (s/includes? % "end$")
+                          ))
+                   (s/split-lines text))))
+        #_(println text)
+        ]
+    (spit (io/file parent (str fname ".tex")) text)))
+
+;;----------------------------------------------------------------
+
+(defn- filetype [f]
+  (last (s/split (.getName (io/file f)) #"\.")))
+        
+(defn rawtex? [f] (= "rawtex" (filetype f)))
+
+;;----------------------------------------------------------------
+
+(doseq [path (filter rawtex? 
+                     (file-seq (io/file "docs/interpolation")))]
+  (repair path))

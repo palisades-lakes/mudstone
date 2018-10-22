@@ -1,0 +1,224 @@
+\chapter{Interpolation}\label{ch:Interpolation}
+
+Motivation: 
+\begin{enumerate}
+ \item Minimization of real-valued functions on linear spaces.
+ \item Iterated line search methods.
+ \item $1$d minimization of real-valued functions on a line,
+ identified with \glssymbol{RealNumbers}.
+ \item $1$d minimization methods based on visiting the
+ argmin of a model function.
+ \item model function constructed using values and derivatives
+ of the $1$d objective function at recently visited locations.
+ \item common model function are low degree polynomials 
+ interpolating the supplied values and derivatives.
+\end{enumerate}
+
+$1$d minimization methods only use the argmin of the model 
+function, so constructing a representation of the interpolating 
+polynomial is usually unnecessary expense.
+This code is intended to make it easy to either 
+compute the argmin alone,
+or reify the model function, for visualization and debugging.
+(Maybe a lazy polynomial constructor that provides argmin with
+minimum effort and defers other work until first call to 
+\texttt{value} or \texttt{derivative}.)
+
+The polynomials of degree $k$ for a linear space of dimension
+$k+1$.
+The most common interpolating polynomials are quadratic or cubic,
+so we will have $3$ or $4$ dimensions (degrees of freedom) to play
+with. 
+(I will discuss affine and constant interpolation for 
+completeness.)
+
+Why not higher order? Are other interpolating functions useful?
+What about splines?
+
+An interpolating polynomial matches some number of $x,y$
+and $x,d$ pairs, where $x$ is a location in the domain,
+$y$ a value in the codomain (range) and $d$ the slope.
+
+The polynomials of degree $k$ for a linear space of dimension
+$k+1$. 
+
+A degree $k$ polynomial can match a combination of $k+1$ value 
+and/or 
+slope constraints, where there are at most $k$ slope constraints,
+and where the value constraints are at distinct $x$'s and the
+slope constraint are at distinct $x$'s, but a slope and a value 
+constraint can be given at the same $x$.
+
+A key issue is the choice of basis.
+
+Some bases are may be more convenient when constructing a 
+polynomial by interpolation.
+
+Another consideration is the accuracy and cost of 
+argmin \texttt{argmin}, \texttt{value}, and \texttt{derivative} 
+when the interpolating polynomial is approximated with 
+floating point numbers.
+
+\texttt{BigFraction} implementation
+
+Accuracy of evaluating the interpolating polynomial
+versus how far the interpolating function is from the function it
+interpolates.
+
+Extrapolation often results when using the \texttt{argmin}.
+Relationship between \texttt{argmin} and inverse interpolation.
+
+\section{Monomial basis}\label{sec:monomial-basis}
+
+The most common basis is the monomial:
+$p(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3$.
+$p$ is quadratic if $a_3$ is $0$,
+affine if $a_3$ and $a_2$ are $0$,
+and constant when only $a_0$ is not $0$.
+The basis functions are:
+\begin{enumerate}[start=0]
+ \item $p_0(x) = 1$
+ \item $p_1(x) = x$
+ \item $p_2(x) = x^2$
+ \item $p_3(x) = x^3$
+\end{enumerate}
+
+(Note: these basis function aren't orthogonal or normalized)is any
+sense. In fact, choosing a distance or an inner product for
+a polynomial space is not a simple question.)
+
+Constructing an interpolating polynomial in the monomial basis
+requires solving a system of equations.
+
+Suppose, for example, we have $x_0,y_0,d_0$ and
+$x_1,y_1,d_1$, that is, we have specified the value and slope we
+want at $x_0 \neq x_1$.
+That's $4$ constraints, impying a cubic interpolant.
+To determine the monomial basis coefficients,
+solve the linear system:
+
+\begin{equation}
+\begin{pmatrix}
+y_0 \\ d_0 \\ y_1 \\ d_1
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 & x_0 & \phantom{2} x_0^2 & \phantom{3} x_0^3 \\
+  & 1   & 2 x_0 & 3 x_0^2 \\
+1 & x_1 & \phantom{2} x_1^2 & \phantom{3} x_1^3 \\
+  & 1   & 2 x_1 & 3 x_1^2 
+\end{pmatrix}
+\begin{pmatrix}
+a_0 \\ a_1 \\ a_2 \\ a_3
+\end{pmatrix}
+\end{equation}
+
+\begin{align}
+ y_0 & = a_0 + a_1 x_0 + \phantom{2} a_2 x_0^2 + \phantom{3} a_3 x_0^3 \\
+ d_0 & = \phantom{a_0} \phantom{+} a_1 \phantom{x_0} + 2 a_2 x_0 + 3 a_3 x_0^2 \nonumber \\
+ y_1 & = a_0 + a_1 x_1 + \phantom{2} a_2 x_1^2 + \phantom{3} a_3 x_1^3 \nonumber \\
+ d_1 & = \phantom{a_0} \phantom{+} a_1 \phantom{x_0} + 2 a_2 x_1 + 3 a_3 x_1^2 \nonumber
+\end{align}
+
+\begin{align}
+ y_0 = & {a_0 + a_1 x_0 + \phantom{2} a_2 x_0^2 + \phantom{3} a_3 x_0^3} \\
+ d_0 = & \pushright{a_1 \phantom{x_0} + 2 a_2 x_0 + 3 a_3 x_0^2} \nonumber \\
+ y_1 = & {a_0 + a_1 x_1 + \phantom{2} a_2 x_1^2 + \phantom{3} a_3 x_1^3 }\nonumber \\
+ d_1 = & \pushright{a_1 \phantom{x_0} + 2 a_2 x_1 + 3 a_3 x_1^2} \nonumber
+\end{align}
+
+\begin{align}
+ y_0 = & {a_0 + a_1 x_0 + a_2 x_0^2 + a_3 x_0^3} \\
+ d_0 = & \pushright{a_1 + 2 a_2 x_0 + 3 a_3 x_0^2} \nonumber \\
+ y_1 = & {a_0 + a_1 x_1 + a_2 x_1^2 + a_3 x_1^3 }\nonumber \\
+ d_1 = & \pushright{a_1 + 2 a_2 x_1 + 3 a_3 x_1^2} \nonumber
+\end{align}
+
+\begin{align}\label{eq:hermite-eqns}
+ y_0 & = a_0 + a_1 x_0 + a_2 x_0^2 + a_3 x_0^3 \\
+ d_0 & = a_1 + 2 a_2 x_0 + 3 a_3 x_0^2 \nonumber \\
+ y_1 & = a_0 + a_1 x_1 + a_2 x_1^2 + a_3 x_1^3 \nonumber \\
+ d_1 & = a_1 + 2 a_2 x_1 + 3 a_3 x_1^2 \nonumber 
+\end{align}
+
+\begin{align}
+ y_0 = &a_0 + a_1 x_0 + a_2 x_0^2 + a_3 x_0^3 \\
+ d_0 = &\specialcell{\hfill a_1 + 2 a_2 x_0 + 3 a_3 x_0^2} \nonumber \\
+ y_1 = &a_0 + a_1 x_1 + a_2 x_1^2 + a_3 x_1^3 \nonumber \\
+ d_1 = &\specialcell{{\hfill a_1 + 2 a_2 x_1 + 3 a_3 x_1^2}} \nonumber 
+\end{align}
+
+\subsection{Constant Monomial}
+
+The only possibility is to 'interpolate' $(x_0,y_0)$ with
+$a_0 = y_0$ (and $a_i = 0$ for other $i$). 
+
+\subsection{Affine Monomial}
+
+There are $2$ possibilities, finding the line thru $2$ points,
+$(x_0,y_0)$ and $(x_1,y_1)$, or or matching the value and slope at
+$(x_0,y_0,d_0)$.
+
+In the first case:
+\input{monomial-yy}
+
+In the second:
+\input{monomial-yd}
+
+\newgeometry{onecolumn=true}
+
+\subsection{Quadratic Monomial}
+
+\subsubsection{$yyy$}
+
+\input{monomial-yyy}
+
+\subsubsection{$yyd$}
+
+$3$ domain locations:
+\input{monomial-yyd3}
+
+$2$ domain locations:
+\input{monomial-yyd2}
+
+\subsubsection{$ydd$}
+
+$3$ domain locations:
+\input{monomial-ydd3}
+
+$2$ domain locations:
+\input{monomial-ydd2}
+
+\subsection{Cubic Monomial}
+
+\subsubsection{$yyyy$}
+
+\input{monomial-yyyy}
+
+\subsubsection{$yyyd$}
+
+$4$ domain locations:
+\input{monomial-yyyd4}
+
+$3$ domain locations:
+\input{monomial-yyyd3}
+
+\subsubsection{$yydd$}
+
+Showing the most likely cases.
+
+$4$ domain locations:
+\input{monomial-yydd4}
+
+$2$ domain locations:
+\input{monomial-yydd2}
+
+\subsubsection{$yddd$}
+$4$ domain locations:
+
+\input{monomial-yddd4}
+
+\restoregeometry
+  
+
+%\section{Lagrange basis}

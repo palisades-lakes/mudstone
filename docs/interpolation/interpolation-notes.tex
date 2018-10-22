@@ -1,0 +1,84 @@
+% !TEX TS-program = arara
+% arara: xelatex: { synctex: on, options: [--halt-on-error] } 
+% arara: biber
+% arara: makeglossaries
+% arara: makeindex
+% arara: xelatex: { synctex: on, options: [-halt-on-error]  } 
+% arara: xelatex: { synctex: on, options: [-halt-on-error]   } 
+% arara: clean: { files: [ interpolation-notes.aux, interpolation-notes.bbl] }
+% arara: clean: { files: [ interpolation-notes.bcf, interpolation-notes.blg] }
+% arara: clean: { files: [ interpolation-notes.glg, interpolation-notes.glo] }
+% arara: clean: { files: [ interpolation-notes.gls, interpolation-notes.gls] }
+% arara: clean: { files: [ interpolation-notes.idx, interpolation-notes.ilg] }
+% arara: clean: { files: [ interpolation-notes.ind, interpolation-notes.loe] }
+% arara: clean: { files: [ interpolation-notes.lof, interpolation-notes.log ] }
+% arara: clean: { files: [ interpolation-notes.log, interpolation-notes.lol ] }
+% arara: clean: { files: [ interpolation-notes.out ] }
+% arara: clean: { files: [ interpolation-notes.run.xml] }
+% arara: clean: { files: [ interpolation-notes.toc, interpolation-notes.xdy] }
+% arara: clean: { files: [ interpolation-notes.synctex.gz] }
+%-------------------------------------------------------------------------------
+\documentclass[10pt,openany]{book}
+\input{../head}
+%\input{../kindle-paperwhite-header}
+\input{../landscape-2col-header}
+%\input{../portrait-1col-header}
+\input{../clj-listings}
+\input{../glossary}
+\addbibresource{../bib/cactus.bib}
+\addbibresource{../bib/clojure.bib}
+\addbibresource{../bib/halmos.bib}
+%\addbibresource{../bib/ieeestd.bib}
+\addbibresource{../bib/tex.bib}
+\addbibresource{../bib/fparith.bib}
+%-------------------------------------------------------------------------------
+\title{Notes on interpolation}
+\author{\textsc{John Alan McDonald}}
+%\email{mcdonald.john.alan at gmail.com}
+\date{draft of \today}
+%-------------------------------------------------------------------------------
+\begin{document}
+
+\maketitle
+
+\frontmatter
+
+\begingroup
+\let\onecolumn\twocolumn
+\sffamily
+\tableofcontents
+\rmfamily
+\endgroup
+
+\mainmatter
+
+%\part{Background}
+%\input{functions}
+%\input{numbers}
+%
+%\chapter{Linear (vector) spaces and functions}
+%\section{mathematics}
+%\cite{Halmos1960Finite}
+%\section{computation}
+%\section{examples}
+%
+%\chapter{Affine (flat) spaces and functions}
+%\section{mathematics}
+%\section{computation}
+%\section{examples}
+%
+\input{interpolation}
+
+%\glsaddallunused
+%-------------------------------------------------------------------------------
+\appendix
+%\part{Appendices}
+\input{../typesetting}
+%-------------------------------------------------------------------------------
+\backmatter
+
+
+%\part{Backmatter}
+\input{../tail}
+%-------------------------------------------------------------------------------
+\end{document}
