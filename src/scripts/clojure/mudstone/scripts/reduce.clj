@@ -6,17 +6,21 @@
   
   {:doc "fix reduce latex output"
    :author "palisades dot lakes at gmail dot com"
-   :version "2018-10-21"}
+   :version "2018-10-22"}
   
   (:require [clojure.java.io :as io]
             [clojure.string :as s]))
 ;;----------------------------------------------------------------
 
 (defn- frac [^String line]
-  (s/replace 
-    line
-    #"^( .+) & = \\left\((.+)\\right\)[\s]*/[\s]*\\left\((.+?)\\right\)[\s]*(\\?\\?)[\s]*$"
-    "$1 & = \\\\frac\n{$2}\n{$3} $4") )
+  #_(println "in:" line)
+  (let [result
+        (s/replace 
+          line
+          #"^( .+) & = [\s]*\\left\( (.+) \\right\)[\s]* / [\s]*\\left\( (.+?) \\right\)[\s]*(\\?\\?)[\s]*$"
+          "$1 & = \\\\frac\n{$2}\n{$3} $4")]
+    #_(println "out:" result)
+    result))
 
 ;;----------------------------------------------------------------
 
@@ -27,6 +31,9 @@
         fname (s/join "." (butlast (s/split (.getName f) #"\.")))
         text (slurp f)
         text (s/replace text #"\$$" "")
+        text (s/replace text "/" " / ")
+        text (s/replace text "\\left(" " \\left( ")
+        text (s/replace text "\\right)" " \\right) ")
         text (s/replace text "{equation}" "{align}")
         text (s/replace text "\\left\\{" "")
         text (s/replace text "\\right\\}" "")
@@ -65,6 +72,9 @@
 
 ;;----------------------------------------------------------------
 
+#_(repair "docs/interpolation/monomial-yddd4.rawtex")
+
 (doseq [path (filter rawtex? 
                      (file-seq (io/file "docs/interpolation")))]
   (repair path))
+
