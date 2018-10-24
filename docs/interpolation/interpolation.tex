@@ -221,4 +221,121 @@ $4$ domain locations:
 \restoregeometry
   
 
-%\section{Lagrange basis}
+\section{Lagrange basis}
+
+The standard Lagrange form of a polynomial is
+\begin{equation}
+f(x) = \sum_{i} y_i \prod_{j \neq i} \frac{x - x_j}{x_i -x_j}
+\end{equation}
+
+We can interpret this as a linear combination of basis functions,
+$\lambda_i (x) = \prod_{j \neq i} \frac{x - x_j}{x_i -x_j}$.
+Each $\lambda_i$ is $1$ at $x_i$ and $0$ at all the other $x_j$.
+So we can use $\lambda_i$ to satisfy a value constraint at $x_i$
+without interferring with value constraints at the other $x_j$.
+
+That suggests that it might be useful to construct similar basis
+functions to interpolate combinations of value and slope 
+constraints.
+
+\subsection{Quadratic case}
+
+\subsubsection{yyy}
+
+For example:
+
+\begin{equation}
+\lambda^{yyy}_0(x) = 
+\frac {(x - x_1) (x - x_2)} {(x_0 - x_1) (x_0 - x_2)}
+\end{equation}
+
+\subsubsection{yyd}
+
+We need 
+$\lambda^{yyd}_0(x_0) = 1$, 
+$\lambda^{yyd}_0(x_1) = 0$, and
+$\partial\lambda^{yyd}_0(x_2) = 0$. 
+
+The second constraint suggests looking at functions of the form
+$f(x) = (x - x_1) (x - c)$, which includes all quadratic 
+polynomials that are zero at $x_1$, up to a scaling factor.  
+$\partial{f}(x) = (x - x_1) + (x - c) = 2 x - x_1 - c$.
+$\partial{f}(x_2) = 0$ implies that
+$c = 2 x_2 - x_1$,
+so
+\begin{equation}
+\lambda^{yyd}_0(x) = 
+\frac 
+{(x - x_1) \left( (x - x_2) + (x_1 - x_2) \right)} 
+{(x_0 - x_1) ((x_0 - x_2) + (x_1 - x_2))}
+\end{equation}
+Note that we may have $x_0 = x_2$ or $x_1 = x_2$, but not both,
+and not $x_0 = x_1$ --- otherwise it would be impossible to 
+satisfy the constraints.
+
+By symmetry, 
+\begin{equation}
+\lambda^{yyd}_1(x) = 
+\frac 
+{(x - x_0) \left( (x - x_2) + (x_0 - x_2) \right)} 
+{(x_1 - x_0) \left( (x_1 - x_2) + (x_0 - x_2) \right)}
+\end{equation}
+
+ For $\lambda^{yyd}_2$, we need 
+$\lambda^{yyd}_2(x_0) = 0$, 
+$\lambda^{yyd}_2(x_1) = 0$, and
+$\partial\lambda^{yyd}_2(x_2) = 1$. 
+The standard form $f(x) = (x-x_0) (x-x_1)$ satisfies the first 
+$2$ constraints. 
+To satisfy the third, we simply need to normailize with
+$\partial{f}(x_2) = (x_2 - x_0) + (x_2 - x_1)$:
+
+\begin{equation}
+\lambda^{yyd}_2(x) = 
+\frac 
+{(x - x_0) (x - x_1)} 
+{(x_2 - x_0) + (x_2 - x_1)}
+\end{equation}
+
+\subsubsection{ydd}
+
+For $\lambda^{ydd}_0$ we need:
+\begin{align}
+\lambda^{ydd}_0(x_0) & = 1 \\
+\partial\lambda^{ydd}_0(x_1) & = 0 \nonumber \\
+\partial\lambda^{ydd}_0(x_2) & = 0 \nonumber
+\end{align}
+Because $\lambda^{ydd}_0$ is quadratic,
+$\partial\lambda^{ydd}_0$ is affine, 
+and the only way its values
+at $x_1$ and $x_2$ can both be zero is if it is a constant, so 
+\begin{equation}
+\lambda^{ydd}_0(x) = 1
+\end{equation}
+
+$\lambda_1$ must satisfy:
+\begin{align}
+\lambda^{ydd}_1(x_0) & = 0 \\
+\partial\lambda^{ydd}_1(x_1) & = 1 \nonumber \\
+\partial\lambda^{ydd}_1(x_2) & = 0 \nonumber
+\end{align}
+This suggests functions proportional to $(x - x_0) (x - c)$ 
+for some $c$. Then 
+$ 0 = (x_2 - x_0) + (x_2 - c)$
+implies $ c = 2 x_2 - x_0$.
+Then we normalize with 
+$\partial\lambda^{ydd}_1(x_1) = (x1 - x0) + (x_1 - 2 x_2 + x_0) 
+= 2 (x_1 - x_2)$, so 
+\begin{equation}
+\lambda^{ydd}_1(x) = 
+\frac {(x - x_0) (x + x_0 - 2 x_2)} {2 (x_1 - x_2)}
+\end{equation}
+and, by symmetry,
+\begin{equation}
+\lambda^{ydd}_2(x) = 
+\frac {(x - x_0) (x + x_0 - 2 x_1)} {2 (x_2 - x_1)}
+\end{equation}
+
+
+ 
+ 
