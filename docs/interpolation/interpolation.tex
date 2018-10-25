@@ -324,16 +324,18 @@ for some $c$. Then
 $ 0 = (x_2 - x_0) + (x_2 - c)$
 implies $ c = 2 x_2 - x_0$.
 Then we normalize with 
-$\partial\lambda^{ydd}_1(x_1) = (x_1 - x_0) + (x_1 - 2 x_2 + x_0) 
+$\partial\lambda^{ydd}_1(x_1) = (x_1 - x_0) + (x_1 - x_2) + (x_0 - x2) 
 = 2 (x_1 - x_2)$, so 
 \begin{equation}
 \lambda^{ydd}_1(x) = 
-\frac {(x - x_0) (x + x_0 - 2 x_2)} {2 (x_1 - x_2)}
+\frac {(x - x_0) \left((x - x_2) + (x_0 - x_2)\right)} 
+{2 (x_1 - x_2)}
 \end{equation}
 and, by symmetry,
 \begin{equation}
 \lambda^{ydd}_2(x) = 
-\frac {(x - x_0) (x + x_0 - 2 x_1)} {2 (x_2 - x_1)}
+\frac {(x - x_0) \left( (x -x_1) + (x_0 - x_1) \right)} 
+{2 (x_2 - x_1)}
 \end{equation}
 
 \subsection{Cubic Lagrange}
