@@ -238,7 +238,7 @@ That suggests that it might be useful to construct similar basis
 functions to interpolate combinations of value and slope 
 constraints.
 
-\subsection{Quadratic case}
+\subsection{Quadratic Lagrange}
 
 \subsubsection{yyy}
 
@@ -324,7 +324,7 @@ for some $c$. Then
 $ 0 = (x_2 - x_0) + (x_2 - c)$
 implies $ c = 2 x_2 - x_0$.
 Then we normalize with 
-$\partial\lambda^{ydd}_1(x_1) = (x1 - x0) + (x_1 - 2 x_2 + x_0) 
+$\partial\lambda^{ydd}_1(x_1) = (x_1 - x_0) + (x_1 - 2 x_2 + x_0) 
 = 2 (x_1 - x_2)$, so 
 \begin{equation}
 \lambda^{ydd}_1(x) = 
@@ -336,6 +336,110 @@ and, by symmetry,
 \frac {(x - x_0) (x + x_0 - 2 x_1)} {2 (x_2 - x_1)}
 \end{equation}
 
-
+\subsection{Cubic Lagrange}
  
+\subsubsection{yyyy}
+
+For example:
+
+\begin{equation}
+\lambda^{yyy}_0(x) = 
+\frac {(x - x_1) (x - x_2) (x - x_3)} 
+{(x_0 - x_1) (x_0 - x_2) (x_0 - x_3)}
+\end{equation}
+
+\subsubsection{yyyd}
+
+We need 
+\begin{align}
+\lambda^{yyyd}_0(x_0) & = 1 \\ 
+\lambda^{yyyd}_0(x_1) & = 0 \nonumber \\
+\lambda^{yyyd}_0(x_2) & = 0 \nonumber \\
+\partial\lambda^{yyyd}_0(x_3) & = 0 \nonumber 
+\end{align}
+
+Consider functions proportional to $f(x) = (x-x_1)(x-x_2)(x-c_0)$.
+This satisfies the first $3$ constraints.
+For the fourth, we need
+\begin{equation}
+0 = (x_3-x_1)(x_3-x_2) + (x_3-x_2)(x_3-c_0) + (x_3-c_0)(x_3-x_1)
+\end{equation}
+which implies
+\begin{align}
+c_0 & = 
+\frac
+{x_3\left((x_3-x_1)+ (x_3-x_2)\right) + (x_3-x_1)(x_3-x_2)}
+{(x_3-x_1)+ (x_3-x_2)} 
+\\
+ &= x_3 + 
+\frac
+{(x_3-x_1)(x_3-x_2)}
+{(x_3-x_1)+ (x_3-x_2)} 
+\nonumber
+\end{align}
+
+To satisfy the first constraint,
+we normalize with $f(x_0)$.
+Therefore:
+\begin{align}
+\lambda^{yyyd}_0(x) & = 
+\frac {(x - x_1) (x - x_2) (x - c_0)} 
+{(x_0 - x_1) (x_0 - x_2) (x_0 - c_0))} 
+\\
+\lambda^{yyyd}_1(x) & = 
+\frac {(x - x_2) (x - x_0) (x - c_1)} 
+{(x_1 - x_2) (x_1 - x_0) (x_1 - c_1))} 
+\nonumber \\
+\lambda^{yyyd}_2(x) & = 
+\frac {(x - x_0) (x - x_1) (x - c_2)} 
+{(x_2 - x_0) (x_2 - x_1) (x_2 - c_2))} 
+\nonumber \\
+\lambda^{yyyd}_3(x) & = 
+\frac {(x - x_0) (x - x_1) (x - x_2)} 
+{\left( (x_3 - x_0) (x_3 - x_1) \right)
++ \left( (x_3 - x_1) (x_3 - x_2) \right)
++ \left( (x_3 - x_2) (x_3 - x_0) \right)} 
+\nonumber
+\end{align}
+
+$\lambda^{yyyd}_1$ and $\lambda^{yyyd}_2$ follow by symmetry.
+$\lambda^{yyyd}_3$ is the standard Lagrange form,
+normalized for unit slope rather unit value, and fairly obviously
+satisfies its constraintz.
+ 
+\subsubsection{yydd}
+
+We need 
+\begin{align}
+\lambda^{yyyd}_0(x_0) & = 1 \\ 
+\lambda^{yyyd}_0(x_1) & = 0 \nonumber \\
+\partial\lambda^{yyyd}_0(x_2) & = 0 \nonumber \\
+\partial\lambda^{yyyd}_0(x_3) & = 0 \nonumber 
+\end{align}
+
+\begin{align}
+a & = \frac
+{
+\sqrt {-4 x_1^{2}+4 x_1 x_2+
+4 x_1 x_3+3 x_2^{2}-10 x_2 x_3+3 x_3^{2}} 
+\sqrt {3}-2 x_1+3 x_2+3 x_3
+}{
+4
+} 
+\\
+b & = \frac
+{
+-\sqrt {-4 x_1^{2}+4 x_1 x_2+
+4 x_1 x_3+3 x_2^{2}-10 x_2 x_3+3 x_3^{2}} 
+\sqrt {3}-2 x_1+3 x_2+3 x_3
+}{
+4
+} 
+\nonumber
+\end{align}
+
+\begin{equation}
+a=\sqrt {-2 x_1 x_2+3 x_2^{2}} , a=-\sqrt {-2 x_1 x_2+3 x_2^{2}}
+\end{equation}
+
  
