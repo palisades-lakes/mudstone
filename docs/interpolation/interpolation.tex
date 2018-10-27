@@ -413,35 +413,85 @@ satisfies its constraintz.
 
 We need 
 \begin{align}
-\lambda^{yyyd}_0(x_0) & = 1 \\ 
-\lambda^{yyyd}_0(x_1) & = 0 \nonumber \\
-\partial\lambda^{yyyd}_0(x_2) & = 0 \nonumber \\
-\partial\lambda^{yyyd}_0(x_3) & = 0 \nonumber 
+\lambda^{yydd}_0(x_0) & = 1 \\ 
+\lambda^{yydd}_0(x_1) & = 0 \nonumber \\
+\partial\lambda^{yydd}_0(x_2) & = 0 \nonumber \\
+\partial\lambda^{yydd}_0(x_3) & = 0 \nonumber 
 \end{align}
 
+Consider functions of the form $(x-x_1)(x-(a_0+b_0))(x-(a_0-b_)))$.
+The second (value) constraint is automatically satisfied.
+The slope constraints are satisfied by
 \begin{align}
-a & = \frac
-{
-\sqrt {-4 x_1^{2}+4 x_1 x_2+
-4 x_1 x_3+3 x_2^{2}-10 x_2 x_3+3 x_3^{2}} 
-\sqrt {3}-2 x_1+3 x_2+3 x_3
-}{
-4
-} 
+a_0 & = \frac{3 (x_2 + x_3) - 2 x_1}{4} \\ 
+b_0 & = \frac{
+\sqrt{3}
+\sqrt{
+- 4 x_1^{2} 
++ 4 x_1 x_2 
++ 4 x_1 x_3 
++ 3 x_2^{2}
+- 10 x_2 x_3
++ 3 x_3^{2}
+}
+}
+{4} \nonumber
+\end{align}
+\begin{align}
+a_0 & = \frac{3 (x_2 + x_3) - 2 x_1}{4} \\ 
+b_0 & = \frac{
+\sqrt{ 9 (x_2 - x_3)^2 - 12 (x_1 - x_2) (x_1 -x_3)}
+}
+{4} \nonumber
+\end{align}
+(See \texttt{lagrange-yydd.reduce} for an example of using a
+symbolic algebra system to solve this.)
+
+By symmetry,  
+\begin{align}
+\lambda^{yydd}_0(x) & =
+\frac{(x-x_1)(x-(a_0+b_0))(x-(a_0-b_0))}
+{(x_0-x_1)(x_0-(a_0+b_0))(x_0-(a_0-b_0))}
 \\
-b & = \frac
-{
--\sqrt {-4 x_1^{2}+4 x_1 x_2+
-4 x_1 x_3+3 x_2^{2}-10 x_2 x_3+3 x_3^{2}} 
-\sqrt {3}-2 x_1+3 x_2+3 x_3
-}{
-4
-} 
+\lambda^{yydd}_1(x) & =
+\frac{(x-x_1)(x-(a_1+b_1))(x-(a_1-b_1))}
+{(x_1-x_0)(x_1-(a_0+b_1))(x_1-(a_1-b_1))}
 \nonumber
 \end{align}
+where $a_1$ and $b_1$ can be obtained 
+by replacing $x_1$ by $x_0$ in the formulas
+above.
 
-\begin{equation}
-a=\sqrt {-2 x_1 x_2+3 x_2^{2}} , a=-\sqrt {-2 x_1 x_2+3 x_2^{2}}
-\end{equation}
-
- 
+For $\lambda^{yydd}_2$ and $\lambda^{yydd}_3$, 
+consider functions of the form $(x-x_0)(x-x_1)(x-c_i)$.
+We need, for example, 
+\begin{align}
+\lambda^{yydd}_3(x_0) & = 1 \\ 
+\lambda^{yydd}_3(x_1) & = 0 \nonumber \\
+\partial\lambda^{yydd}_3(x_2) & = 0 \nonumber \\
+\partial\lambda^{yydd}_3(x_3) & = 1 \nonumber 
+\end{align}
+It's reasonably easy to see that 
+\begin{align}
+c_2 & = x_3 + 
+\frac{(x_3 - x_0)(x_3 - x_1)}{(x_3 - x_0) + (x_3 - x_1)} \\
+c_3 & = x_2 + 
+\frac{(x_2 - x_0)(x_2 - x_1)}{(x_2 - x_0) + (x_2 - x_1)} \\
+\end{align}
+so
+\begin{align}
+\lambda^{yydd}_2(x) & =
+\frac{(x-x_0)(x-x_1)(x-c_2)}
+{
+(x_2-x_0)(x_2-x_1) +
+(x_2-x_1)(x_2-c_2) +
+(x_2-c_2)(x_2-x_0)}
+\\
+\lambda^{yydd}_3(x) & =
+\frac{(x-x_0)(x-x_1)(x-x_2)}
+{
+(x_3-x_0)(x_3-x_1) +
+(x_3-x_1)(x_3-c_3) +
+(x+3-c_3)(x_3-x_0)}
+\nonumber
+\end{align}
