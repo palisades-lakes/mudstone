@@ -167,11 +167,11 @@ In the second:
 
 \subsection{Quadratic Monomial}
 
-\subsubsection{$yyy$}
+\subsubsection{yyy}
 
 \input{monomial-yyy}
 
-\subsubsection{$yyd$}
+\subsubsection{yyd}
 
 $3$ domain locations:
 \input{monomial-yyd3}
@@ -179,7 +179,7 @@ $3$ domain locations:
 $2$ domain locations:
 \input{monomial-yyd2}
 
-\subsubsection{$ydd$}
+\subsubsection{ydd}
 
 $3$ domain locations:
 \input{monomial-ydd3}
@@ -191,11 +191,11 @@ $2$ domain locations:
 
 \subsection{Cubic Monomial}
 
-\subsubsection{$yyyy$}
+\subsubsection{yyyy}
 
 \input{monomial-yyyy-1}
 
-\subsubsection{$yyyd$}
+\subsubsection{yyyd}
 
 $4$ domain locations:
 \input{monomial-yyyd4}
@@ -203,7 +203,7 @@ $4$ domain locations:
 $3$ domain locations:
 \input{monomial-yyyd3}
 
-\subsubsection{$yydd$}
+\subsubsection{yydd}
 
 Showing the most likely cases.
 
@@ -213,7 +213,7 @@ $4$ domain locations:
 $2$ domain locations:
 \input{monomial-yydd2}
 
-\subsubsection{$yddd$}
+\subsubsection{yddd}
 $4$ domain locations:
 
 \input{monomial-yddd4}
@@ -238,6 +238,39 @@ That suggests that it might be useful to construct similar basis
 functions to interpolate combinations of value and slope 
 constraints.
 
+\subsection{Affine Lagrange}
+
+\subsubsection{yy}
+
+It's easy enough to see that:
+\begin{align}
+\lambda^{\text{yy}}_0(x) & = \frac {(x - x_1)} {(x_0 - x_1)} \\
+\lambda^{\text{yy}}_1(x) & = \frac {(x - x_0)} {(x_1 - x_0)} \nonumber
+\end{align}
+satisfies
+\begin{align}
+\lambda^{\text{yy}}_0(x_0) & = 1 \\
+\lambda^{\text{yy}}_0(x_1) & = 0 \nonumber \\
+\lambda^{\text{yy}}_1(x_0) & = 0 \nonumber \\
+\lambda^{\text{yy}}_1(x_1) & = 1 \nonumber 
+\end{align}
+
+
+\subsubsection{yd}
+
+We need $\partial\lambda^{\text{yd}}_0 (x_1) = 0$,
+but that implies affine $\lambda^{\text{yd}}_0$ 
+must be a constant.
+So we have to extend our definition of Lagrange basis functions
+to include constants.
+We also need $\lambda^{\text{yd}}_1 (x_0) = 0$ and
+$\partial\lambda^{\text{yd}}_1 (x_1) = 1$, leading to the basis:
+\begin{align}
+\lambda^{\text{yd}}_0 (x) & = 1 \\
+\lambda^{\text{yd}}_1 (x) & = x - x_0 \nonumber
+\end{align}
+
+
 \subsection{Quadratic Lagrange}
 
 \subsubsection{yyy}
@@ -245,16 +278,16 @@ constraints.
 For example:
 
 \begin{equation}
-\lambda^{yyy}_0(x) = 
+\lambda^{\text{yyy}}_0(x) = 
 \frac {(x - x_1) (x - x_2)} {(x_0 - x_1) (x_0 - x_2)}
 \end{equation}
 
 \subsubsection{yyd}
 
 We need 
-$\lambda^{yyd}_0(x_0) = 1$, 
-$\lambda^{yyd}_0(x_1) = 0$, and
-$\partial\lambda^{yyd}_0(x_2) = 0$. 
+$\lambda^{\text{yyd}}_0(x_0) = 1$, 
+$\lambda^{\text{yyd}}_0(x_1) = 0$, and
+$\partial\lambda^{\text{yyd}}_0(x_2) = 0$. 
 
 The second constraint suggests looking at functions of the form
 $f(x) = (x - x_1) (x - c)$, which includes all quadratic 
@@ -264,7 +297,7 @@ $\partial{f}(x_2) = 0$ implies that
 $c = 2 x_2 - x_1$,
 so
 \begin{equation}
-\lambda^{yyd}_0(x) = 
+\lambda^{\text{yyd}}_0(x) = 
 \frac 
 {(x - x_1) \left( (x - x_2) + (x_1 - x_2) \right)} 
 {(x_0 - x_1) ((x_0 - x_2) + (x_1 - x_2))}
@@ -275,65 +308,65 @@ satisfy the constraints.
 
 By symmetry, 
 \begin{equation}
-\lambda^{yyd}_1(x) = 
+\lambda^{\text{yyd}}_1(x) = 
 \frac 
 {(x - x_0) \left( (x - x_2) + (x_0 - x_2) \right)} 
 {(x_1 - x_0) \left( (x_1 - x_2) + (x_0 - x_2) \right)}
 \end{equation}
 
- For $\lambda^{yyd}_2$, we need 
-$\lambda^{yyd}_2(x_0) = 0$, 
-$\lambda^{yyd}_2(x_1) = 0$, and
-$\partial\lambda^{yyd}_2(x_2) = 1$. 
+ For $\lambda^{\text{yyd}}_2$, we need 
+$\lambda^{\text{yyd}}_2(x_0) = 0$, 
+$\lambda^{\text{yyd}}_2(x_1) = 0$, and
+$\partial\lambda^{\text{yyd}}_2(x_2) = 1$. 
 The standard form $f(x) = (x-x_0) (x-x_1)$ satisfies the first 
 $2$ constraints. 
 To satisfy the third, we simply need to normailize with
 $\partial{f}(x_2) = (x_2 - x_0) + (x_2 - x_1)$:
 
 \begin{equation}
-\lambda^{yyd}_2(x) = 
+\lambda^{\text{yyd}}_2(x) = 
 \frac 
 {(x - x_0) (x - x_1)} 
 {(x_2 - x_0) + (x_2 - x_1)}
 \end{equation}
 
-\subsubsection{ydd}
+\subsubsection{ydd}\label{sec:lagrange-ydd}
 
-For $\lambda^{ydd}_0$ we need:
+For $\lambda^{\text{ydd}}_0$ we need:
 \begin{align}
-\lambda^{ydd}_0(x_0) & = 1 \\
-\partial\lambda^{ydd}_0(x_1) & = 0 \nonumber \\
-\partial\lambda^{ydd}_0(x_2) & = 0 \nonumber
+\lambda^{\text{ydd}}_0(x_0) & = 1 \\
+\partial\lambda^{\text{ydd}}_0(x_1) & = 0 \nonumber \\
+\partial\lambda^{\text{ydd}}_0(x_2) & = 0 \nonumber
 \end{align}
-Because $\lambda^{ydd}_0$ is quadratic,
-$\partial\lambda^{ydd}_0$ is affine, 
+Because $\lambda^{\text{ydd}}_0$ is quadratic,
+$\partial\lambda^{\text{ydd}}_0$ is affine, 
 and the only way its values
 at $x_1$ and $x_2$ can both be zero is if it is a constant, so 
 \begin{equation}
-\lambda^{ydd}_0(x) = 1
+\lambda^{\text{ydd}}_0(x) = 1
 \end{equation}
 
 $\lambda_1$ must satisfy:
 \begin{align}
-\lambda^{ydd}_1(x_0) & = 0 \\
-\partial\lambda^{ydd}_1(x_1) & = 1 \nonumber \\
-\partial\lambda^{ydd}_1(x_2) & = 0 \nonumber
+\lambda^{\text{ydd}}_1(x_0) & = 0 \\
+\partial\lambda^{\text{ydd}}_1(x_1) & = 1 \nonumber \\
+\partial\lambda^{\text{ydd}}_1(x_2) & = 0 \nonumber
 \end{align}
 This suggests functions proportional to $(x - x_0) (x - c)$ 
 for some $c$. Then 
 $ 0 = (x_2 - x_0) + (x_2 - c)$
 implies $ c = 2 x_2 - x_0$.
 Then we normalize with 
-$\partial\lambda^{ydd}_1(x_1) = (x_1 - x_0) + (x_1 - x_2) + (x_0 - x2) 
+$\partial\lambda^{\text{ydd}}_1(x_1) = (x_1 - x_0) + (x_1 - x_2) + (x_0 - x2) 
 = 2 (x_1 - x_2)$, so 
 \begin{equation}
-\lambda^{ydd}_1(x) = 
+\lambda^{\text{ydd}}_1(x) = 
 \frac {(x - x_0) \left((x - x_2) + (x_0 - x_2)\right)} 
 {2 (x_1 - x_2)}
 \end{equation}
 and, by symmetry,
 \begin{equation}
-\lambda^{ydd}_2(x) = 
+\lambda^{\text{ydd}}_2(x) = 
 \frac {(x - x_0) \left( (x -x_1) + (x_0 - x_1) \right)} 
 {2 (x_2 - x_1)}
 \end{equation}
@@ -345,7 +378,7 @@ and, by symmetry,
 For example:
 
 \begin{equation}
-\lambda^{yyy}_0(x) = 
+\lambda^{\text{yyy}}_0(x) = 
 \frac {(x - x_1) (x - x_2) (x - x_3)} 
 {(x_0 - x_1) (x_0 - x_2) (x_0 - x_3)}
 \end{equation}
@@ -354,10 +387,10 @@ For example:
 
 We need 
 \begin{align}
-\lambda^{yyyd}_0(x_0) & = 1 \\ 
-\lambda^{yyyd}_0(x_1) & = 0 \nonumber \\
-\lambda^{yyyd}_0(x_2) & = 0 \nonumber \\
-\partial\lambda^{yyyd}_0(x_3) & = 0 \nonumber 
+\lambda^{\text{yyyd}}_0(x_0) & = 1 \\ 
+\lambda^{\text{yyyd}}_0(x_1) & = 0 \nonumber \\
+\lambda^{\text{yyyd}}_0(x_2) & = 0 \nonumber \\
+\partial\lambda^{\text{yyyd}}_0(x_3) & = 0 \nonumber 
 \end{align}
 
 Consider functions proportional to $f(x) = (x-x_1)(x-x_2)(x-c_0)$.
@@ -384,19 +417,19 @@ To satisfy the first constraint,
 we normalize with $f(x_0)$.
 Therefore:
 \begin{align}
-\lambda^{yyyd}_0(x) & = 
+\lambda^{\text{yyyd}}_0(x) & = 
 \frac {(x - x_1) (x - x_2) (x - c_0)} 
 {(x_0 - x_1) (x_0 - x_2) (x_0 - c_0))} 
 \\
-\lambda^{yyyd}_1(x) & = 
+\lambda^{\text{yyyd}}_1(x) & = 
 \frac {(x - x_2) (x - x_0) (x - c_1)} 
 {(x_1 - x_2) (x_1 - x_0) (x_1 - c_1))} 
 \nonumber \\
-\lambda^{yyyd}_2(x) & = 
+\lambda^{\text{yyyd}}_2(x) & = 
 \frac {(x - x_0) (x - x_1) (x - c_2)} 
 {(x_2 - x_0) (x_2 - x_1) (x_2 - c_2))} 
 \nonumber \\
-\lambda^{yyyd}_3(x) & = 
+\lambda^{\text{yyyd}}_3(x) & = 
 \frac {(x - x_0) (x - x_1) (x - x_2)} 
 {\left( (x_3 - x_0) (x_3 - x_1) \right)
 + \left( (x_3 - x_1) (x_3 - x_2) \right)
@@ -404,39 +437,39 @@ Therefore:
 \nonumber
 \end{align}
 
-$\lambda^{yyyd}_1$ and $\lambda^{yyyd}_2$ follow by symmetry.
-$\lambda^{yyyd}_3$ is the standard Lagrange form,
+$\lambda^{\text{yyyd}}_1$ and $\lambda^{\text{yyyd}}_2$ follow by symmetry.
+$\lambda^{\text{yyyd}}_3$ is the standard Lagrange form,
 normalized for unit slope rather unit value, and fairly obviously
 satisfies its constraintz.
  
-\subsubsection{yydd}
+\subsubsection{yydd}\label{sec:lagrange-yydd}
 
 We need 
 \begin{align}
-\lambda^{yydd}_0(x_0) & = 1 \\ 
-\lambda^{yydd}_0(x_1) & = 0 \nonumber \\
-\partial\lambda^{yydd}_0(x_2) & = 0 \nonumber \\
-\partial\lambda^{yydd}_0(x_3) & = 0 \nonumber 
+\lambda^{\text{yydd}}_0(x_0) & = 1 \\ 
+\lambda^{\text{yydd}}_0(x_1) & = 0 \nonumber \\
+\partial\lambda^{\text{yydd}}_0(x_2) & = 0 \nonumber \\
+\partial\lambda^{\text{yydd}}_0(x_3) & = 0 \nonumber 
 \end{align}
 
 Consider functions of the form $(x-x_1)(x-(a_0+b_0))(x-(a_0-b_)))$.
 The second (value) constraint is automatically satisfied.
 The slope constraints are satisfied by
-\begin{align}
-a_0 & = \frac{3 (x_2 + x_3) - 2 x_1}{4} \\ 
-b_0 & = \frac{
-\sqrt{3}
-\sqrt{
-- 4 x_1^{2} 
-+ 4 x_1 x_2 
-+ 4 x_1 x_3 
-+ 3 x_2^{2}
-- 10 x_2 x_3
-+ 3 x_3^{2}
-}
-}
-{4} \nonumber
-\end{align}
+% \begin{align}
+% a_0 & = \frac{3 (x_2 + x_3) - 2 x_1}{4} \\ 
+% b_0 & = \frac{
+% \sqrt{3}
+% \sqrt{
+% - 4 x_1^{2} 
+% + 4 x_1 x_2 
+% + 4 x_1 x_3 
+% + 3 x_2^{2}
+% - 10 x_2 x_3
+% + 3 x_3^{2}
+% }
+% }
+% {4} \nonumber
+% \end{align}
 \begin{align}
 a_0 & = \frac{3 (x_2 + x_3) - 2 x_1}{4} \\ 
 b_0 & = \frac{
@@ -449,12 +482,12 @@ symbolic algebra system to solve this.)
 
 By symmetry,  
 \begin{align}
-\lambda^{yydd}_0(x) & =
+\lambda^{\text{yydd}}_0(x) & =
 \frac{(x-x_1)(x-(a_0+b_0))(x-(a_0-b_0))}
 {(x_0-x_1)(x_0-(a_0+b_0))(x_0-(a_0-b_0))}
 \\
-\lambda^{yydd}_1(x) & =
-\frac{(x-x_1)(x-(a_1+b_1))(x-(a_1-b_1))}
+\lambda^{\text{yydd}}_1(x) & =
+\frac{(x-x_0)(x-(a_1+b_1))(x-(a_1-b_1))}
 {(x_1-x_0)(x_1-(a_0+b_1))(x_1-(a_1-b_1))}
 \nonumber
 \end{align}
@@ -462,14 +495,14 @@ where $a_1$ and $b_1$ can be obtained
 by replacing $x_1$ by $x_0$ in the formulas
 above.
 
-For $\lambda^{yydd}_2$ and $\lambda^{yydd}_3$, 
+For $\lambda^{\text{yydd}}_2$ and $\lambda^{\text{yydd}}_3$, 
 consider functions of the form $(x-x_0)(x-x_1)(x-c_i)$.
 We need, for example, 
 \begin{align}
-\lambda^{yydd}_3(x_0) & = 1 \\ 
-\lambda^{yydd}_3(x_1) & = 0 \nonumber \\
-\partial\lambda^{yydd}_3(x_2) & = 0 \nonumber \\
-\partial\lambda^{yydd}_3(x_3) & = 1 \nonumber 
+\lambda^{\text{yydd}}_3(x_0) & = 1 \\ 
+\lambda^{\text{yydd}}_3(x_1) & = 0 \nonumber \\
+\partial\lambda^{\text{yydd}}_3(x_2) & = 0 \nonumber \\
+\partial\lambda^{\text{yydd}}_3(x_3) & = 1 \nonumber 
 \end{align}
 It's reasonably easy to see that 
 \begin{align}
@@ -480,14 +513,14 @@ c_3 & = x_2 +
 \end{align}
 so
 \begin{align}
-\lambda^{yydd}_2(x) & =
+\lambda^{\text{yydd}}_2(x) & =
 \frac{(x-x_0)(x-x_1)(x-c_2)}
 {
 (x_2-x_0)(x_2-x_1) +
 (x_2-x_1)(x_2-c_2) +
 (x_2-c_2)(x_2-x_0)}
 \\
-\lambda^{yydd}_3(x) & =
+\lambda^{\text{yydd}}_3(x) & =
 \frac{(x-x_0)(x-x_1)(x-x_2)}
 {
 (x_3-x_0)(x_3-x_1) +
@@ -495,3 +528,103 @@ so
 (x+3-c_3)(x_3-x_0)}
 \nonumber
 \end{align}
+
+\paragraph{Hermite interpolation}\label{sec:Hermite-yydd}
+
+When $x_0 = x_2$ and $x_1 = x_3$ --- $2$ knots with value and 
+slope specified at each --- 
+we have the standard cubic Hermite interpolation
+problem\cite{wiki:cubic-hermite-spline}.
+
+The constraints are then:
+\begin{align}
+\lambda^{\text{hermite}}_{00}(x_0) & = 1 \\ 
+\lambda^{\text{hermite}}_{00}(x_1) & = 0 \nonumber \\
+\partial\lambda^{\text{hermite}}_{00}(x_0) & = 0 \nonumber \\
+\partial\lambda^{\text{hermite}}_{00}(x_1) & = 0 \nonumber \\
+\lambda^{\text{hermite}}_{01}(x_0) & = 0 \\ 
+\lambda^{\text{hermite}}_{01}(x_1) & = 1 \nonumber \\
+\partial\lambda^{\text{hermite}}_{01}(x_0) & = 0 \nonumber \\
+\partial\lambda^{\text{hermite}}_{01}(x_1) & = 0 \nonumber \\
+\lambda^{\text{hermite}}_{10}(x_0) & = 0 \\ 
+\lambda^{\text{hermite}}_{10}(x_1) & = 0 \nonumber \\
+\partial\lambda^{\text{hermite}}_{10}(x_0) & = 1 \nonumber \\
+\partial\lambda^{\text{hermite}}_{10}(x_1) & = 0 \nonumber \\
+\lambda^{\text{hermite}}_{11}(x_0) & = 0 \\ 
+\lambda^{\text{hermite}}_{11}(x_1) & = 0 \nonumber \\
+\partial\lambda^{\text{hermite}}_{11}(x_0) & = 0 \nonumber \\
+\partial\lambda^{\text{hermite}}_{11}(x_1) & = 1 \nonumber 
+\end{align}
+The $4$ basis functions can be determined by substituting $x_0$
+for $x_2$ and $x_1$ for $x_3$ in the results in 
+section~\ref{sec:lagrange-yydd}:
+\begin{align}
+\lambda^{\text{hermite}}_{00}(x) & =
+\frac
+{(x-x_1)^2 \left(2(x - x_0) + (x_1 - x_0) \right)}
+{(x_1-x_0)^3}
+\\
+\lambda^{\text{hermite}}_{01}(x) & =
+\frac
+{(x-x_0)^2 \left(2(x - x_1) + (x_0 - x_1) \right)}
+{(x_0-x_1)^3}
+\nonumber \\
+\lambda^{\text{hermite}}_{10}(x) & =
+\frac {(x-x_1)^2(x-x_0)} {(x_0-x_1)^2}
+\nonumber \\
+\lambda^{\text{hermite}}_{11}(x) & =
+\frac {(x-x_0)^2(x-x_1)} {(x_1-x_0)^2}
+\nonumber
+\end{align}
+
+\subsubsection{yddd}\label{sec:lagrange-yddd}
+
+For $\lambda^{\text{yddd}}_0$, we need 
+\begin{align}
+\lambda^{\text{yddd}}_0(x_0) & = 1 \\ 
+\partial\lambda^{\text{yddd}}_0(x_1) & = 0 \nonumber \\
+\partial\lambda^{\text{yddd}}_0(x_2) & = 0 \nonumber \\
+\partial\lambda^{\text{yddd}}_0(x_3) & = 0 \nonumber 
+\end{align}
+As in section~\ref{sec:lagrange-ydd},
+this can only be satisfied by a constant function:
+$\lambda^{\text{yddd}}_0(x) = 1$.
+
+The other $3$ basis functions must satisfy variations of
+\begin{align}
+\lambda^{\text{yddd}}_1(x_0) & = 0 \\ 
+\partial\lambda^{\text{yddd}}_1(x_1) & = 1 \nonumber \\
+\partial\lambda^{\text{yddd}}_1(x_2) & = 0 \nonumber \\
+\partial\lambda^{\text{yddd}}_1(x_3) & = 0 \nonumber 
+\end{align}
+This is essentially the same problem as that of $\lambda^{\text{yydd}}_0$
+in section~\ref{sec:lagrange-yydd},
+so the solution is:
+\begin{align}
+\lambda^{\text{yddd}}_1(x) & =
+\frac{(x-x_0)(x-(a_1+b_1))(x-(a_1-b_1))}
+{(x_1-x_0)(x_1-(a_1+b_1))(x_1-(a_1-b_1))}
+\\
+\lambda^{\text{yddd}}_2(x) & =
+\frac{(x-x_0)(x-(a_2+b_2))(x-(a_2-b_2))}
+{(x_2-x_0)(x_2-(a_2+b_2))(x_2-(a_2-b_2))}
+\nonumber \\
+\lambda^{\text{yddd}}_3(x) & =
+\frac{(x-x_0)(x-(a_3+b_3))(x-(a_3-b_3))}
+{(x_3-x_0)(x_3-(a_3+b_3))(x_3-(a_3-b_3))}
+\nonumber
+\end{align}
+where
+\begin{align}
+a_1 & = 
+\frac{3 (x_2 + x_3) - 2 x_0}{4} 
+\\ 
+b_1 & = 
+\frac{\sqrt{ 9 (x_2 - x_3)^2 - 12 (x_0 - x_2) (x_0 -x_3)}}{4} 
+\nonumber
+\end{align}
+and similarly for $a_2,b_2$ and $a_3,b_3$.
+ 
+
+
+
