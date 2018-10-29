@@ -1,0 +1,75 @@
+%off echo$
+on nat$
+linelength(120);
+off ratpri;
+off allfac;
+off div;
+off rat;
+off list;
+on factor;
+off gcd;
+off horner;
+on nosplit;
+on revpri;
+off varopt;
+realvalued mu0,mu1,mu2,mu3,y0,y1,y2,y3,d0,d1,d1,d3,x0,x1,x2,x3;
+order y0,y1,y2,y3,mu0,mu1,mu2,mu3,d0,d1,d1,d3,x,x0,x1,x2,x3;
+load_package "rlfi";
+LALINE!* := 120;
+off verbatim;
+mathstyle equation;
+%------------------------------------------------------
+% yyy quadratic
+s := solve(
+  { y0 = mu0 + mu1 * x0 + mu2 * x0^2,
+    y1 = mu0 + mu1 * x1 + mu2 * x1^2,
+    y2 = mu0 + mu1 * x2 + mu2 * x2^2,
+    0 = mu1 + 2*mu2*x },
+  { x, mu0, mu1, mu2 });
+first(first(s));
+%------------------------------------------------------
+% yyyy cubic
+s := solve(
+  { y0 = mu0 + mu1 * x0 + mu2 * x0^2 + mu3 * x0^3,
+    y1 = mu0 + mu1 * x1 + mu2 * x1^2 + mu3 * x1^3,
+    y2 = mu0 + mu1 * x2 + mu2 * x2^2 + mu3 * x2^3,
+    y3 = mu0 + mu1 * x3 + mu2 * x3^2 + mu3 * x3^3,
+    0 = df(mu0 + mu1 * x + mu2 * x^2 + mu3 * x^3, x)},
+  { x, mu0, mu1, mu2, mu3 });
+first(first(s));
+%------------------------------------------------------
+% yydd2 cubic
+s := solve(
+  { y0 = mu0 + mu1*x0 + mu2*x0^2 + mu3*x0^3,
+    y1 = mu0 + mu1*x1 + mu2*x1^2 + mu3*x1^3,
+    d0 = mu1 + 2*mu2*x0 + 3*mu3*x0^2,
+    d1 = mu1 + 2*mu2*x1 + 3*mu3*x1^2,
+    0 = df(mu0 + mu1*x + mu2*x^2 + mu3*x^3, x)},
+  { x, mu0, mu1, mu2, mu3 });
+first(first(s));
+%------------------------------------------------------
+c := { y0 = mu0 + mu1 * x0 + mu2 * x0^2,
+       y1 = mu0 + mu1 * x1 + mu2 * x1^2,
+       y2 = mu0 + mu1 * x2 + mu2 * x2^2,
+       0 = mu1 + 2*mu2*x }$
+v := { mu0, mu1, mu2, x }$
+s := solve(c,v)$
+out "docs/interpolation/monomial-yyy.rawtex"$
+on latex; on lasimp$
+on exp$ write c; off exp$ write s;
+off latex;      
+shut "docs/interpolation/monomial-yyy.rawtex";
+%------------------------------------------------------
+solve(0 = df(mu0 + mu1 * x + mu2 * x^2,x),x);
+solve(0 = df(mu0 + mu1 * x + mu2 * x^2 + mu3* x^3,x),x);
+%------------------------------------------------------
+out "docs/interpolation/monomial-argmin.rawtex"$
+on lasimp;
+on latex;
+on exp$
+solve(0 = df(mu0 + mu1 * x + mu2 * x^2,x),x);
+solve(0 = df(mu0 + mu1 * x + mu2 * x^2 + mu3* x^3,x),x);
+off latex;      
+shut "docs/interpolation/monomial-argmin.rawtex";
+%------------------------------------------------------
+;END;

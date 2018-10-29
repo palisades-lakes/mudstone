@@ -6,7 +6,7 @@
   
   {:doc "fix reduce latex output"
    :author "palisades dot lakes at gmail dot com"
-   :version "2018-10-22"}
+   :version "2018-10-29"}
   
   (:require [clojure.java.io :as io]
             [clojure.string :as s]))
@@ -45,6 +45,8 @@
         text (s/replace text "=" " & = ")
         text (s/replace text "-" " - ")
         text (s/replace text #"([axyd]{1})([0123]{1})" "$1_$2")
+        text (s/replace text "sqrt" "\\sqrt")
+        text (s/replace text #"mu([0123]{1})" "\\\\mu_$1")
         #_(println text)
         text (s/join 
                "\n"
