@@ -1,5 +1,21 @@
 \chapter{Interpolation}\label{ch:Interpolation}
 
+TODO:
+\begin{itemize}
+\item Polynomial form supporting updating algorithm when
+ adding and droping constraints.
+\item Basis functions supporting updating algorithm when
+ adding and droping constraints --- any difference from above?
+\item numerical accuracy by representation and degree?
+\item sensitivity of interpolant values as function of constraint
+ values, as function of degree of polynomial?
+\item deriviative of argmin as function of knot location, value, 
+ slope, etc., as function of degree.
+ \item Tests for 'singular' interpolation problem in the sense 
+ that not all coefficients are determined --- 
+ for example, $3$ xy pairs that lie on a line. 
+\end{itemize}
+
 Motivation: 
 \begin{enumerate}
  \item Minimization of real-valued functions on linear spaces.
@@ -68,7 +84,7 @@ interpolates.
 Extrapolation often results when using the \texttt{argmin}.
 Relationship between \texttt{argmin} and inverse interpolation.
 
-\section{Monomial basis}\label{sec:monomial-basis}
+\section{Monomial basis}\label{sec:Monomial-basis}
 
 The most common basis is the monomial:
 $p(x) = \mu_0 + \mu_1 x + \mu_2 x^2 + \mu_3 x^3$.
@@ -83,12 +99,25 @@ The basis functions are:
  \item $p_3(x) = x^3$
 \end{enumerate}
 
-(Note: these basis function aren't orthogonal or normalized)is any
+\textbf{TODO:} 
+\begin{itemize}
+  \item Evaluation speed?
+  \item Horner's algorithm and fma
+  \item differentiation/argmin advantage?
+  \item numerical accuracy?
+  \item easy to sum and multiply and divide within monomial
+  representation
+  \item degree obvious
+\end{itemize}
+
+(Note: these basis function aren't orthogonal or normalized)
+in any
 sense. In fact, choosing a distance or an inner product for
 a polynomial space is not a simple question.)
 
 Constructing an interpolating polynomial in the monomial basis
-requires solving a system of equations.
+requires solving a dense system of equations. 
+No advantage for small changes to constraints.
 
 Suppose, for example, we have $x_0,y_0,d_0$ and
 $x_1,y_1,d_1$, that is, we have specified the value and slope we
@@ -147,6 +176,8 @@ y_0 \\ d_0 \\ y_1 \\ d_1
  y_1 = &\mu_0 + \mu_1 x_1 + \mu_2 x_1^2 + \mu_3 x_1^3 \nonumber \\
  d_1 = &\specialcell{{\hfill \mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2}} \nonumber 
 \end{align}
+
+\subsection{Differentiation and \texttt{argmin}}
 
 \subsection{Constant Monomial}
 
@@ -255,7 +286,7 @@ $4$ domain locations:
 
 \restoregeometry
   
-\section{Lagrange basis}
+\section{Lagrange basis}\label{sec:Lagrange-basis}
 
 The standard Lagrange\cite{wiki:Lagrange-polynomial}
 form of a polynomial  is
@@ -267,12 +298,35 @@ We can interpret this as a linear combination of basis functions,
 $\lambda_i (x) = \prod_{j \neq i} \frac{x - x_j}{x_i -x_j}$.
 Each $\lambda_i$ is $1$ at $x_i$ and $0$ at all the other $x_j$.
 So we can use $\lambda_i$ to satisfy a value constraint at $x_i$
-without interferring with value constraints at the other $x_j$.
+without interfering with value constraints at the other $x_j$.
 
 That suggests that it might be useful to construct similar basis
 functions to interpolate combinations of value and slope 
 constraints.
 
+\textbf{TODO:} 
+\begin{itemize}
+  \item Can all real polynomials be represented in this form? 
+        With addition of constants? Maybe not, since some
+        quadratics can't be factored over reals.
+  \item Evaluation speed?
+  \item Horner's algorithm and fma
+  \item differentiation/argmin disadvantage?
+  \item numerical accuracy?
+  \item easy to sum and multiply and divide within monomial
+  representation
+\end{itemize}
+
+(Note: these basis function aren't orthogonal or normalized)
+in any
+sense. In fact, choosing a distance or an inner product for
+a polynomial space is not a simple question.)
+
+Constructing an interpolating polynomial in the monomial basis
+requires solving a dense system of equations. 
+No advantage for small changes to constraints.
+
+\subsection{Differentiation and \texttt{argmin}}
 
 \subsection{Affine Lagrange}
 
@@ -662,9 +716,174 @@ b_1 & =
 and similarly for $a_2,b_2$ and $a_3,b_3$.
  
 \section{Newton basis}
+ \cite{wiki:Newton-polynomial}
 
-\cite{wiki:Newton-polynomial}
+One advantage of the Lagrange basis 
+(section~\ref{sec:Lagrange-basis})
+over the monomial (section~\ref{sec:Monomial-basis}),
+besdies giving a simpler system of equations to solve initially,
+is the fact that the basis functions depend only on the locations
+of the knots, and not the values or slopes specified at those 
+points. 
+That makes it easy to update the interpolant 
+(though not its argmin) if we change the specified values
+or slopes.
+ 
+However, it doesn't help if we want add and remove knots,
+as is the case in one-dimensional search applications.
+
+The Newton basis supports adding knots, increasing the degree
+of the interpolating polynomial with each added constraint.
+So it, too, is of limited value for our driving application.
+
+General form interpolating 
+$(x_{0},y_{0}),\ldots ,(x_{j},y_{j}),\ldots ,(x_{k},y_{k})$:
+
+\begin{equation}
+f(x) = \sum _{{j=0}}^{{k}}a_{{j}} {\nu}_{{j}}(x)
+\end{equation}
+where the basis functions are similar to the Lagrange:
+\begin{equation}
+{\nu}_{j}(x) \defeq \prod_{{i=0}}^{{j-1}}(x-x_{i})
+\end{equation}
+but the coefficients are defined using 
+\textit{divided differences} 
+(section~\ref{sec:Divided-differences}):
+\begin{equation}
+a_{j} \defeq [y_{0},\ldots ,y_{j}] 
+\end{equation}
+
+Note that adding an additonal constraint
+adds anew basis function and term in the sum, without affecting 
+any of the previous ones.
+Because we are only interested at most cubic interpolants,
+and delete constraints as often as we add them,
+this property has limited value.
+
+As with the Lagrange basis, we can extend the usual definition
+to handle slope constraints as well as value constraints.
+In this case, however, it's not feasible to work through
+all the quadratic and cubic cases, since the result depends
+on the order in which constraints are specified, not just
+how many of each kind there are.
+
+\subsection{$(x_0,y_0),(x_1,y_1,d_1)$}
+
+Quadratic case where value is specified at $x_0$ and $x_1$,
+and slope is also specified at $x_1$.
+General quadratic function in terms of Newton basis at
+$x_0, x_1$:
+\begin{align}
+f(x) & = a_0 + a_1 (x - x_0) + a_2 (x - x_0) (x - x_1) 
+\\
+\partial{f}(x) & = a_1 + a_2 \left( (x - x_0) + (x - x_1) \right)
+\nonumber
+\end{align}
+
+\begin{align}
+y_0 = f(x_0) = a_0 & \Rightarrow a_0 = y_0 
+\\
+y_1 = f(x_1) = a_0 + a_1 (x_1 - x_0) & \Rightarrow 
+a_1 = \frac{y_1-y_0}{x_1 - x_0} 
+\nonumber \\
+d_1 = \partial{f}(x_1) = a_1 + a_2 (x_1 - x_0) & \Rightarrow 
+a_2 = \frac{d_1 (x_1 - x_0) - (y_1-y_0)}{(x_1 - x_0)^2} 
+\nonumber
+\end{align}
 
 
+\subsection{Differentiation and \texttt{argmin}}
 
+\section{Divided differences}\label{sec:Divided-differences}
+ \cite{wiki:Divided-differences}
+Given $k+1$ pairs 
+$\left( x_0, y_0 \right) \ldots \left( x_k, y_k \right) $:
 
+For $0 \leq \nu \leq k$:
+
+\begin{align}
+\left[ y_{\nu} \right] & \defeq y_{\nu}
+\\
+\left[ y_{\nu}, \ldots , y_{\nu + j} \right] & \defeq 
+\frac{
+\left[ y_{\nu + 1}, \ldots ,  y_{\nu + j} \right]
+-
+\left[ y_{\nu}, \ldots ,  y_{\nu + j - 1} \right]
+}{
+x_{\nu + j} - x_{\nu}
+} 
+\; \text{(forward)}
+\nonumber
+\\
+\left[ y_{\nu}, \ldots , y_{\nu - j} \right] & \defeq 
+\frac{
+\left[ y_{\nu}, \ldots ,  y_{\nu - j + 1} \right]
+-
+\left[ y_{\nu - 1}, \ldots ,  y_{\nu - j} \right]
+}{
+x_{\nu} - x_{\nu - j}
+} 
+\; \text{(backward)}
+\nonumber
+\end{align}
+
+Note: $x_i$ are implied in the standard 
+$\left[ y_{\nu}, \ldots , y_{\nu + j} \right]$ notation.
+
+Given $x_0, \ldots , x_k$ and $f$:
+
+For $0 \leq \nu \leq k$:
+
+\begin{align}
+f \left[ x_{\nu} \right] & \defeq f \left( x_{\nu} \right)
+\\
+f \left[ x_{\nu}, \ldots , x_{\nu + j} \right] & \defeq 
+\frac{
+f \left[ x_{\nu + 1}, \ldots ,  x_{\nu + j} \right]
+-
+f \left[ x_{\nu}, \ldots ,  x_{\nu + j - 1} \right]
+}{
+x_{\nu + j} - x_{\nu}
+} 
+\nonumber
+\end{align}
+
+Relevant special cases ($z_{ij} \defeq z_i - z_j$ for $z$ 
+either $x$ or $y$): 
+\begin{align}
+\left[ y_0 \right] & = y_0 
+\\
+\left[ y_0 , y_1  \right] & = 
+\dfrac{y_{01}}{x_{01}} 
+\nonumber
+\\
+\left[ y_0 , y_1 , y_2 \right] & = 
+\dfrac{
+\left( \dfrac{y_{12}}{x_{12}} - \dfrac{y_{01}}{x_{01}} \right)
+}{
+x_{20}
+} 
+\nonumber
+\\
+\left[ y_0 , y_1 , y_2 , y_3 \right] & = 
+\dfrac{
+ \left(
+ \dfrac{
+ \left(
+  \frac{y_{23}}{x_{23}} - \frac{y_{12}}{x_{12}}
+  \right)
+  }{x_{31}}
+  \right)
+ -
+ \left(
+ \dfrac{
+ \left(
+  \frac{y_{12}}{x_{12}} - \frac{y_{01}}{x_{01}}
+  \right)
+  }{x_{20}}
+  \right)
+}{
+x_{30}
+} 
+\nonumber
+\end{align}

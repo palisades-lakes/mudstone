@@ -1,3 +1,23 @@
+% TODO:
+% \usepackage{amsmath,amsfonts,amssymb,mathrsfs,theorem}
+% \usepackage{multicol,multirow,calc,achicago,graphicx,color,colortab,rotating,enumerate}
+% \usepackage{pstricks,psfrag,tabularx,comment,hyperref}
+% \usepackage{boxedminipage}
+% \usepackage{bbm}
+% Graphics
+% \usepackage{graphicx}
+% %Tables
+% \usepackage{booktabs}
+% \usepackage{lscape}
+% \usepackage{bbold}
+% \usepackage{natbib}
+% \def\newblock{\hskip .11em plus .33em minus .07em}
+% \usepackage{url}
+% \usepackage{citeref}
+% \citestyle{authoryear}
+% \usepackage{hyperref}
+
+%-------------------------------------------------------------------------------
 \errorcontextlines 10000
 %-------------------------------------------------------------------------------
 % layout header file determines 1/2 col, landscape/portrait...
@@ -76,6 +96,8 @@ BoldItalicFont = *08-Italic ]
 \usepackage{amssymb}
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\defeq}
+{\overset{\underset{\mathrm{def}}{}}{=}}
 %https://tex.stackexchange.com/questions/83509/hfill-in-math-mode
 \makeatletter
 \newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
