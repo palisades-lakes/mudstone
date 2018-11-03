@@ -1,5 +1,7 @@
 \chapter{Interpolation}\label{ch:Interpolation}
 
+\cite{wiki:Interpolation,wiki:Polynomial-interpolation}
+
 TODO:
 \begin{itemize}
 \item Polynomial form supporting updating algorithm when
@@ -721,7 +723,7 @@ and similarly for $a_2,b_2$ and $a_3,b_3$.
 One advantage of the Lagrange basis 
 (section~\ref{sec:Lagrange-basis})
 over the monomial (section~\ref{sec:Monomial-basis}),
-besdies giving a simpler system of equations to solve initially,
+besides giving a simpler system of equations to solve initially,
 is the fact that the basis functions depend only on the locations
 of the knots, and not the values or slopes specified at those 
 points. 
@@ -767,7 +769,7 @@ all the quadratic and cubic cases, since the result depends
 on the order in which constraints are specified, not just
 how many of each kind there are.
 
-\subsection{$(x_0,y_0),(x_1,y_1,d_1)$}
+\subsection{Quadratic: $(x_0,y_0),(x_1,y_1,d_1)$}
 
 Quadratic case where value is specified at $x_0$ and $x_1$,
 and slope is also specified at $x_1$.
@@ -791,6 +793,7 @@ a_2 = \frac{d_1 (x_1 - x_0) - (y_1-y_0)}{(x_1 - x_0)^2}
 \nonumber
 \end{align}
 
+\subsection{Cubic: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}
 
 \subsection{Differentiation and \texttt{argmin}}
 
