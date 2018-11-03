@@ -742,11 +742,11 @@ General form interpolating
 $(x_{0},y_{0}),\ldots ,(x_{j},y_{j}),\ldots ,(x_{k},y_{k})$:
 
 \begin{equation}
-f(x) = \sum _{{j=0}}^{{k}}a_{{j}} {\nu}_{{j}}(x)
+\nu(x) = \sum _{{j=0}}^{{k}}a_{{j}} {\beta}_{{j}}(x)
 \end{equation}
 where the basis functions are similar to the Lagrange:
 \begin{equation}
-{\nu}_{j}(x) \defeq \prod_{{i=0}}^{{j-1}}(x-x_{i})
+{\beta}_{j}(x) \defeq \prod_{{i=0}}^{{j-1}}(x-x_{i})
 \end{equation}
 but the coefficients are defined using 
 \textit{divided differences} 
@@ -776,27 +776,115 @@ and slope is also specified at $x_1$.
 General quadratic function in terms of Newton basis at
 $x_0, x_1$:
 \begin{align}
-f(x) & = a_0 + a_1 (x - x_0) + a_2 (x - x_0) (x - x_1) 
+\nu(x) & = \nu_0 + \nu_1 (x - x_0) + \nu_2 (x - x_0) (x - x_1) 
 \\
-\partial{f}(x) & = a_1 + a_2 \left( (x - x_0) + (x - x_1) \right)
+\partial{\nu}(x) & = \nu_1 + \nu_2 \left( (x - x_0) + (x - x_1) \right)
 \nonumber
 \end{align}
 
 \begin{align}
-y_0 = f(x_0) = a_0 & \Rightarrow a_0 = y_0 
+y_0 = \nu(x_0) = \nu_0 & \Rightarrow \nu_0 = y_0 
 \\
-y_1 = f(x_1) = a_0 + a_1 (x_1 - x_0) & \Rightarrow 
-a_1 = \frac{y_1-y_0}{x_1 - x_0} 
+y_1 = \nu(x_1) = \nu_0 + \nu_1 (x_1 - x_0) & \Rightarrow 
+\nu_1 = \frac{y_1-y_0}{x_1 - x_0} 
 \nonumber \\
-d_1 = \partial{f}(x_1) = a_1 + a_2 (x_1 - x_0) & \Rightarrow 
-a_2 = \frac{d_1 (x_1 - x_0) - (y_1-y_0)}{(x_1 - x_0)^2} 
+d_1 = \partial{\nu}(x_1) = \nu_1 + \nu_2 (x_1 - x_0) & \Rightarrow 
+\nu_2 = \frac{d_1 (x_1 - x_0) - (y_1-y_0)}{(x_1 - x_0)^2} 
 \nonumber
 \end{align}
 
+In this case, the critical point is at
+\begin{equation}
+x = x_0 + \frac{x_{01} y_{01}}{d_1 x_{01} - y_{01}}
+\end{equation}
+This is a global minimum if 
+$\nu_2 = \frac{y_{01} - d_1 x_{01}}{x_{01}^2}$
+is positive.
+
 \subsection{Cubic: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}
 
-\subsection{Differentiation and \texttt{argmin}}
+Cubic (Hermite~\cite{wiki:cubic-hermite-spline}) 
+case where value and slope are specified at $x_0$ and $x_1$.
+General cubic function in terms of Newton basis at
+$x_0, x_1$:
+\begin{align}
+\nu(x) & = \nu_0 + \nu_1 x_{{\star}0} + \nu_2 x_{{\star}0} x_{{\star}1} 
+ + \nu_3 x_{{\star}0} x_{{\star}1} x_{{\star}2} \\
+\partial{\nu}(x) & = \nu_1 
++ \nu_2 \left( x_{{\star}0} + x_{{\star}1} \right) 
++ \nu_3 \left( 
+ x_{{\star}0} x_{{\star}1} +
+ x_{{\star}1} x_{{\star}2} +
+ x_{{\star}2} x_{{\star}0} +
+\right)
+\nonumber
+\end{align}
+where $x_{{\star}i} = \left(x - x_i\right)$.
 
+The interpolation constraints are:
+\begin{align}
+y_0 & = \nu_0 
+\\
+y_1 & = \nu_0 + \nu_1 x_{10}  
+\nonumber 
+\\
+d_0 & = \nu_1 + \nu_2 x_{01} - \nu_3 x_{01} x_{20} 
+\\
+d_1 & = \nu_1 - \nu_2 x_{01} - \nu_3 x_{01} x_{12} 
+\nonumber
+\end{align}
+(using $x_{ij} = - x_{ji}$).
+
+We have $4$ constraints but $5$ unknowns, counting $x_2$
+as unspecified.
+If we take $x_2 = \frac{x_0 + x_1}{2}$,
+then $x_{20} = x_{12} = -\frac{x_{01}}{2}$,
+and the constraints reduce to
+\begin{align}
+y_0 & = \nu_0 
+\\
+y_1 & = \nu_0 + \nu_1 x_{10}  
+\nonumber 
+\\
+d_0 & = \nu_1 + \nu_2 x_{01} + \nu_3 \frac{x_{01}^2}{2} 
+\\
+d_1 & = \nu_1 - \nu_2 x_{01} + \nu_3 \frac{x_{01}^2}{2} 
+\nonumber
+\end{align}
+
+(\textbf{TODO:} Is this the best choice for $x_2$? 
+If so, is there a good argument why?)
+
+The Newton coefficients are then
+\begin{align}
+\nu_0 & = y_0 
+\\
+\nu_1 & = \frac{y_{01}}{x_{01}}
+\nonumber
+\\ 
+\nu_2 & = \frac{d_{01}}{2 x_{01}}
+\nonumber
+\\ 
+\nu_3 & = \frac{ \left(d_0 + d_1 \right) x_{01} + 2 y_{01}}{x_{01}^3}
+\nonumber
+\end{align} 
+
+In terms of those coefficients, the critical points are at
+\begin{equation}
+x=\frac{-2 \nu_2 + 3 \nu_3 \left( x_0 + x_1 \right) 
+\pm \sqrt{-12 \nu_1 \nu_3 + 4 \nu_2^{2} + 3 \nu_3^{2} x_{01}^{2}}
+}
+{ 6 \nu_3}
+\end{equation}
+when the argument of the square root is non-negative.
+One of these is a local minimum when the $2$nd derivative is positive:
+\begin{equation}
+\partial^2 \nu(x) = 2\nu_2
+ + 2 \nu_3 \left(x_{{\star}0} + x_{{\star}1} + x_{{\star}2}\right)
+\end{equation}
+
+
+\newpage
 \section{Divided differences}\label{sec:Divided-differences}
  \cite{wiki:Divided-differences}
 Given $k+1$ pairs 

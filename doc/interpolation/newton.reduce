@@ -18,7 +18,11 @@ LALINE!* := 120;
 off verbatim;
 mathstyle equation;
 %------------------------------------------------------
-out "docs/interpolation/newton-yyd.rawtex"$
+% quadratic
+%------------------------------------------------------
+% nu(x) = nu0 + nu1*(x-x0) + nu2*(x-x0)*(x-x1) 
+% dnu(x) = nu1 + nu2*((x-x0) + (x-x1))
+
 c := { 
 y0 = nu0 
 , 
@@ -27,33 +31,139 @@ y1 = nu0 + nu1*(x1-x0) + nu2*(x1-x0)*(x1-x1)
 d1 = nu1 + nu2*(x1-x0)
 };
 
-v := { 0, a1, a2 }$
-s := solve(c,v)$
+v := { nu0, nu1, nu2 };
+s := solve(c,v);
+out "doc/interpolation/newton-yyd.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "docs/interpolation/newton-yyd.rawtex";
+shut "doc/interpolation/newton-yyd.rawtex";
 %------------------------------------------------------
-out "docs/interpolation/newton-yd2.rawtex"$
 c := { 
-0 = (x3-a1)*(x3-a2) + (x3-a2)*(x3-a0) + (x3-a0)*(x3-a1) 
+y0 = nu0 
 , 
-0 = (x2-a0)*(x2-a1) + (x2-a1)*(x2-a2) + (x2-a2)*(x2-a0)
+y1 = nu0 - nu1*x01
 , 
-0 = (x1-a0) * (x1-a1) * (x1-a2)
-}$
+d1 = nu1 - nu2*x01
+,
+0 = nu1 + nu2*x_0
+};
 
-v := { a0, a1, a2 }$
-s := solve(c,v)$
+v := { nu0, nu1, nu2, x_0 };
+s := solve(c,v);
+out "doc/interpolation/newton-yyd-argmin.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "docs/interpolation/newton-yd2.rawtex";
+shut "doc/interpolation/newton-yyd-argmin.rawtex";
+%------------------------------------------------------
+% cubic
+%------------------------------------------------------
+% nu(x) = nu0 + nu1*(x-x0) + nu2*(x-x0)*(x-x1) 
+%       + nu3*(x-x0)*(x-x1)*(x-x2)
+% dnu(x) = nu1 + nu2*((x-x0) + (x-x1)) 
+%  + nu3*(((x-x0)*(x-x1)) + ((x-x1)*(x-x2)) + ((x-x2)*(x-x0)))
+
+c := { 
+y0 = nu0 
+,
+d0 = nu1 + nu2*x01 + nu3*x01*x01/2
+, 
+y1 = nu0 - nu1*x01
+, 
+d1 = nu1 - nu2*x01 + nu3*x01*x01/2
+};
+
+v := { nu0, nu1, nu2, nu3 };
+s := solve(c,v);
+first(s);
+out "doc/interpolation/newton-yd2.rawtex"$
+on latex;
+on exp$
+write c;
+on lasimp;
+write s;
+off latex;      
+shut "doc/interpolation/newton-yd2.rawtex";
+%------------------------------------------------------
+% nu(x) = nu0 + nu1*(x-x0) + nu2*(x-x0)*(x-x1) 
+%       + nu3*(x-x0)*(x-x1)*(x-x2)
+% dnu(x) = nu1 + nu2*((x-x0) + (x-x1)) 
+%  + nu3*(((x-x0)*(x-x1)) + ((x-x1)*(x-x2)) + ((x-x2)*(x-x0)))
+
+c := { 
+y0 = nu0 
+,
+d0 = nu1 + nu2*(x0-x1) + nu3*(x0-x1)^2/2
+, 
+y1 = nu0 - nu1*(x0-x1)
+, 
+d1 = nu1 - nu2*(x0-x1) + nu3*(x0-x1)^2/2
+,
+0 = nu1 + nu2*((x-x0)+(x-x1)) 
++ nu3*((x-x0)*(x-x1) + (x-x1)*(x-(x0+x1)/2) + (x-x0)*(x-(x0+x1)/2))  
+};
+
+v := { nu0, nu1, nu2, nu3, x };
+s := solve(c,v);
+first(s);
+out "doc/interpolation/newton-yd2-argmin.rawtex"$
+on latex;
+on exp$
+write c;
+on lasimp;
+write s;
+off latex;      
+shut "doc/interpolation/newton-yd2-argmin.rawtex";
+%------------------------------------------------------
+% nu(x) = nu0 + nu1*(x-x0) + nu2*(x-x0)*(x-x1) 
+%       + nu3*(x-x0)*(x-x1)*(x-x2)
+% dnu(x) = nu1 + nu2*((x-x0) + (x-x1)) 
+%  + nu3*(((x-x0)*(x-x1)) + ((x-x1)*(x-x2)) + ((x-x2)*(x-x0)))
+
+c := { 
+0 = nu1 + nu2*((x-x0)+(x-x1)) 
++ nu3*((x-x0)*(x-x1) + (x-x1)*(x-(x0+x1)/2) + (x-x0)*(x-(x0+x1)/2))  
+};
+
+v := { x };
+s := solve(c,v);
+first(s);
+out "doc/interpolation/newton-yd2-argmin.rawtex"$
+on latex;
+on exp$
+write c;
+on lasimp;
+write s;
+off latex;      
+shut "doc/interpolation/newton-yd2-argmin.rawtex";
+%------------------------------------------------------
+c := { 
+y0 = nu0 
+,
+d0 = nu1 + nu2*x01 - nu3*x01*x20
+, 
+y1 = nu0 - nu1*x01
+, 
+d1 = nu1 - nu2*x01 + nu3*x01*x12
+};
+
+v := { nu0, nu1, nu2, nu3 };
+s := solve(c,v);
+first(s);
+out "doc/interpolation/newton-yd2.rawtex"$
+on latex;
+on exp$
+write c;
+on lasimp;
+write s;
+off latex;      
+shut "doc/interpolation/newton-yd2.rawtex";
 %------------------------------------------------------
 ;END;
