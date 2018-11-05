@@ -20,7 +20,7 @@
 %-------------------------------------------------------------------------------
 \errorcontextlines 10000
 %-------------------------------------------------------------------------------
-% layout header file determines 1/2 col, landscape/portrait...
+% layout file determines 1/2 col, landscape/portrait...
 \usepackage{geometry}
 %-------------------------------------------------------------------------------
 \usepackage{color}
@@ -44,6 +44,12 @@
 \usepackage{fontspec}
 %-------------------------------------------------------------------------------
 %\setmainfont{Baskerville Old Face}
+%\setmainfont{Libre Caslon Text}[Scale=0.85]
+%\setmainfont{Centaur}
+%\setmainfont{Garamond}
+%\setmainfont{Georgia}
+%\setmainfont{Perpetua}
+%\setmainfont{Poor Richard}
 
 % http://www.impallari.com/projects/overview/libre-caslon-display-and-text
 %\setmainfont{Libre Caslon Text}[Scale=0.85]
@@ -132,6 +138,9 @@ postheadspace=\newline,%
 \declaretheorem[style=mythmstyle,title=Definition,name={Definition}]{definition}
 \declaretheorem[style=mythmstyle,title=Example,name={Example}]{example}
 \renewcommand{\thmtformatoptarg}[1]{#1}%
+%\theoremstyle{definition}
+%\newtheorem{definition}{\textsf{Definition}}[section]
+%\newtheorem{fact}{\textsf{Fact}}[section]
 %-------------------------------------------------------------------------------
 \numberwithin{definition}{section}
 \numberwithin{example}{section}
@@ -195,7 +204,7 @@ keywordstyle={\ttfamily}}
 % %\addtolength{\headwidth}{\marginparsep}
 % %\addtolength{\headwidth}{\marginparwidth}
 % \fancypagestyle{plain}{
-% \fancyhead{} % clear all header fields 
+% \fancyhead{} % clear all head fields 
 % \fancyfoot{} % clear all foot fields
 % \fancyfoot[RO,LE]{\textsf{\thepage}} 
 % \fancyfoot[RE,LO]{\textsf{Draft of \today}}
@@ -213,6 +222,11 @@ keywordstyle={\ttfamily}}
 \predate{\begin{flushright}\sffamily\scshape\mdseries}
 \postdate{\par\end{flushright}}
 \setlength{\droptitle}{-80pt}
+%-------------------------------------------------------------------------------
+\usepackage{enumitem}
+\setlist[description]{font=\small\sffamily\mdseries,style=unboxed,leftmargin=0cm}
+\setlist[itemize]{style=unboxed,itemindent=0cm}
+\setlist[enumerate]{style=unboxed,itemindent=0cm}
 %-------------------------------------------------------------------------------
 \usepackage[sf,small,compact]{titlesec}
 %\newfontfamily\headingfont[]{New Yorker}
