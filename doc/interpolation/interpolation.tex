@@ -4,6 +4,8 @@
 
 TODO:
 \begin{itemize}
+\item Better to way to characterize space of polynomials,
+than just monomial form?
 \item Polynomial form supporting updating algorithm when
  adding and droping constraints.
 \item Basis functions supporting updating algorithm when
@@ -16,6 +18,7 @@ TODO:
  \item Tests for 'singular' interpolation problem in the sense 
  that not all coefficients are determined --- 
  for example, $3$ xy pairs that lie on a line. 
+ \item Consistent naming for basis functions and coefficients?
 \end{itemize}
 
 Motivation: 
@@ -89,17 +92,9 @@ Relationship between \texttt{argmin} and inverse interpolation.
 \section{Monomial basis}\label{sec:Monomial-basis}
 
 The most common basis is the monomial:
-$p(x) = \mu_0 + \mu_1 x + \mu_2 x^2 + \mu_3 x^3$.
-$p$ is quadratic if $\mu_3$ is $0$,
-affine if $\mu_3$ and $\mu_2$ are $0$,
-and constant when only $\mu_0$ is not $0$.
-The basis functions are:
-\begin{enumerate}[start=0]
- \item $p_0(x) = 1$
- \item $p_1(x) = x$
- \item $p_2(x) = x^2$
- \item $p_3(x) = x^3$
-\end{enumerate}
+\begin{equation}
+\mu(x) = \sum_{i=0}^{k} \mu_i x^i
+\end{equation}
 
 \textbf{TODO:} 
 \begin{itemize}
@@ -181,21 +176,58 @@ y_0 \\ d_0 \\ y_1 \\ d_1
 
 \subsection{Differentiation and \texttt{argmin}}
 
+Degree $k$ polynomial:
+\begin{align}
+\mu(x) & = \sum_{i=0}^{k} \mu_i x^i
+\\
+\partial{\mu}(x) & = \sum_{i=1}^{k} i \mu_i x^{i-1}
+\nonumber
+\\
+\partial^2{\mu}(x) & = \sum_{i=2}^{k} i (i-1) \mu_i x^{i-2}
+\nonumber
+\end{align}
+
+Critical points $\hat{x}$ occur where 
+$ 0 = \partial{\mu}(\hat{x}) $,
+with $\hat{x}$ is a local minimum if 
+$ 0 < \partial^2{\mu}(\hat{x}) $.
+It can be helpful to look at how $\hat{x}$ depends
+on the parameters of the polynomial representation,
+and on the inputs to interpolation that determine those 
+parameters.
+
 \subsection{Constant Monomial}
+
+\begin{equation}
+\mu(x) = \mu_0
+\end{equation}
+
+Constant monomials have no critical points or local/global
+minima. 
+(So implementation returns \texttt{NaN} for \texttt{(argmin mu)}).
 
 The only possibility is to 'interpolate' $(x_0,y_0)$ with
 $\mu_0 = y_0$ (and $\mu_i = 0$ for other $i$). 
 
 \subsection{Affine Monomial}
 
-There are $2$ possibilities, finding the line thru $2$ points,
-$(x_0,y_0)$ and $(x_1,y_1)$, or or matching the value and slope at
+\begin{equation}
+\mu(x) = \mu_0 + \mu_1 x
+\end{equation}
+
+Affine monomials have no critical points.
+The global minimum/maximum is at $\mp \sign(\mu_1) \infty$.
+
+For interpolation, there are $2$ possibilities, finding the line thru $2$
+points, $(x_0,y_0)$ and $(x_1,y_1)$, or or matching the value and slope at
 $(x_0,y_0,d_0)$.
 
-In the first case:
+\subsubsection{$(x_0,y_0), (x_1,y_1)$}
+
 \input{monomial-yy}
 
-In the second:
+\subsubsection{$(x_0,y_0,d_0)$}
+
 \input{monomial-yd}
 
 \subsection{Quadratic Monomial}
@@ -204,7 +236,7 @@ In the second:
 \mu(x) = \mu_0 + \mu_1 x + \mu_2 x^2
 \end{equation}
 
-Critical ($\partial\mu(x) = 0$) point at
+Critical point at
 \begin{equation}
 \hat{x} = \frac{-\mu_1}{2 \mu_2}
 \end{equation}
@@ -213,6 +245,18 @@ and the global maximum if $\mu_2>0$.
 If $\mu_2 = 0$, the global maximum is at 
 $\text{sign}(\mu_1)\infty$
 and the minimum is at $-\text{sign}(\mu_1)\infty$.
+
+Dependence on monomial coeficients:
+\begin{equation}
+\nabla_{\vec{\mu}} \hat{x} =
+\begin{pmatrix}
+0 
+\\
+- \frac{1}{2 \mu_2} 
+\\
+\frac{\mu_1}{\mu_2^2}
+\end{pmatrix}
+\end{equation}
 
 \subsubsection{yyy}
 
@@ -231,7 +275,7 @@ $2$ domain locations:
 $3$ domain locations:
 \input{monomial-ydd3}
 
-$2$ domain locations:
+$2$ domain locations (essentially the secant step):
 \input{monomial-ydd2}
 
 \subsection{Cubic Monomial}
@@ -240,7 +284,7 @@ $2$ domain locations:
 \mu(x) = \mu_0 + \mu_1 x + \mu_2 x^2 + \mu_3 x^3
 \end{equation}
 
-Critical ($\partial\mu(x) = 0$) points are at
+Critical points are at
 \begin{equation}
 \hat{x}_{\pm} = \frac{-\mu_2 \pm \sqrt{ \mu_2^{2} - 3 \mu_1 \mu_3 }}{3 \mu_3}
 \end{equation}
@@ -257,34 +301,62 @@ If $\mu_2^{2} < 3 \mu_1 \mu_3$, then there are no critical points,
 no local minima/maxima, and the global minimum (maximum) is at
 $\mp\text{sign}(\mu_3)\infty$.
 
+Dependence on monomial coeficients:
+\begin{equation}
+\nabla_{\vec{\mu}} \hat{x} =
+\begin{pmatrix}
+0 
+\\
+\dfrac{
+\mp \mu_3^{2}
+}{
+2 \sqrt{\mu_2^{2} -3 \mu_1 \mu_3}
+}
+\\
+\dfrac{
+-\mu_3 \left(\sqrt{\mu_2^{2} -3 \mu_1 \mu_3} \mp \mu_2\right)
+}{
+3 \sqrt{\mu_2^{2} -3 \mu_1 \mu_3}
+}
+\\
+\dfrac{
+\mp \mu_1 \mu_3
++ 2 \sqrt{\mu_2^{2} - 3 \mu_1 \mu_3}
+\left(\pm \sqrt{\mu_2^{2} - 3 \mu_1 \mu_3}  - \mu_2 \right)
+}{
+6 \sqrt{\mu_2^{2} -3 \mu_1 \mu_3}
+}
+\end{pmatrix}
+\end{equation}
+
 \newgeometry{onecolumn=true}
 
 \subsubsection{yyyy}
 
 \input{monomial-yyyy-1}
 
-\subsubsection{yyyd}
-
-$4$ domain locations:
-\input{monomial-yyyd4}
-
-$3$ domain locations:
-\input{monomial-yyyd3}
+% \subsubsection{yyyd}
+% 
+% $4$ domain locations:
+% \input{monomial-yyyd4}
+% 
+% $3$ domain locations:
+% \input{monomial-yyyd3}
 
 \subsubsection{yydd}
 
 Showing the most likely cases.
 
-$4$ domain locations:
-\input{monomial-yydd4}
+% $4$ domain locations:
+% \input{monomial-yydd4}
 
 $2$ domain locations:
 \input{monomial-yydd2}
 
-\subsubsection{yddd}
-$4$ domain locations:
-
-\input{monomial-yddd4}
+% \subsubsection{yddd}
+% $4$ domain locations:
+% 
+% \input{monomial-yddd4}
 
 \restoregeometry
   
@@ -424,6 +496,8 @@ $\partial{f}(x_2) = (x_2 - x_0) + (x_2 - x_1)$:
 
 \subsubsection{ydd}\label{sec:lagrange-ydd}
 
+(Secant)
+
 For $\lambda^{\text{ydd}}_0$ we need:
 \begin{align}
 \lambda^{\text{ydd}}_0(x_0) & = 1 \\
@@ -475,64 +549,64 @@ For example:
 {(x_0 - x_1) (x_0 - x_2) (x_0 - x_3)}
 \end{equation}
 
-\subsubsection{yyyd}
-
-We need 
-\begin{align}
-\lambda^{\text{yyyd}}_0(x_0) & = 1 \\ 
-\lambda^{\text{yyyd}}_0(x_1) & = 0 \nonumber \\
-\lambda^{\text{yyyd}}_0(x_2) & = 0 \nonumber \\
-\partial\lambda^{\text{yyyd}}_0(x_3) & = 0 \nonumber 
-\end{align}
-
-Consider functions proportional to $f(x) = (x-x_1)(x-x_2)(x-c_0)$.
-This satisfies the first $3$ constraints.
-For the fourth, we need
-\begin{equation}
-0 = (x_3-x_1)(x_3-x_2) + (x_3-x_2)(x_3-c_0) + (x_3-c_0)(x_3-x_1)
-\end{equation}
-which implies
-\begin{align}
-c_0 & = 
-\frac
-{x_3\left((x_3-x_1)+ (x_3-x_2)\right) + (x_3-x_1)(x_3-x_2)}
-{(x_3-x_1)+ (x_3-x_2)} 
-\\
- &= x_3 + 
-\frac
-{(x_3-x_1)(x_3-x_2)}
-{(x_3-x_1)+ (x_3-x_2)} 
-\nonumber
-\end{align}
-
-To satisfy the first constraint,
-we normalize with $f(x_0)$.
-Therefore:
-\begin{align}
-\lambda^{\text{yyyd}}_0(x) & = 
-\frac {(x - x_1) (x - x_2) (x - c_0)} 
-{(x_0 - x_1) (x_0 - x_2) (x_0 - c_0))} 
-\\
-\lambda^{\text{yyyd}}_1(x) & = 
-\frac {(x - x_2) (x - x_0) (x - c_1)} 
-{(x_1 - x_2) (x_1 - x_0) (x_1 - c_1))} 
-\nonumber \\
-\lambda^{\text{yyyd}}_2(x) & = 
-\frac {(x - x_0) (x - x_1) (x - c_2)} 
-{(x_2 - x_0) (x_2 - x_1) (x_2 - c_2))} 
-\nonumber \\
-\lambda^{\text{yyyd}}_3(x) & = 
-\frac {(x - x_0) (x - x_1) (x - x_2)} 
-{\left( (x_3 - x_0) (x_3 - x_1) \right)
-+ \left( (x_3 - x_1) (x_3 - x_2) \right)
-+ \left( (x_3 - x_2) (x_3 - x_0) \right)} 
-\nonumber
-\end{align}
-
-$\lambda^{\text{yyyd}}_1$ and $\lambda^{\text{yyyd}}_2$ follow by symmetry.
-$\lambda^{\text{yyyd}}_3$ is the standard Lagrange form,
-normalized for unit slope rather unit value, and fairly obviously
-satisfies its constraintz.
+% \subsubsection{yyyd}
+% 
+% We need 
+% \begin{align}
+% \lambda^{\text{yyyd}}_0(x_0) & = 1 \\ 
+% \lambda^{\text{yyyd}}_0(x_1) & = 0 \nonumber \\
+% \lambda^{\text{yyyd}}_0(x_2) & = 0 \nonumber \\
+% \partial\lambda^{\text{yyyd}}_0(x_3) & = 0 \nonumber 
+% \end{align}
+% 
+% Consider functions proportional to $f(x) = (x-x_1)(x-x_2)(x-c_0)$.
+% This satisfies the first $3$ constraints.
+% For the fourth, we need
+% \begin{equation}
+% 0 = (x_3-x_1)(x_3-x_2) + (x_3-x_2)(x_3-c_0) + (x_3-c_0)(x_3-x_1)
+% \end{equation}
+% which implies
+% \begin{align}
+% c_0 & = 
+% \frac
+% {x_3\left((x_3-x_1)+ (x_3-x_2)\right) + (x_3-x_1)(x_3-x_2)}
+% {(x_3-x_1)+ (x_3-x_2)} 
+% \\
+%  &= x_3 + 
+% \frac
+% {(x_3-x_1)(x_3-x_2)}
+% {(x_3-x_1)+ (x_3-x_2)} 
+% \nonumber
+% \end{align}
+% 
+% To satisfy the first constraint,
+% we normalize with $f(x_0)$.
+% Therefore:
+% \begin{align}
+% \lambda^{\text{yyyd}}_0(x) & = 
+% \frac {(x - x_1) (x - x_2) (x - c_0)} 
+% {(x_0 - x_1) (x_0 - x_2) (x_0 - c_0))} 
+% \\
+% \lambda^{\text{yyyd}}_1(x) & = 
+% \frac {(x - x_2) (x - x_0) (x - c_1)} 
+% {(x_1 - x_2) (x_1 - x_0) (x_1 - c_1))} 
+% \nonumber \\
+% \lambda^{\text{yyyd}}_2(x) & = 
+% \frac {(x - x_0) (x - x_1) (x - c_2)} 
+% {(x_2 - x_0) (x_2 - x_1) (x_2 - c_2))} 
+% \nonumber \\
+% \lambda^{\text{yyyd}}_3(x) & = 
+% \frac {(x - x_0) (x - x_1) (x - x_2)} 
+% {\left( (x_3 - x_0) (x_3 - x_1) \right)
+% + \left( (x_3 - x_1) (x_3 - x_2) \right)
+% + \left( (x_3 - x_2) (x_3 - x_0) \right)} 
+% \nonumber
+% \end{align}
+% 
+% $\lambda^{\text{yyyd}}_1$ and $\lambda^{\text{yyyd}}_2$ follow by symmetry.
+% $\lambda^{\text{yyyd}}_3$ is the standard Lagrange form,
+% normalized for unit slope rather unit value, and fairly obviously
+% satisfies its constraintz.
  
 \subsubsection{yydd}\label{sec:lagrange-yydd}
 
@@ -669,53 +743,53 @@ section~\ref{sec:lagrange-yydd}:
 \nonumber
 \end{align}
 
-\subsubsection{yddd}\label{sec:lagrange-yddd}
-
-For $\lambda^{\text{yddd}}_0$, we need 
-\begin{align}
-\lambda^{\text{yddd}}_0(x_0) & = 1 \\ 
-\partial\lambda^{\text{yddd}}_0(x_1) & = 0 \nonumber \\
-\partial\lambda^{\text{yddd}}_0(x_2) & = 0 \nonumber \\
-\partial\lambda^{\text{yddd}}_0(x_3) & = 0 \nonumber 
-\end{align}
-As in section~\ref{sec:lagrange-ydd},
-this can only be satisfied by a constant function:
-$\lambda^{\text{yddd}}_0(x) = 1$.
-
-The other $3$ basis functions must satisfy variations of
-\begin{align}
-\lambda^{\text{yddd}}_1(x_0) & = 0 \\ 
-\partial\lambda^{\text{yddd}}_1(x_1) & = 1 \nonumber \\
-\partial\lambda^{\text{yddd}}_1(x_2) & = 0 \nonumber \\
-\partial\lambda^{\text{yddd}}_1(x_3) & = 0 \nonumber 
-\end{align}
-This is essentially the same problem as that of $\lambda^{\text{yydd}}_0$
-in section~\ref{sec:lagrange-yydd},
-so the solution is:
-\begin{align}
-\lambda^{\text{yddd}}_1(x) & =
-\frac{(x-x_0)(x-(a_1+b_1))(x-(a_1-b_1))}
-{(x_1-x_0)(x_1-(a_1+b_1))(x_1-(a_1-b_1))}
-\\
-\lambda^{\text{yddd}}_2(x) & =
-\frac{(x-x_0)(x-(a_2+b_2))(x-(a_2-b_2))}
-{(x_2-x_0)(x_2-(a_2+b_2))(x_2-(a_2-b_2))}
-\nonumber \\
-\lambda^{\text{yddd}}_3(x) & =
-\frac{(x-x_0)(x-(a_3+b_3))(x-(a_3-b_3))}
-{(x_3-x_0)(x_3-(a_3+b_3))(x_3-(a_3-b_3))}
-\nonumber
-\end{align}
-where
-\begin{align}
-a_1 & = 
-\frac{3 (x_2 + x_3) - 2 x_0}{4} 
-\\ 
-b_1 & = 
-\frac{\sqrt{ 9 (x_2 - x_3)^2 - 12 (x_0 - x_2) (x_0 -x_3)}}{4} 
-\nonumber
-\end{align}
-and similarly for $a_2,b_2$ and $a_3,b_3$.
+% \subsubsection{yddd}\label{sec:lagrange-yddd}
+% 
+% For $\lambda^{\text{yddd}}_0$, we need 
+% \begin{align}
+% \lambda^{\text{yddd}}_0(x_0) & = 1 \\ 
+% \partial\lambda^{\text{yddd}}_0(x_1) & = 0 \nonumber \\
+% \partial\lambda^{\text{yddd}}_0(x_2) & = 0 \nonumber \\
+% \partial\lambda^{\text{yddd}}_0(x_3) & = 0 \nonumber 
+% \end{align}
+% As in section~\ref{sec:lagrange-ydd},
+% this can only be satisfied by a constant function:
+% $\lambda^{\text{yddd}}_0(x) = 1$.
+% 
+% The other $3$ basis functions must satisfy variations of
+% \begin{align}
+% \lambda^{\text{yddd}}_1(x_0) & = 0 \\ 
+% \partial\lambda^{\text{yddd}}_1(x_1) & = 1 \nonumber \\
+% \partial\lambda^{\text{yddd}}_1(x_2) & = 0 \nonumber \\
+% \partial\lambda^{\text{yddd}}_1(x_3) & = 0 \nonumber 
+% \end{align}
+% This is essentially the same problem as that of $\lambda^{\text{yydd}}_0$
+% in section~\ref{sec:lagrange-yydd},
+% so the solution is:
+% \begin{align}
+% \lambda^{\text{yddd}}_1(x) & =
+% \frac{(x-x_0)(x-(a_1+b_1))(x-(a_1-b_1))}
+% {(x_1-x_0)(x_1-(a_1+b_1))(x_1-(a_1-b_1))}
+% \\
+% \lambda^{\text{yddd}}_2(x) & =
+% \frac{(x-x_0)(x-(a_2+b_2))(x-(a_2-b_2))}
+% {(x_2-x_0)(x_2-(a_2+b_2))(x_2-(a_2-b_2))}
+% \nonumber \\
+% \lambda^{\text{yddd}}_3(x) & =
+% \frac{(x-x_0)(x-(a_3+b_3))(x-(a_3-b_3))}
+% {(x_3-x_0)(x_3-(a_3+b_3))(x_3-(a_3-b_3))}
+% \nonumber
+% \end{align}
+% where
+% \begin{align}
+% a_1 & = 
+% \frac{3 (x_2 + x_3) - 2 x_0}{4} 
+% \\ 
+% b_1 & = 
+% \frac{\sqrt{ 9 (x_2 - x_3)^2 - 12 (x_0 - x_2) (x_0 -x_3)}}{4} 
+% \nonumber
+% \end{align}
+% and similarly for $a_2,b_2$ and $a_3,b_3$.
  
 \section{Newton basis}
  \cite{wiki:Newton-polynomial}

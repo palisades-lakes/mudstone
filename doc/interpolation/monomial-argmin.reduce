@@ -1,5 +1,5 @@
 %off echo$
-on nat$
+off nat$
 linelength(120);
 off ratpri;
 off allfac;
@@ -54,22 +54,36 @@ c := { y0 = mu0 + mu1 * x0 + mu2 * x0^2,
        0 = mu1 + 2*mu2*x }$
 v := { mu0, mu1, mu2, x }$
 s := solve(c,v)$
-out "docs/interpolation/monomial-yyy.rawtex"$
+out "doc/interpolation/monomial-yyy.rawtex"$
 on latex; on lasimp$
 on exp$ write c; off exp$ write s;
 off latex;      
-shut "docs/interpolation/monomial-yyy.rawtex";
+shut "doc/interpolation/monomial-yyy.rawtex";
 %------------------------------------------------------
 solve(0 = df(mu0 + mu1 * x + mu2 * x^2,x),x);
-solve(0 = df(mu0 + mu1 * x + mu2 * x^2 + mu3* x^3,x),x);
 %------------------------------------------------------
-out "docs/interpolation/monomial-argmin.rawtex"$
+solve(0 = df(mu0 + mu1 * x + mu2 * x^2 + mu3* x^3,x),x);
+
+g := {
+0,
+df((pm*sqrt(mu2**2 - 3*mu1*mu3) - mu2)/3*mu3,mu1),
+df((pm*sqrt(mu2**2 - 3*mu1*mu3) - mu2)/3*mu3,mu2),
+df((pm*sqrt(mu2**2 - 3*mu1*mu3) - mu2)/3*mu3,mu3)
+};
+mathstyle equation;
+out "doc/interpolation/monomial3-argmin-grad.rawtex"$
+on latex; on lasimp$
+write g;
+off latex;      
+shut "doc/interpolation/monomial3-argmin-grad.rawtex"$
+%------------------------------------------------------
+out "doc/interpolation/monomial-argmin.rawtex"$
 on lasimp;
 on latex;
 on exp$
 solve(0 = df(mu0 + mu1 * x + mu2 * x^2,x),x);
 solve(0 = df(mu0 + mu1 * x + mu2 * x^2 + mu3* x^3,x),x);
 off latex;      
-shut "docs/interpolation/monomial-argmin.rawtex";
+shut "doc/interpolation/monomial-argmin.rawtex";
 %------------------------------------------------------
 ;END;
