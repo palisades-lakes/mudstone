@@ -18,7 +18,8 @@
 % arara: clean: { files: [ interpolation-notes.toc, interpolation-notes.xdy] }
 % arara: clean: { files: [ interpolation-notes.synctex.gz] }
 %-------------------------------------------------------------------------------
-\documentclass[10pt,openany]{book}
+%\documentclass[10pt,openany]{book}
+\documentclass[10pt,openany]{article}
 \input{../head}
 %\input{../kindle-paperwhite}
 \input{../landscape-2col}
@@ -43,16 +44,16 @@
 
 \maketitle
 
-\frontmatter
+%\frontmatter
 
-\begingroup
-\let\onecolumn\twocolumn
-\sffamily
-\tableofcontents
-\rmfamily
-\endgroup
+% \begingroup
+% \let\onecolumn\twocolumn
+% \sffamily
+% \tableofcontents
+% \rmfamily
+% \endgroup
 
-\mainmatter
+%\mainmatter
 
 %\part{Background}
 %\input{functions}
@@ -77,7 +78,7 @@
 %\part{Appendices}
 \input{../typesetting}
 %-------------------------------------------------------------------------------
-\backmatter
+%\backmatter
 %\part{Backmatter}
 \input{../tail}
 %-------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-\chapter{Interpolation}\label{ch:Interpolation}
+%\chapter{Interpolation}\label{ch:Interpolation}
 
 \cite{wiki:Interpolation,wiki:Polynomial-interpolation}
 
@@ -139,40 +139,40 @@ y_0 \\ d_0 \\ y_1 \\ d_1
 \end{pmatrix}
 \end{equation}
 
-\begin{align}
- y_0 & = \mu_0 + \mu_1 x_0 + \phantom{2} \mu_2 x_0^2 + \phantom{3} \mu_3 x_0^3 \\
- d_0 & = \phantom{\mu_0} \phantom{+} \mu_1 \phantom{x_0} + 2 \mu_2 x_0 + 3 \mu_3 x_0^2 \nonumber \\
- y_1 & = \mu_0 + \mu_1 x_1 + \phantom{2} \mu_2 x_1^2 + \phantom{3} \mu_3 x_1^3 \nonumber \\
- d_1 & = \phantom{\mu_0} \phantom{+} \mu_1 \phantom{x_0} + 2 \mu_2 x_1 + 3 \mu_3 x_1^2 \nonumber
-\end{align}
-
-\begin{align}
- y_0 = & {\mu_0 + \mu_1 x_0 + \phantom{2} \mu_2 x_0^2 + \phantom{3} \mu_3 x_0^3} \\
- d_0 = & \pushright{\mu_1 \phantom{x_0} + 2 \mu_2 x_0 + 3 \mu_3 x_0^2} \nonumber \\
- y_1 = & {\mu_0 + \mu_1 x_1 + \phantom{2} \mu_2 x_1^2 + \phantom{3} \mu_3 x_1^3 }\nonumber \\
- d_1 = & \pushright{\mu_1 \phantom{x_0} + 2 \mu_2 x_1 + 3 \mu_3 x_1^2} \nonumber
-\end{align}
-
-\begin{align}
- y_0 = & {\mu_0 + \mu_1 x_0 + \mu_2 x_0^2 + \mu_3 x_0^3} \\
- d_0 = & \pushright{\mu_1 + 2 \mu_2 x_0 + 3 \mu_3 x_0^2} \nonumber \\
- y_1 = & {\mu_0 + \mu_1 x_1 + \mu_2 x_1^2 + \mu_3 x_1^3 }\nonumber \\
- d_1 = & \pushright{\mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2} \nonumber
-\end{align}
-
-\begin{align}\label{eq:hermite-eqns}
- y_0 & = \mu_0 + \mu_1 x_0 + \mu_2 x_0^2 + \mu_3 x_0^3 \\
- d_0 & = \mu_1 + 2 \mu_2 x_0 + 3 \mu_3 x_0^2 \nonumber \\
- y_1 & = \mu_0 + \mu_1 x_1 + \mu_2 x_1^2 + \mu_3 x_1^3 \nonumber \\
- d_1 & = \mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2 \nonumber 
-\end{align}
-
-\begin{align}
- y_0 = &\mu_0 + \mu_1 x_0 + \mu_2 x_0^2 + \mu_3 x_0^3 \\
- d_0 = &\specialcell{\hfill \mu_1 + 2 \mu_2 x_0 + 3 \mu_3 x_0^2} \nonumber \\
- y_1 = &\mu_0 + \mu_1 x_1 + \mu_2 x_1^2 + \mu_3 x_1^3 \nonumber \\
- d_1 = &\specialcell{{\hfill \mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2}} \nonumber 
-\end{align}
+% \begin{align}
+%  y_0 & = \mu_0 + \mu_1 x_0 + \phantom{2} \mu_2 x_0^2 + \phantom{3} \mu_3 x_0^3 \\
+%  d_0 & = \phantom{\mu_0} \phantom{+} \mu_1 \phantom{x_0} + 2 \mu_2 x_0 + 3 \mu_3 x_0^2 \nonumber \\
+%  y_1 & = \mu_0 + \mu_1 x_1 + \phantom{2} \mu_2 x_1^2 + \phantom{3} \mu_3 x_1^3 \nonumber \\
+%  d_1 & = \phantom{\mu_0} \phantom{+} \mu_1 \phantom{x_0} + 2 \mu_2 x_1 + 3 \mu_3 x_1^2 \nonumber
+% \end{align}
+% 
+% \begin{align}
+%  y_0 = & {\mu_0 + \mu_1 x_0 + \phantom{2} \mu_2 x_0^2 + \phantom{3} \mu_3 x_0^3} \\
+%  d_0 = & \pushright{\mu_1 \phantom{x_0} + 2 \mu_2 x_0 + 3 \mu_3 x_0^2} \nonumber \\
+%  y_1 = & {\mu_0 + \mu_1 x_1 + \phantom{2} \mu_2 x_1^2 + \phantom{3} \mu_3 x_1^3 }\nonumber \\
+%  d_1 = & \pushright{\mu_1 \phantom{x_0} + 2 \mu_2 x_1 + 3 \mu_3 x_1^2} \nonumber
+% \end{align}
+% 
+% \begin{align}
+%  y_0 = & {\mu_0 + \mu_1 x_0 + \mu_2 x_0^2 + \mu_3 x_0^3} \\
+%  d_0 = & \pushright{\mu_1 + 2 \mu_2 x_0 + 3 \mu_3 x_0^2} \nonumber \\
+%  y_1 = & {\mu_0 + \mu_1 x_1 + \mu_2 x_1^2 + \mu_3 x_1^3 }\nonumber \\
+%  d_1 = & \pushright{\mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2} \nonumber
+% \end{align}
+% 
+% \begin{align}\label{eq:hermite-eqns}
+%  y_0 & = \mu_0 + \mu_1 x_0 + \mu_2 x_0^2 + \mu_3 x_0^3 \\
+%  d_0 & = \mu_1 + 2 \mu_2 x_0 + 3 \mu_3 x_0^2 \nonumber \\
+%  y_1 & = \mu_0 + \mu_1 x_1 + \mu_2 x_1^2 + \mu_3 x_1^3 \nonumber \\
+%  d_1 & = \mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2 \nonumber 
+% \end{align}
+% 
+% \begin{align}
+%  y_0 = &\mu_0 + \mu_1 x_0 + \mu_2 x_0^2 + \mu_3 x_0^3 \\
+%  d_0 = &\specialcell{\hfill \mu_1 + 2 \mu_2 x_0 + 3 \mu_3 x_0^2} \nonumber \\
+%  y_1 = &\mu_0 + \mu_1 x_1 + \mu_2 x_1^2 + \mu_3 x_1^3 \nonumber \\
+%  d_1 = &\specialcell{{\hfill \mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2}} \nonumber 
+% \end{align}
 
 \subsection{Differentiation and \texttt{argmin}}
 
@@ -249,7 +249,7 @@ and the minimum is at $-\text{sign}(\mu_1)\infty$.
 Dependence on monomial coeficients:
 \begin{equation}
 \nabla_{\vec{\mu}} \hat{x} =
-\begin{pmatrix}
+\begin{pmatrix}[1.5]
 0 
 \\
 - \frac{1}{2 \mu_2} 
@@ -258,9 +258,126 @@ Dependence on monomial coeficients:
 \end{pmatrix}
 \end{equation}
 
-\subsubsection{yyy}
+\subsubsection{$(x_0,y_0), (x_1,y_1), (x_2,y_2)$}
 
 \input{monomial-yyy}
+
+\begin{align}
+\mu_0 & =
+\frac{
+y_0 x_1 x_2 \left( x_1 - x_2 \right)
++
+y_1 x_2 x_0 \left( x_2 - x_0 \right)
++
+y_2 x_0 x_1 \left( x_0 - x_1 \right)
+}{
+\left(x_1-x_0\right) \left(x_2-x_1\right) \left(x_0-x_2\right)
+} 
+\\
+\mu_1 & =
+\frac{
+\left(y_2-y_0\right) x_1^{2}
++
+\left(y_1-y_2\right) x_0^{2}
++ 
+\left(y_0-y_1\right) x_2^{2}
+}{
+\left(x_1-x_0\right) \left(x_2-x_1\right) \left(x_0-x_2\right)
+} 
+\nonumber \\
+\mu_2 & = 
+\frac{
+\left(y_0-y_2\right) x_1
++
+\left(y_2-y_1\right) x_0
++
+\left(y_1-y_0\right) x_2
+}{
+\left(x_1-x_0\right) \left(x_2-x_1\right) \left(x_0-x_2\right)
+ } 
+\nonumber  \\ 
+ \hat{x} & = 
+\frac{
+ \left(y_2-y_1\right) x_0^{2}
+ +
+ \left(y_0-y_2\right) x_1^{2}
+ +
+ \left(y_1-y_0\right) x_2^{2}
+}{
+2 \left(
+\left(y_2-y_1\right) x_0
++ 
+\left(y_0-y_2\right) x_1 
++ 
+\left(y_1-y_0\right) x_2 
+\right)
+}
+\nonumber 
+\end{align}
+
+\newgeometry{onecolumn=true}
+
+\begin{equation}
+\nabla_{{xy}^3} \hat{x} =
+\begin{pmatrix}[2.5]
+\dfrac{
+\left(\left(y_0-y_2\right) x_1^{2}-\left(y_1-y_2\right) x_0^{2}-\left(y_0
+-y_1\right) x_2^{2}-2 \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-
+\left(y_0-y_1\right) x_2\right) x_0\right) \left(y_1-y_2\right)
+}{
+2
+ \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2
+\right)^{2}
+} 
+\\
+\dfrac{
+\left(x_0-x_1\right) \left(x_0-x_2\right) \left(
+x_1-x_2\right) \left(y_1-y_2\right)
+}{
+2 \left(\left(y_0-y_2\right) 
+x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2\right)^{2}
+} 
+\\ 
+\dfrac{
+-\left(\left(y_0-y_2\right) x_1^{2}-\left(y_1-y_2\right) x_0^{2}-\left(
+y_0-y_1\right) x_2^{2}-2 \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-
+\left(y_0-y_1\right) x_2\right) x_1\right) \left(y_0-y_2\right)
+}{
+2
+ \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2
+\right)^{2}
+}
+\\
+ \dfrac{
+ -\left(x_0-x_1\right) \left(x_0-x_2\right) \left(
+x_1-x_2\right) \left(y_0-y_2\right)
+}{
+2 \left(\left(y_0-y_2\right) 
+x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2\right)^{2}
+} 
+\\
+\dfrac{
+\left(\left(y_0-y_2\right) x_1^{2}-\left(y_1-y_2\right) x_0^{2}-\left(y_0
+-y_1\right) x_2^{2}-2 \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-
+\left(y_0-y_1\right) x_2\right) x_2\right) \left(y_0-y_1\right)
+}{
+2
+ \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2
+\right)^{2}
+}
+\\
+\dfrac{
+\left(x_0-x_1\right) \left(x_0-x_2\right) \left(
+x_1-x_2\right) \left(y_0-y_1\right)
+}{
+2 \left(\left(y_0-y_2\right) 
+x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2\right)^{2}
+}
+\end{pmatrix}
+\end{equation}
+
+\newgeometry{onecolumn=false}
+
 
 \subsubsection{yyd}
 
@@ -272,8 +389,8 @@ $2$ domain locations:
 
 \subsubsection{ydd}
 
-$3$ domain locations:
-\input{monomial-ydd3}
+% $3$ domain locations:
+% \input{monomial-ydd3}
 
 $2$ domain locations (essentially the secant step):
 \input{monomial-ydd2}
@@ -283,7 +400,6 @@ $2$ domain locations (essentially the secant step):
 \begin{equation}
 \mu(x) = \mu_0 + \mu_1 x + \mu_2 x^2 + \mu_3 x^3
 \end{equation}
-
 Critical points are at
 \begin{equation}
 \hat{x}_{\pm} = \frac{-\mu_2 \pm \sqrt{ \mu_2^{2} - 3 \mu_1 \mu_3 }}{3 \mu_3}
@@ -353,7 +469,7 @@ Showing the most likely cases.
 $2$ domain locations:
 \input{monomial-yydd2}
 
-% \subsubsection{yddd}
+% \subsection{yddd}
 % $4$ domain locations:
 % 
 % \input{monomial-yddd4}
@@ -523,7 +639,7 @@ for some $c$. Then
 $ 0 = (x_2 - x_0) + (x_2 - c)$
 implies $ c = 2 x_2 - x_0$.
 Then we normalize with 
-$\partial\lambda^{\text{ydd}}_1(x_1) = (x_1 - x_0) + (x_1 - x_2) + (x_0 - x2) 
+$\partial\lambda^{\text{ydd}}_1(x_1) = (x_1 - x_0) + (x_1 - x_2) + (x_0 - x_2) 
 = 2 (x_1 - x_2)$, so 
 \begin{equation}
 \lambda^{\text{ydd}}_1(x) = 
@@ -549,7 +665,7 @@ For example:
 {(x_0 - x_1) (x_0 - x_2) (x_0 - x_3)}
 \end{equation}
 
-% \subsubsection{yyyd}
+% \subsection{yyyd}
 % 
 % We need 
 % \begin{align}
@@ -743,7 +859,7 @@ section~\ref{sec:lagrange-yydd}:
 \nonumber
 \end{align}
 
-% \subsubsection{yddd}\label{sec:lagrange-yddd}
+% \subsection{yddd}\label{sec:lagrange-yddd}
 % 
 % For $\lambda^{\text{yddd}}_0$, we need 
 % \begin{align}
@@ -956,7 +1072,6 @@ One of these is a local minimum when the $2$nd derivative is positive:
 \partial^2 \nu(x) = 2\nu_2
  + 2 \nu_3 \left(x_{{\star}0} + x_{{\star}1} + x_{{\star}2}\right)
 \end{equation}
-
 
 \newpage
 \section{Divided differences}\label{sec:Divided-differences}

@@ -20,13 +20,28 @@ off verbatim;
 mathstyle equation;
 %------------------------------------------------------
 % yyy quadratic
+off nat;
 s := solve(
   { y0 = mu0 + mu1 * x0 + mu2 * x0^2,
     y1 = mu0 + mu1 * x1 + mu2 * x1^2,
     y2 = mu0 + mu1 * x2 + mu2 * x2^2,
     0 = mu1 + 2*mu2*x },
-  { x, mu0, mu1, mu2 });
-first(first(s));
+  { mu0, mu1, mu2, x });
+s;
+g := {
+df(( - ( - y1 + y0)*x2**2 - ( - y2 + y1)*x0**2 + ( - y2 + y0)*x1**2)/( - 2*( - y1 + y0)*x2 + 2*( - ( - y2 + y1)*x0 + ( -y2 + y0)*x1)),x0),
+df(( - ( - y1 + y0)*x2**2 - ( - y2 + y1)*x0**2 + ( - y2 + y0)*x1**2)/( - 2*( - y1 + y0)*x2 + 2*( - ( - y2 + y1)*x0 + ( -y2 + y0)*x1)),y0),
+df(( - ( - y1 + y0)*x2**2 - ( - y2 + y1)*x0**2 + ( - y2 + y0)*x1**2)/( - 2*( - y1 + y0)*x2 + 2*( - ( - y2 + y1)*x0 + ( -y2 + y0)*x1)),x1),
+df(( - ( - y1 + y0)*x2**2 - ( - y2 + y1)*x0**2 + ( - y2 + y0)*x1**2)/( - 2*( - y1 + y0)*x2 + 2*( - ( - y2 + y1)*x0 + ( -y2 + y0)*x1)),y1),
+df(( - ( - y1 + y0)*x2**2 - ( - y2 + y1)*x0**2 + ( - y2 + y0)*x1**2)/( - 2*( - y1 + y0)*x2 + 2*( - ( - y2 + y1)*x0 + ( -y2 + y0)*x1)),x2),
+df(( - ( - y1 + y0)*x2**2 - ( - y2 + y1)*x0**2 + ( - y2 + y0)*x1**2)/( - 2*( - y1 + y0)*x2 + 2*( - ( - y2 + y1)*x0 + ( -y2 + y0)*x1)),y2)
+};
+out "doc/interpolation/monomial2-argmin-yyy.rawtex"$
+on latex; on lasimp$
+write s;
+write g;
+off latex;      
+shut "doc/interpolation/monomial2-argmin-yyy.rawtex"$
 %------------------------------------------------------
 % yyyy cubic
 s := solve(
