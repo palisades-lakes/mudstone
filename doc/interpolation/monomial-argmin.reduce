@@ -19,6 +19,29 @@ LALINE!* := 120;
 off verbatim;
 mathstyle equation;
 %------------------------------------------------------
+% yyd quadratic
+off nat;
+s := solve(
+  { y0 = mu0 + mu1 * x0 + mu2 * x0^2,
+    y1 = mu0 + mu1 * x1 + mu2 * x1^2,
+    d1 = mu1 + 2 * mu2 * x1,
+    0 = mu1 + 2 * mu2 * x },
+  { mu0, mu1, mu2, x });
+s;
+g := {
+df(( - 2*( - y1 + y0)*x1 + (x1 + x0)*( - x1 + x0)*d1)/( - 2*( - y1 + y0) + 2*( - x1 + x0)*d1),x0),
+df(( - 2*( - y1 + y0)*x1 + (x1 + x0)*( - x1 + x0)*d1)/( - 2*( - y1 + y0) + 2*( - x1 + x0)*d1),y0),
+df(( - 2*( - y1 + y0)*x1 + (x1 + x0)*( - x1 + x0)*d1)/( - 2*( - y1 + y0) + 2*( - x1 + x0)*d1),x1),
+df(( - 2*( - y1 + y0)*x1 + (x1 + x0)*( - x1 + x0)*d1)/( - 2*( - y1 + y0) + 2*( - x1 + x0)*d1),y1),
+df(( - 2*( - y1 + y0)*x1 + (x1 + x0)*( - x1 + x0)*d1)/( - 2*( - y1 + y0) + 2*( - x1 + x0)*d1),d1)
+};
+out "doc/interpolation/monomial2-argmin-yyd.rawtex"$
+on latex; on lasimp$
+write s;
+write g;
+off latex;      
+shut "doc/interpolation/monomial2-argmin-yyd.rawtex"$
+%------------------------------------------------------
 % yyy quadratic
 off nat;
 s := solve(

@@ -238,7 +238,7 @@ $(x_0,y_0,d_0)$.
 
 Critical point at
 \begin{equation}
-\hat{x} = \frac{-\mu_1}{2 \mu_2}
+\hat{x} = - \frac{\mu_1}{2 \mu_2}
 \end{equation}
 $\hat{x}$ is the global minimum if $\mu_2>0$ 
 and the global maximum if $\mu_2>0$.
@@ -258,134 +258,269 @@ Dependence on monomial coeficients:
 \end{pmatrix}
 \end{equation}
 
-\subsubsection{$(x_0,y_0), (x_1,y_1), (x_2,y_2)$}
+Note that $\hat{x} \to  \pm \infty$ as $\mu_2 \to 0$. 
+This is not surprising, since $\mu_2 = 0$ is equivalent to
+an affine polynomial, which has no critical points.
+This key issue it raises is how, for each concrete problem,
+to determine what degree interpolant the inputs can support,\
+and reverting to a lower degree polynomial when that is all that
+can be accurately fit.
 
-\input{monomial-yyy}
+\subsubsection{Input: $(x_0,y_0), (x_1,y_1), (x_2,y_2)$}
+
+%\input{monomial-yyy}
+
+Constraints:
 
 \begin{align}
+y_0 & = \mu_0+\mu_1 x_0+\mu_2 x_0^{2}  
+\\
+y_1 & = \mu_0+\mu_1 x_1+\mu_2 x_1^{2}  
+\nonumber 
+\\
+y_2 & = \mu_0+\mu_1 x_2+\mu_2 x_2^{2}  
+\nonumber 
+\\
+0 & = \mu_1 + 2 \mu_2 \hat{x}  
+\nonumber 
+\end{align}
+
+Solution:
+\begin{align}
 \mu_0 & =
-\frac{
-y_0 x_1 x_2 \left( x_1 - x_2 \right)
+- \frac{
+x_0 x_1 y_2 \left( x_1 - x_0 \right)
 +
-y_1 x_2 x_0 \left( x_2 - x_0 \right)
+x_1 x_2 y_0 \left( x_2 - x_1 \right)
 +
-y_2 x_0 x_1 \left( x_0 - x_1 \right)
+x_2 x_0 y_1 \left( x_0 - x_2 \right)
 }{
 \left(x_1-x_0\right) \left(x_2-x_1\right) \left(x_0-x_2\right)
 } 
 \\
 \mu_1 & =
-\frac{
-\left(y_2-y_0\right) x_1^{2}
-+
-\left(y_1-y_2\right) x_0^{2}
+- \frac{
+x_0^{2} \left(y_2-y_1\right)
 + 
-\left(y_0-y_1\right) x_2^{2}
+x_1^{2} \left(y_0-y_2\right) 
++
+x_2^{2} \left(y_1-y_0\right)
 }{
 \left(x_1-x_0\right) \left(x_2-x_1\right) \left(x_0-x_2\right)
 } 
 \nonumber \\
 \mu_2 & = 
 \frac{
-\left(y_0-y_2\right) x_1
+x_0 \left(y_2-y_1\right) 
 +
-\left(y_2-y_1\right) x_0
+x_1 \left(y_0-y_2\right)
 +
-\left(y_1-y_0\right) x_2
+x_2 \left(y_1-y_0\right) 
 }{
 \left(x_1-x_0\right) \left(x_2-x_1\right) \left(x_0-x_2\right)
  } 
 \nonumber  \\ 
  \hat{x} & = 
 \frac{
- \left(y_2-y_1\right) x_0^{2}
+x_0^{2} \left(y_2-y_1\right) 
  +
- \left(y_0-y_2\right) x_1^{2}
+x_1^{2} \left(y_0-y_2\right) 
  +
- \left(y_1-y_0\right) x_2^{2}
+x_2^{2} \left(y_1-y_0\right) 
 }{
 2 \left(
-\left(y_2-y_1\right) x_0
+x_0 \left(y_2-y_1\right) 
 + 
-\left(y_0-y_2\right) x_1 
+x_1 \left(y_0-y_2\right) 
 + 
-\left(y_1-y_0\right) x_2 
+x_2 \left(y_1-y_0\right)  
 \right)
 }
 \nonumber 
 \end{align}
 
-\newgeometry{onecolumn=true}
+%\newgeometry{onecolumn=true}
+
+Derivative of $\hat{x}$ with respect to inputs
+$(x_0,y_0,x_1,y_1,x_2,y_2)$,
+using $z_{ij} \defeq z_i - z_j$:
 
 \begin{equation}
-\nabla_{{xy}^3} \hat{x} =
-\begin{pmatrix}[2.5]
+\nabla \hat{x} =
+\begin{pmatrix}[3]
 \dfrac{
-\left(\left(y_0-y_2\right) x_1^{2}-\left(y_1-y_2\right) x_0^{2}-\left(y_0
--y_1\right) x_2^{2}-2 \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-
-\left(y_0-y_1\right) x_2\right) x_0\right) \left(y_1-y_2\right)
-}{
-2
- \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2
-\right)^{2}
+\left(
+x_0^2 y_{21}
+-
+x_1 \left( x_1 - 2 x_0 \right) y_{02}
+- 
+x_2 \left( x_2 - 2 x_0 \right) y_{10}
+\right)
+y_{21}
+}{ %---------------------------------------------------
+2 \left( x_0 y_{21} + x_1 y_{02} + x_2 y_{10} \right)^{2}
 } 
-\\
-\dfrac{
-\left(x_0-x_1\right) \left(x_0-x_2\right) \left(
-x_1-x_2\right) \left(y_1-y_2\right)
+\\ %---------------------------------------------------
+- \dfrac{
+x_{10} x_{02} x_{21} y_{21}
 }{
-2 \left(\left(y_0-y_2\right) 
-x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2\right)^{2}
+2 \left( x_0 y_{21} + x_1 y_{02} + x_2 y_{10} \right)^{2}
 } 
-\\ 
+\\  %---------------------------------------------------
 \dfrac{
--\left(\left(y_0-y_2\right) x_1^{2}-\left(y_1-y_2\right) x_0^{2}-\left(
-y_0-y_1\right) x_2^{2}-2 \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-
-\left(y_0-y_1\right) x_2\right) x_1\right) \left(y_0-y_2\right)
-}{
-2
- \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2
-\right)^{2}
+\left(
+x_1^2 y_{02}
+-
+x_2 \left( x_2 - 2 x_1 \right) y_{10}
+- 
+x_0 \left( x_0 - 2 x_1 \right) y_{21}
+\right)
+y_{02}
+}{ %---------------------------------------------------
+2 \left( x_0 y_{21} + x_1 y_{02} + x_2 y_{10} \right)^{2}
 }
-\\
- \dfrac{
- -\left(x_0-x_1\right) \left(x_0-x_2\right) \left(
-x_1-x_2\right) \left(y_0-y_2\right)
-}{
-2 \left(\left(y_0-y_2\right) 
-x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2\right)^{2}
+\\ %---------------------------------------------------
+- \dfrac{
+x_{21} x_{10} x_{02} y_{02}
+}{ %---------------------------------------------------
+2 \left( x_0 y_{21} + x_1 y_{02} + x_2 y_{10} \right)^{2}
 } 
-\\
+\\ %---------------------------------------------------
 \dfrac{
-\left(\left(y_0-y_2\right) x_1^{2}-\left(y_1-y_2\right) x_0^{2}-\left(y_0
--y_1\right) x_2^{2}-2 \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-
-\left(y_0-y_1\right) x_2\right) x_2\right) \left(y_0-y_1\right)
-}{
-2
- \left(\left(y_0-y_2\right) x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2
-\right)^{2}
+\left(
+x_2^2 y_{10}
+-
+x_0 \left( x_0 - 2 x_2 \right) y_{21}
+- 
+x_1 \left( x_1 - 2 x_2 \right) y_{02}
+\right)
+y_{10}
+}{ %---------------------------------------------------
+2 \left( x_0 y_{21} + x_1 y_{02} + x_2 y_{10} \right)^{2}
 }
-\\
-\dfrac{
-\left(x_0-x_1\right) \left(x_0-x_2\right) \left(
-x_1-x_2\right) \left(y_0-y_1\right)
-}{
-2 \left(\left(y_0-y_2\right) 
-x_1-\left(y_1-y_2\right) x_0-\left(y_0-y_1\right) x_2\right)^{2}
+\\ %---------------------------------------------------
+- \dfrac{
+x_{02} x_{21} x_{10} y_{10}
+}{ %---------------------------------------------------
+2 \left( x_0 y_{21} + x_1 y_{02} + x_2 y_{10} \right)^{2}
 }
 \end{pmatrix}
 \end{equation}
 
+Note that all the components of the gradient have the same 
+denominatior, and
+$\hat{x}$ is unstable when that denominator is small.
+Also note that:
+\begin{equation}
+x_0 y_{21} + x_1 y_{02} + x_2 y_{10}
+=
+- \left(
+y_0 x_{21} + y_1 x_{02} + y_2 x_{10}
+\right)
+\end{equation}
+
+%\newgeometry{onecolumn=false}
+
+
+%\subsubsection{Input: $(x_0,y_0),(x_1,y_1),(x_2,d_2)$}
+% $3$ domain locations:
+% \input{monomial-yyd3}
+
+\subsubsection{Input: $(x_0,y_0),(x_1,y_1,d_1)$}
+
+This not one of the standard interpolation problems.
+It's close to hermite interpolation,
+which uses a cubic polynomial to match
+$(x_0,y_0,d_0),(x_1,y_1,d_1)$.
+We'll seew this in detail below 
+in section~\ref{sec:Cubic-hermite}.
+Current hypothesis is that the cubic hermite argmin is more
+unstable, especially with respect to changes in the
+slope constraint that is farther away.
+(\textbf{TODO:} is this really true?)
+
+Question to be answered: is the quadratic polynomial that drops
+one slope constraint better/useful in some cases?
+
+% $2$ domain locations:
+% \input{monomial-yyd2}
+
+Constraints:
+\begin{align}
+y_0 & = \mu_0+\mu_1 x_0+\mu_2 x_0^{2}  
+\\
+y_1 & = \mu_0+\mu_1 x_0+\mu_2 x_1^{2}  
+\nonumber
+\\
+d_1 & = \mu_1 + 2 \mu_2 x_1  
+\nonumber
+\\
+0 & = \mu_1 + 2 \mu_2 \hat{x}  
+\nonumber
+\end{align}
+
+Solution:
+\begin{align}
+\mu_0 & =
+\left(x_0^{2} y_1-2 x_0 x_1 y_1+x_1^{2} y_0-\left(x_0-x_1\right) d_1 x_0 x_1
+\right)
+/
+\left(x_0-x_1\right)^{2}
+\nonumber
+\\
+\mu_1 & =
+\left(\left(x_0+x_1\right) \left(x_0-
+x_1\right) d_1-2 \left(y_0-y_1\right) x_1\right)
+/
+\left(x_0-x_1\right)^{2} 
+\nonumber
+\\
+\mu_2
+& = \left(-\left(x_0-x_1\right) d_1+y_0-y_1\right)
+/
+\left(x_0-x_1\right)^{2}
+\nonumber 
+\\
+\hat{x} & =
+\left(\left(x_0+x_1\right) \left(x_0-x_1\right) d_1-2 \left(y_0-y_1\right) x_1
+\right)
+/
+\left(2 \left(x_0-x_1\right) d_1-2 \left(y_0-y_1\right)\right)
+\nonumber 
+\end{align}
+
+Derivative of $\hat{x}$ with respect to inputs
+$(x_0,y_0,x_1,y_1,d_1)$,
+using $z_{ij} \defeq z_i - z_j$:
+\newgeometry{onecolumn=true}
+\begin{equation}
+\nabla \hat{x} =
+\begin{pmatrix}[3]
+\left(d_1 \left(d_1 x_0-d_1 x_1-2 y_0+2 y_1\right) \left(x_0-x_1\right)\right)
+/
+\left(2 \left(\left(x_0-x_1\right) d_1-\left(y_0-y_1\right)\right)^{2}\right)
+\\
+\left(d_1 \left(x_0-x_1\right)^{2}\right)
+/
+\left(2 \left(\left(x_0-x_1 \right) d_1-\left(y_0-y_1\right)\right)^{2}\right) 
+\\
+ \left(d_1 \left(\left(x_0+x_1\right) \left(x_0-x_1\right) d_1-2 \left(y_0-y_1\right) x_1\right)-2 
+\left(\left(x_0-x_1\right) d_1-\left(y_0-y_1\right)\right) \left(d_1 x_1+y_0-y_1
+\right)\right)
+/
+\left(2 \left(\left(x_0-x_1\right) d_1-\left(y_0-y_1\right)\right)^{2}\right)
+\\
+ \left(-d_1 \left(x_0-x_1\right)^{2}\right)
+ /
+ \left(2 \left(\left(x_0-x_1\right) d_1-\left(y_0-y_1\right)\right)^{2}\right)
+\\ 
+\left(-\left(x_0-x_1\right)^{2} \left(y_0-y_1\right)\right)
+/
+\left(2 \left( \left(x_0-x_1\right) d_1-\left(y_0-y_1\right)\right)^{2}\right)
+\end{pmatrix}
+\end{equation}
 \newgeometry{onecolumn=false}
 
-
-\subsubsection{yyd}
-
-$3$ domain locations:
-\input{monomial-yyd3}
-
-$2$ domain locations:
-\input{monomial-yyd2}
 
 \subsubsection{ydd}
 
@@ -459,7 +594,7 @@ Dependence on monomial coeficients:
 % $3$ domain locations:
 % \input{monomial-yyyd3}
 
-\subsubsection{yydd}
+\subsubsection{yydd}{sec:Cubic-hermite}
 
 Showing the most likely cases.
 
