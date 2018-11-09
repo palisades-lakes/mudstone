@@ -19,13 +19,21 @@ off verbatim;
 mathstyle equation;
 %------------------------------------------------------
 % yyy
-solve(
-0 = df(
-y0*((x-x1)*(x-x2))/((x0-x1)*(x0-x2)) +
+l := y0*((x-x1)*(x-x2))/((x0-x1)*(x0-x2)) +
 y1*((x-x2)*(x-x0))/((x1-x2)*(x1-x0)) +
-y2*((x-x0)*(x-x1))/((x2-x0)*(x2-x1)),
-x),
-x);
+y2*((x-x0)*(x-x1))/((x2-x0)*(x2-x1))$
+s := solve(0 = df(l,x),x)$
+xhat := rhs(first(s))$
+
+g := { df(xhat,x0), df(xhat,y0) }$
+out "doc/interpolation/rawtex/lagrange-argmin-yyy.rawtex"$
+on latex$ 
+on lasimp$
+write first(s);
+write g;
+off latex;      
+shut "doc/interpolation/rawtex/lagrange-argmin-yyy.rawtex"$
+
 %------------------------------------------------------
 % yyyy
 on factor;

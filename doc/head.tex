@@ -122,6 +122,8 @@ BoldItalicFont = *08-Italic ]
   \let\@ifnextchar\new@ifnextchar
   \array{*\c@MaxMatrixCols c}}
 \makeatother
+% https://tex.stackexchange.com/questions/42726/align-but-show-one-equation-number-at-the-end/42728#42728
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 %-------------------------------------------------------------------------------
 \usepackage{mathtools}
 %-------------------------------------------------------------------------------
@@ -201,7 +203,7 @@ keywordstyle={\ttfamily}}
 \renewcommand{\today}{
 \the\year \dateseparator \twodigit\month \dateseparator \twodigit\day}
 %-------------------------------------------------------------------------------
-\setlength{\parskip}{3pt}
+\setlength{\parskip}{5pt}
 \setlength{\parindent}{0pt}
 \usepackage[parfill]{parskip}
 %-------------------------------------------------------------------------------
@@ -251,9 +253,9 @@ keywordstyle={\ttfamily}}
 \titleformat{\paragraph}[runin]{\normalsize\sffamily\mdseries}{\theparagraph}{0.5em}{}[\hspace{1em}]
 \titleformat{\subparagraph}[runin]{\normalsize\sffamily\mdseries}{\thesubparagraph}{0.5em}{}[\hspace{1em}]
 
-\titlespacing\section{0pt}{4pt plus 4pt minus 2pt}{3pt plus 2pt minus 2pt}
-\titlespacing\subsection{0pt}{4pt plus 4pt minus 2pt}{3pt plus 2pt minus 2pt}
-\titlespacing\subsubsection{0pt}{4pt plus 4pt minus 2pt}{3pt plus 2pt minus 2pt}
+\titlespacing\section{0pt}{12pt plus 12pt minus 2pt}{5pt plus 5pt minus 2pt}
+\titlespacing\subsection{0pt}{11pt plus 11pt minus 2pt}{5pt plus 5pt minus 2pt}
+\titlespacing\subsubsection{0pt}{10pt plus 10pt minus 2pt}{5pt plus 5pt minus 2pt}
 
 \setcounter{secnumdepth}{7}
 %-------------------------------------------------------------------------------

@@ -33,14 +33,14 @@ d1 = nu1 + nu2*(x1-x0)
 
 v := { nu0, nu1, nu2 };
 s := solve(c,v);
-out "doc/interpolation/newton-yyd.rawtex"$
+out "doc/interpolation/rawtex/newton-yyd.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "doc/interpolation/newton-yyd.rawtex";
+shut "doc/interpolation/rawtex/newton-yyd.rawtex";
 %------------------------------------------------------
 c := { 
 y0 = nu0 
@@ -54,14 +54,14 @@ d1 = nu1 - nu2*x01
 
 v := { nu0, nu1, nu2, x_0 };
 s := solve(c,v);
-out "doc/interpolation/newton-yyd-argmin.rawtex"$
+out "doc/interpolation/rawtex/newton-yyd-argmin.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "doc/interpolation/newton-yyd-argmin.rawtex";
+shut "doc/interpolation/rawtex/newton-yyd-argmin.rawtex";
 %------------------------------------------------------
 % cubic
 %------------------------------------------------------
@@ -83,14 +83,14 @@ d1 = nu1 - nu2*x01 + nu3*x01*x01/2
 v := { nu0, nu1, nu2, nu3 };
 s := solve(c,v);
 first(s);
-out "doc/interpolation/newton-yd2.rawtex"$
+out "doc/interpolation/rawtex/newton-yd2.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "doc/interpolation/newton-yd2.rawtex";
+shut "doc/interpolation/rawtex/newton-yd2.rawtex";
 %------------------------------------------------------
 % nu(x) = nu0 + nu1*(x-x0) + nu2*(x-x0)*(x-x1) 
 %       + nu3*(x-x0)*(x-x1)*(x-x2)
@@ -113,14 +113,14 @@ d1 = nu1 - nu2*(x0-x1) + nu3*(x0-x1)^2/2
 v := { nu0, nu1, nu2, nu3, x };
 s := solve(c,v);
 first(s);
-out "doc/interpolation/newton-yd2-argmin.rawtex"$
+out "doc/interpolation/rawtex/newton-yd2-argmin.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "doc/interpolation/newton-yd2-argmin.rawtex";
+shut "doc/interpolation/rawtex/newton-yd2-argmin.rawtex";
 %------------------------------------------------------
 % nu(x) = nu0 + nu1*(x-x0) + nu2*(x-x0)*(x-x1) 
 %       + nu3*(x-x0)*(x-x1)*(x-x2)
@@ -135,14 +135,14 @@ c := {
 v := { x };
 s := solve(c,v);
 first(s);
-out "doc/interpolation/newton-yd2-argmin.rawtex"$
+out "doc/interpolation/rawtex/newton-yd2-argmin.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "doc/interpolation/newton-yd2-argmin.rawtex";
+shut "doc/interpolation/rawtex/newton-yd2-argmin.rawtex";
 %------------------------------------------------------
 c := { 
 y0 = nu0 
@@ -157,13 +157,13 @@ d1 = nu1 - nu2*x01 + nu3*x01*x12
 v := { nu0, nu1, nu2, nu3 };
 s := solve(c,v);
 first(s);
-out "doc/interpolation/newton-yd2.rawtex"$
+out "doc/interpolation/rawtex/newton-yd2.rawtex"$
 on latex;
 on exp$
 write c;
 on lasimp;
 write s;
 off latex;      
-shut "doc/interpolation/newton-yd2.rawtex";
+shut "doc/interpolation/rawtex/newton-yd2.rawtex";
 %------------------------------------------------------
 ;END;
