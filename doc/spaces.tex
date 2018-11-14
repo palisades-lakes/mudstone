@@ -1,0 +1,102 @@
+% jam 2004-09-10
+
+\section{Spaces}
+\subsection{Linear spaces}
+\label{sec:Linear-spaces}
+
+My approach to linear (aka vector) spaces is largely based on
+the texts I used as a college freshman for linear algebra and
+multivariate calculus: Halmos \cite{halmos-1958}
+and Spivak \cite{spivak-1965}.
+
+Some useful definitions/identities:
+
+\subsubsection{Inner product spaces}
+Let $\Vspace$ be an $n$-dimensional real inner product space.
+Let $\v, \w \in \Vspace$.
+
+
+\begin{itemize}
+\item The inner (dot) product on $\Reals^n$:
+\begin{equation}
+\v \bullet \w \; \equiv \; \sum_{i=0}^{n-1} v_i w_i
+\end{equation}
+
+\item The euclidean ($l_2$) norm:
+\begin{equation}
+\| \v \|^2 \; \equiv \; \v \bullet \v
+\end{equation}
+
+\item $\theta(\v,\w)$ is the angle between $\v$ and $\w$
+and is defined by:
+\begin{eqnarray}
+\v \bullet \w \; = \; \| \v \| \| \w \| \cos(\theta(\v,\w))
+\\
+\theta(\v,\w)
+\; \equiv \;
+\cos^{-1} \left(\frac{ \v \bullet \w }{\| \v \| \| \w \| } \right)
+\nonumber
+\end{eqnarray}
+
+\item The tensor (outer) product:
+
+Let $\v, \u \in \Vspace, \w \in \Wspace.$
+$\w \otimes \v$ is a rank 1 linear map
+from $\Vspace$ to $\Wspace$, defined by:
+\begin{equation}
+(\w \otimes \v)(\u) \; \equiv \; \w (\v \bullet \u)
+\end{equation}
+
+Note: this is an abuse of the usual definition of tensor product $\otimes$.
+This operation, which takes a pair of vectors and returns a linear map,
+is more conventionally referred to as the 'outer product',
+and written $\w \v^{\dagger}$.
+However, because I am working in spaces other than $\Reals^n$
+(eg. $\Lspace(\Vspace,\Wspace)$, the space of linear maps
+between 2 vector spaces),
+I want to avoid notations that suggest thinking in terms
+of 'row' and 'column' vectors.
+
+The following is a useful identity.
+If $\t \in \Tspace$, $\u, \v \in \Vspace$, and $\w \in \Wspace.$
+then
+\begin{equation}
+\label{eq:tensor-dot}
+(\t \otimes \u) (\v \otimes \w)(\u) = (\u \bullet \v) (\t \otimes \w)
+\end{equation}
+
+\item Elementary orthogonal projection:
+\begin{equation}
+\Projection_{\w} \v
+\; \equiv \;
+\left( \frac{ \w }{ \| \w \| } \otimes \frac{ \w }{ \| \w \| } \right) \v
+\; = \;
+\left( \frac{\w }{\|\w\|} \bullet \v \right) \frac{\w}{\|\w\|}
+\end{equation}
+
+\item Orthogonal complement:
+\begin{equation}
+\perp_{\w} \v
+\; \equiv \;
+\v \perp \w
+\; \equiv \;
+\v \; - \; \Projection_{\w} \v
+\; = \;
+\v \; - \; \left( \frac{\w}{\|\w\|} \bullet \v \right) \frac{\w}{\|\w\|}
+\end{equation}
+
+\end{itemize}
+
+\subsection{Affine spaces}
+\label{sec:affine-spaces}
+
+\subsection{Projective spaces}
+\label{sec:Projective-spaces}
+
+\subsection{Oriented projective spaces}
+\label{sec:Oriented-projective-spaces}
+\cite{Stolfi1991opg}
+
+\subsection{Manifolds}
+\label{sec:Manifolds}
+

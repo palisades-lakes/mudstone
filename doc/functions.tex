@@ -1,0 +1,257 @@
+% jam 2018-11-13
+
+\section{Functions between linear spaces}
+\label{sec:functions}
+
+In general, the functions discussed here map between real inner product spaces:
+$\f:\Vspace \mapsto \Wspace$, where $\Vspace$ is the
+{\it domain} and $\Wspace$ is the {\it codomain}.
+The real inner product spaces are almost derived from some $\Reals^n$.
+
+The {\it range} of $\f$, $\range(f)$, is the set $\f(\Vspace)$,
+which may be a proper subset of its codomain $\Wspace$.
+The {\it kernel} of $\f$, $\kernel(f)$, is the set
+$\kernel(\f) = \{ \v \in \Vspace : \f(\v) = \0 \}$.
+
+When I want to distinguish between real- and vector-valued functions,
+I may use 'function' for vector-valued functions and
+'functional' for real-valued ones.
+
+I use $\Uspace$, $\Vspace$, $\Wspace$ for generic linear spaces,
+$\u$, $\v$, $\w$, etc., for elements of linear spaces,
+usually called \textit{vectors}
+and
+$\f$, $\g$, $\h$ for vector-valued functions.
+I generally do not distinguish $\Reals$, the real numbers,
+and $\Reals^1$, or any other 1-dimensional real linear space.
+I sometimes use $f$, $g$, $h$ for extra clarity in the special
+case of real-valued functions.
+
+The domains of many interesting functions,
+such as those that depend on vertex positions,
+are direct sum of inner product spaces.
+The {\it direct sum} $\Vspace \oplus \Wspace$ is the inner product space
+consisting of the ordered pairs $\{ (\v,\w) : \v \in \Vspace, \w \in \Wspace \}$
+inheriting the inner product space operations in the obvious way:
+$(\v_0,\w_0) \bullet (\v_1,\w_1) = (\v_0 \bullet \v_1) + (\w_0 \bullet \w_1).$
+I will usually write an element of $\oplus^n \Vspace$ as
+$(\v_0,\ldots,\v_{n-1})$
+and use
+$\f(\v_0,\v_1,\ldots,\v_{n-1})$
+for a function that depends on $n$ vectors.
+
+%--------------------------------------------------------------------
+
+\subsection{Linear functions}
+\label{sec:linear-functions}
+
+A function $\Lmap(\v):\Vspace \mapsto \Wspace$
+is {\it linear} iff
+$\Lmap(a_0 \v_0 + a_1 \v_1) = a_0 \Lmap(\v_0) + a_1 \Lmap(\v_1)$.
+I will often write $\Lmap\v \equiv \Lmap(\v)$.
+
+Its not hard to see that, for a linear function,
+the range and kernel are linear subspaces of the codomain and
+domain, respectively.
+Thus any linear function between inner product spaces
+divides its domain and codomain each into 2 orthogonal subspaces.
+The domain is divided into $\Vspace = \kernel(\Lmap) \oplus \kernel^{\perp}(\Lmap)$,
+and the codomain is divided into $\Wspace = \range(\Lmap) \oplus \range^{\perp}(\Lmap)$.
+
+The most common representation for linear functions is the {\it matrix:}
+Let $\Lmap(\v):\Vspace \mapsto \Wspace$ be linear,
+$\{ \e_0^{\Vspace} \ldots  \e_{m-1}^{\Vspace} \}$ an orthonormal basis for $\Vspace$,
+and
+$\{ \e_0^{\Wspace} \ldots \e_{n-1}^{\Wspace} \}$ an orthonormal  basis for $\Wspace$
+Then $\Lmap$ can be expressed as
+\begin{equation}
+\Lmap
+ =
+\sum_{i=0}^{m-1} \sum_{j=0}^{n-1} L_{ij} ( \e_i^{\Wspace} \otimes \e_j^{\Vspace} )
+\end{equation}
+$(L_{ij})$ is the matrix representation of $\Lmap$ with respect to
+the two bases\cite{halmos-1958}.
+
+It is important to note that there are many usful
+representations for linear functions other than matrices \cite{mcdonald-1989b}.
+Sometimes other representations are used for convenience,
+or to enforce some constraint like symmetry.
+In some cases, a non-matrix representation must be used,
+because a particular linear transformation
+cannot be accurately represented by a matrix of floating point numbers.
+
+Examples:
+
+\begin{itemize}
+
+\item Column-wise:
+$\Lmap = \sum_{j=0}^{n-1} ( \c_j^{\Lmap} \otimes \e_j^{\Vspace} )$
+
+$\c_j^{\Lmap} \in \Wspace$ are the 'columns' of $\Lmap$.
+$\linear_span\{ \c_0^{\Lmap} \ldots \c_{n-1}^{\Lmap} \} = \range(\Lmap)$
+(see section \ref{sec:spans-and-projections}).
+
+\item Row-wise:
+$\Lmap = \sum_{i=0}^{m-1} ( \e_i^{\Wspace} \otimes  \r_i^{\Lmap} )$
+
+$\r_i^{\Lmap} \in \Vspace$ are the 'rows' of $\Lmap$.
+$\linear_span\{ \r_0^{\Lmap} \ldots \r_{m-1}^{\Lmap} \} =  \kernel(\Lmap)^{\perp}$
+(see section \ref{sec:spans-and-projections}).
+
+\item Householder:
+$\h_{\v} = \Identity_{\Vspace} - \frac{2}{\| \v \|^2} (\v \otimes \v)$
+
+Householder maps are usually chosen to zero the elements of
+a vector, or a row or column of a matrix, for a contiguous range of
+indices, say, $[i_0,\ldots,i_n)$.
+
+\end {itemize}
+
+%--------------------------------------------------------------------
+
+\subsection{Affine functions}
+\label{sec:affine-functions}
+
+A function $\Amap(\v):\Vspace \mapsto \Wspace$
+is {\it affine} if distributes over affine combinations:
+$\Amap(\sum_{i=0}^{n-1} a_i \v_i) = \sum_{i=0}^{n-1} a_i \Amap(\v_i) $
+for all $\{a_i\}$ such that $1 = \sum_{i=0}^{n-1} a_i$.
+(Note that I am describing affine functions on vector (linear) spaces,
+rather than the slightly more general notion of affine functions on affine spaces.)
+Any linear function between linear spaces is automatically affine.
+The other major class of affine functions on linear spaces are the translations.
+A {\it translation,} $\Tmap_{\t}$, $\Vspace \mapsto \Vspace$,
+simply adds a vector ($\t$) to its argument:
+$\Tmap_{\t} \v = \v + \t$.
+It's not hard to see that any affine function between two linear spaces
+can be represented as the sum of a linear function and a translation.
+A typical representation for a general affine function $\Amap : \Vspace \mapsto \Wspace$
+is as a pair $(\Lmap,\t)$ where $\Lmap : \Vspace \mapsto \Wspace$ is linear,
+$\t \in \Wspace$, and $\Amap(\v) = \Lmap(\v) + \t$.
+
+%--------------------------------------------------------------------
+
+\subsection{Spans and projections}
+\label{sec:spans-and-projections}
+
+Let $\Vspace$ be an $n$-dimensional inner product space.
+
+The {\it linear span} of a set of $m$ vectors in $\Vspace$
+is the set of linear combinations of those vectors:
+\begin{equation}
+\linear_span\{ \v_0 \ldots \v_{m-1} \} = \{\v \in \Vspace : \v = \sum_{i=0}^{m-1} a_i \v_i\}
+\end{equation}
+$\linear_span\{ \v_0 \ldots \v_{m-1} \}$ is a linear subspace of $\Vspace$.
+
+The {\it projection} $\Projection_{\Sset} \v$ of a vector $\v \in \Vspace$
+onto an arbitrary subset $\Sset \subset \Vspace$
+is the closest point in $\Sset$ to $\v$.
+Projection onto a linear subspace is a linear function and
+can be computed by summing
+elementary orthogonal projections onto an orthonormal basis for the subspace.
+
+An orthonormal basis for $\linear_span\{ \v_0 \ldots \v_{m-1} \}$
+(and $\linear_span\{ \v_0 \ldots \v_{m-1} \}^\perp$)
+can be computed using the QR decomposition
+of the function $\Vmap = \sum_{i=0}^{m-1} \v_i \otimes \e_i$,
+(the $n \times m$ matrix whose columns are the $\v_i$)
+\cite[See][sec. 5.2 ]{golub-vanloan-2012}.
+
+The {\it affine span} of a set of $m+1$ vectors in $\Vspace$
+is the set of affine combinations of those vectors:
+\begin{equation}
+\affine_span\{ \p_0 \ldots \p_{m} \} = \{\v \in \Vspace : \v = \sum_{i=0}^{m} b_i \p_i;
+1 = \sum_{i=0}^{m} b_i \}.
+\end{equation}
+$\affine_span\{ \p_0 \ldots \p_{m} \}$ is an affine subspace of $\Vspace$.
+$\b = ( b_0 \ldots b_m )$ are {\it barycentric coordinates}
+for $\v$ with respect to $\{ \p_0 \ldots \p_{m} \}$.
+The barycentric coordinates are unique if $\{ \p_0 \ldots \p_{m} \}$
+are affinely independent.
+
+Any affine subspace, $\Aspace$, of a linear space, $\Vspace$ can be represented as
+as a translation of a linear subspace of $\Vspace$:
+$\Aspace = \Tspace(\Aspace) + \t$,
+$\Tspace(\Aspace)$ is the set of differences of elements of $\Aspace$,
+a linear subspace of $\Vspace$.
+If $\t$ is any element of $\Aspace$.
+then projection onto $\Aspace$
+can be computed as a translation of an orthogonal projection onto $\Tspace(\Aspace)$:
+$\Projection_{\Aspace} (\p) = \t + \Projection_{\Tspace(\Aspace)} (\p - \t)$.
+Typically, we pick $\t$ to be the smallest element of $\Aspace$.
+Projection onto an affine space is clearly an affine function.
+
+We can represent the affine span of a set of $m+1$ vectors
+as a translation of a linear span:
+\begin{equation}
+\affine_span\{ \p_0 \ldots \p_{m} \} = \p_m + \linear_span\{\v_0 \ldots \v_{m-1}\}
+\end{equation}
+where $\v_i = \p_i - \p_m$,
+which allows us to compute the projection onto
+$\affine_span\{ \p_0 \ldots \p_{m} \}$
+again using the QR decomposition
+of $\Vmap = \sum_{i=0}^{m-1} \v_i \otimes \e_i$.
+
+%--------------------------------------------------------------------
+
+\subsection{Inverses and pseudo-inverses}
+\label{sec:Inverses-and-pseudo-inverses}
+
+A convenient definition for the {\it true inverse}
+of a function $\f(\v):\Vspace \mapsto \Wspace$ is
+$\f^{-1}(\w) = \{ \v : \f(\v) = \w \}$.
+The usual definition of inverse treats $\f^{-1}$
+as a function from $\Wspace \mapsto \Vspace$,
+which is undefined where the value of the true
+inverse is not a set containing a single point.
+
+For functions between inner product spaces,
+the {\it pseudo-inverse}, $f^{-}$, is a function $\Wspace \mapsto \Vspace$
+defined everywhere on $\Wspace$.
+Let $\hat{\w}$ be an element of $\Wspace$ closest to $\w$
+such that $\f^{-1}(\w)$ is not empty.
+Let $\hat{\v}$ be a minimum norm element of $\f^{-1}(\hat{\w})$.
+Then $\f^{-}(\w) = \hat{\v}$.
+
+If $\Lmap$ is linear, then it's not hard to see that
+$\hat{\w} = \pi_{\range(\Lmap)} \w$, the projection of $\w$
+on the range of $\Lmap$
+and
+$\hat{\v}$ is the unique element of $\kernel^{\perp}(\Lmap)$
+such that $\Lmap(\hat{\v}) = \hat{\w}$.
+
+The pseudo-inverse of a linear function can be characterized
+by the four Moore-Penrose conditions
+\cite[See][sec. 5.5.2]{golub-vanloan-2012}:
+\begin{enumerate}
+\item $\Lmap \Lmap^{-} \Lmap = \Lmap$
+\item $\Lmap^{-} \Lmap \Lmap^{-} = \Lmap^{-}$
+\item $\left( \Lmap \Lmap^{-} \right)^{\dagger} = \Lmap \Lmap^{-}$
+\item $\left( \Lmap^{-} \Lmap \right)^{\dagger} = \Lmap^{-} \Lmap$
+\end{enumerate}
+
+When the 'columns' of $\Lmap$, $\r_j^{\Lmap}$
+($\Lmap = \sum_{j=0}^{n-1} ( \Lmap_j^{\Wspace} \otimes \e_j^{\Vspace} )$)
+are linearly independent,
+then a useful identity is:
+\begin{equation}
+\label{eq:full-rank-pseudo-inverse}
+\Lmap^{-} = \left( \Lmap^{\dagger} \Lmap \right)^{-1} \Lmap^{\dagger}
+\end{equation}
+
+The pseudoinverse can be computed
+using standard matrix decompositions such as
+the QR and SVD \cite{golub-vanloan-2012}.
+The pseudoinverse is an example of a linear transformation
+which should {\em not} be represented by a matrix
+\cite{mcdonald-1989b}.
+
+If $\Amap$ is affine,
+let $\Amap = \Lmap + \t$,
+where $\Lmap$ is linear,
+and $\t$ is an element of $\range(\Amap)$.
+Then $\Amap^{-}(\w) = \Lmap^{-}( \w - \t )$.
+
+%--------------------------------------------------------------------
+
+
