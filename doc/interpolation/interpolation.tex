@@ -45,8 +45,8 @@ or reify the model function, for visualization and debugging.
 minimum effort and defers other work until first call to 
 \texttt{value} or \texttt{derivative}.)
 
-The polynomials of degree $k$ for a linear space of dimension
-$k+1$\cite{wiki:polynomial}.
+The polynomials of degree $k$ form a linear space of dimension
+$k+1$\cite{wiki:Polynomial}.
 The most common interpolating polynomials are quadratic or cubic,
 so we will have $3$ or $4$ dimensions (degrees of freedom) to play
 with. 
@@ -224,11 +224,11 @@ $(x_0,y_0,d_0)$.
 
 \subsubsection{Input: $(x_0,y_0),(x_1,y_1)$}
 
-\input{monomial-yy}
+\input{rawtex/monomial-yy}
 
 \subsubsection{Input: $(x_0,y_0,d_0)$}
 
-\input{monomial-yd}
+\input{rawtex/monomial-yd}
 
 \subsection{Quadratic Monomial}
 
@@ -269,7 +269,7 @@ can be accurately fit.
 \subsubsection{Input: $(x_0,y_0), (x_1,y_1), (x_2,y_2)$}
 \label{sec:monomial-yyy}
 
-%\input{monomial-yyy}
+%\input{rawtex/monomial-yyy}
 
 Constraints:
 \begin{align}
@@ -424,7 +424,7 @@ y_0 x_{21} + y_1 x_{02} + y_2 x_{10}
 
 %\subsubsection{Input: $(x_0,y_0),(x_1,y_1),(x_2,d_2)$}
 % $3$ domain locations:
-% \input{monomial-yyd_3}
+% \input{rawtex/monomial-yyd_3}
 
 \subsubsection{Input: $(x_0,y_0),(x_1,y_1,d_1)$}\label{sec:monomial-yyd}
 
@@ -442,7 +442,7 @@ unstable, especially with respect to changes in the
 slope constraint that is farther away.
 
 % $2$ domain locations:
-% \input{monomial-yyd_2}
+% \input{rawtex/monomial-yyd_2}
 
 Constraints:
 \begin{align}
@@ -599,10 +599,10 @@ in other words,
 if the affine interpolant of the slopes is constant,
 either no zero or all zero.
 % $3$ domain locations:
-% \input{monomial-ydd_3}
+% \input{rawtex/monomial-ydd_3}
 
 % $2$ domain locations (essentially the secant step):
-% \input{monomial-ydd_2}
+% \input{rawtex/monomial-ydd_2}
 
 %-----------------------------------------------------------------
 
@@ -3869,15 +3869,15 @@ y_1-y_3\right) x_2^{2}-y_{23} x_1^{2}-y_{12} x_3^{2}-
 % \end{equation}
 
 
-%\input{monomial-yyyy-1}
+%\input{rawtex/monomial-yyyy-1}
 
 % \subsubsection{yyyd}
 % 
 % $4$ domain locations:
-% \input{monomial-yyyd4}
+% \input{rawtex/monomial-yyyd4}
 % 
 % $3$ domain locations:
-% \input{monomial-yyyd_3}
+% \input{rawtex/monomial-yyyd_3}
 
 
 \subsubsection{Input: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}\label{sec:monomial-ydyd}
@@ -4048,15 +4048,15 @@ x_{01}-6 y_{01}\right) x_{01} d_0+
 
 
 % $4$ domain locations:
-% \input{monomial-yydd4}
+% \input{rawtex/monomial-yydd4}
 
 %$2$ domain locations:
-%\input{monomial-yydd_2}
+%\input{rawtex/monomial-yydd_2}
 
 % \subsection{yddd}
 % $4$ domain locations:
 % 
-% \input{monomial-yddd4}
+% \input{rawtex/monomial-yddd4}
 
 \restoregeometry
   
