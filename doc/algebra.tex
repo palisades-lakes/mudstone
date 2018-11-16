@@ -121,7 +121,7 @@ where
   \item[Additive identity] $\exists \, 0 \in \Set{S} \text{ s.t. } 
   a + 0 = 0 + a = a \; \forall \, a \in \Set{S}$ 
   \item[Additive inverse] $\forall a \in \Set{S} \; 
-  \exists -a \in \Set{S} 
+  \exists \, {-a} \in \Set{S} 
   \text{ s.t. }  a + \left( -a \right) = \left( -a \right) + a = 0$ 
   \item[Multiplicative closure] $a * b \in \Set{S} \; \forall \,a,b \in \Set{S}$ 
   \item[Multiplicative associativity] 
@@ -154,8 +154,8 @@ any sequence of additions and multiplies
 returns the correct \glssymbol{RealNumbers} value rounded to float.
 EG: $ a +_{\text{fl}} b = c +_{\text{fl}} \epsilon$
 where $\text{fl} c +_{\glssymbol{RealNumbers}} \epsilon) = c$
-Absorbing elements at $\pm\infty$, \textt{NaN} make that hard.
-Is it possible to replace $\pm\infty$ and \textt{NaN}
+Absorbing elements at $\pm\infty$, \texttt{NaN} make that hard.
+Is it possible to replace $\pm\infty$ and \texttt{NaN}
 by symbolic expressions that can later be combined to get 
 accurate finite values?
 
