@@ -1,4 +1,5 @@
-%\chapter{Interpolation}\label{ch:Interpolation}
+\newcounter{baseSectionLevel}
+\setcounter{baseSectionLevel}{\value{currentlevel}}
 
 \cite{wiki:Interpolation,wiki:Polynomial-interpolation}
 
@@ -89,7 +90,10 @@ interpolates.
 Extrapolation often results when using the \texttt{argmin}.
 Relationship between \texttt{argmin} and inverse interpolation.
 
-\section{Monomial basis}\label{sec:Monomial-basis}
+%-----------------------------------------------------------------
+\setcounter{currentlevel}{\value{baseSectionLevel}}
+\levelstay{Monomial basis}
+\label{sec:Monomial-basis}
 
 The most common basis is the monomial:
 \begin{equation}
@@ -174,7 +178,8 @@ y_0 \\ d_0 \\ y_1 \\ d_1
 %  d_1 = &\specialcell{{\hfill \mu_1 + 2 \mu_2 x_1 + 3 \mu_3 x_1^2}} \nonumber 
 % \end{align}
 
-\subsection{Differentiation and \texttt{argmin}}
+%-----------------------------------------------------------------
+\leveldown{Differentiation and \texttt{argmin}}
 
 Degree $k$ polynomial:
 \begin{align}
@@ -196,7 +201,8 @@ on the parameters of the polynomial representation,
 and on the inputs to interpolation that determine those 
 parameters.
 
-\subsection{Constant Monomial}
+%-----------------------------------------------------------------
+\levelstay{Constant Monomial}
 
 \begin{equation}
 \mu(x) = \mu_0
@@ -209,7 +215,8 @@ minima.
 The only possibility is to 'interpolate' $(x_0,y_0)$ with
 $\mu_0 = y_0$ (and $\mu_i = 0$ for other $i$). 
 
-\subsection{Affine Monomial}
+%-----------------------------------------------------------------
+\levelstay{Affine Monomial}
 
 \begin{equation}
 \mu(x) = \mu_0 + \mu_1 x
@@ -222,15 +229,18 @@ For interpolation, there are $2$ possibilities, finding the line thru $2$
 points, $(x_0,y_0)$ and $(x_1,y_1)$, or or matching the value and slope at
 $(x_0,y_0,d_0)$.
 
-\subsubsection{Input: $(x_0,y_0),(x_1,y_1)$}
+%-----------------------------------------------------------------
+\leveldown{Input: $(x_0,y_0),(x_1,y_1)$}
 
 \input{rawtex/monomial-yy}
 
-\subsubsection{Input: $(x_0,y_0,d_0)$}
+%-----------------------------------------------------------------
+\levelstay{Input: $(x_0,y_0,d_0)$}
 
 \input{rawtex/monomial-yd}
 
-\subsection{Quadratic Monomial}
+%-----------------------------------------------------------------
+\levelup{Quadratic Monomial}
 
 \begin{equation}
 \mu(x) = \mu_0 + \mu_1 x + \mu_2 x^2
@@ -266,7 +276,8 @@ to determine what degree interpolant the inputs can support,\
 and reverting to a lower degree polynomial when that is all that
 can be accurately fit.
 
-\subsubsection{Input: $(x_0,y_0), (x_1,y_1), (x_2,y_2)$}
+%-----------------------------------------------------------------
+\leveldown{Input: $(x_0,y_0), (x_1,y_1), (x_2,y_2)$}
 \label{sec:monomial-yyy}
 
 %\input{rawtex/monomial-yyy}
@@ -421,12 +432,15 @@ y_0 x_{21} + y_1 x_{02} + y_2 x_{10}
 
 %\newgeometry{onecolumn=false}
 
-
-%\subsubsection{Input: $(x_0,y_0),(x_1,y_1),(x_2,d_2)$}
+%-----------------------------------------------------------------
+%\levelstay{Input: $(x_0,y_0),(x_1,y_1),(x_2,d_2)$}
 % $3$ domain locations:
 % \input{rawtex/monomial-yyd_3}
 
-\subsubsection{Input: $(x_0,y_0),(x_1,y_1,d_1)$}\label{sec:monomial-yyd}
+%-----------------------------------------------------------------
+\levelstay{Input: 
+\texorpdfstring{$(x_0,y_0),(x_1,y_1,d_1)$}{(x0,y0),(x1,y1,d1)}}
+\label{sec:monomial-yyd}
 
 This not one of the standard interpolation problems.
 It's close to hermite interpolation,
@@ -524,7 +538,9 @@ Note $\hat{x} \to \pm \infty$ if $y_{10} \to x_{10} d_1$,
 in other words, if the constraints are consistent with an
 affine interpolant.
 
-\subsubsection{Input: $(x_0,d_0),(x_1,y_1,d_1)$}\label{sec:monomial-dyd}
+%-----------------------------------------------------------------
+\levelstay{Input: $(x_0,d_0),(x_1,y_1,d_1)$}
+\label{sec:monomial-dyd}
 
 Like section~\ref{sec:monomial-yyd_2},
 this is another semi-hermite interpolation problem,
@@ -598,6 +614,7 @@ Note that $\hat{x} \to \pm \infty$ as $d_{10} \to 0$,
 in other words,
 if the affine interpolant of the slopes is constant,
 either no zero or all zero.
+
 % $3$ domain locations:
 % \input{rawtex/monomial-ydd_3}
 
@@ -605,8 +622,7 @@ either no zero or all zero.
 % \input{rawtex/monomial-ydd_2}
 
 %-----------------------------------------------------------------
-
-\subsection{Cubic Monomial}
+\levelup{Cubic Monomial}
 
 \begin{equation}
 \mu(x) = \mu_0 + \mu_1 x + \mu_2 x^2 + \mu_3 x^3
@@ -656,8 +672,9 @@ Dependence on monomial coeficients:
 \end{pmatrix}
 \end{equation}
 
+%-----------------------------------------------------------------
 \newgeometry{onecolumn=true}
-\subsubsection{Input: $(x_0,y_0),(x_1,y_1),(x_2,y_2),(x_3,y_3)$}
+\leveldown{Input: $(x_0,y_0),(x_1,y_1),(x_2,y_2),(x_3,y_3)$}
 \label{sec:monomial-yyyy}
 
 Constraints:
@@ -3879,8 +3896,8 @@ y_1-y_3\right) x_2^{2}-y_{23} x_1^{2}-y_{12} x_3^{2}-
 % $3$ domain locations:
 % \input{rawtex/monomial-yyyd_3}
 
-
-\subsubsection{Input: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}\label{sec:monomial-ydyd}
+\levelstay{Input: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}
+\label{sec:monomial-ydyd}
 
 Constraints:
 \begin{equation}
@@ -4059,8 +4076,10 @@ x_{01}-6 y_{01}\right) x_{01} d_0+
 % \input{rawtex/monomial-yddd4}
 
 \restoregeometry
-  
-\section{Lagrange basis}\label{sec:Lagrange-basis}
+%-----------------------------------------------------------------
+\setcounter{currentlevel}{\value{baseSectionLevel}}
+\levelstay{Lagrange basis}
+\label{sec:Lagrange-basis}
 
 The standard Lagrange\cite{wiki:Lagrange-polynomial}
 form of a polynomial  is
@@ -4100,11 +4119,14 @@ Constructing an interpolating polynomial in the monomial basis
 requires solving a dense system of equations. 
 No advantage for small changes to constraints.
 
-\subsection{Differentiation and \texttt{argmin}}
+%-----------------------------------------------------------------
+\leveldown{Differentiation and \texttt{argmin}}
 
-\subsection{Affine Lagrange}
+%-----------------------------------------------------------------
+\levelstay{Affine Lagrange}
 
-\subsubsection{Input: $(x_0,y_0),(x_1,y_1)$}
+%-----------------------------------------------------------------
+\leveldown{Input: $(x_0,y_0),(x_1,y_1)$}
 
 It's easy enough to see that:
 \begin{align}
@@ -4119,8 +4141,8 @@ satisfies
 \lambda^{\text{yy}}_1(x_1) & = 1 \nonumber 
 \end{align}
 
-
-\subsubsection{Input: $(x_0,y_0,d_0)$}
+%-----------------------------------------------------------------
+\levelstay{Input: $(x_0,y_0,d_0)$}
 
 Constraints:
 \begin{equation}
@@ -4147,9 +4169,11 @@ with $l_0 = y_0$ and $l_1 = d_0$.
 
 The argmin $\hat{x}$ is $-\sign(d_0)\infty$.
 
-\subsection{Quadratic Lagrange}
+%-----------------------------------------------------------------
+\levelup{Quadratic Lagrange}
 
-\subsubsection{Input: $(x_0,y_0),(x_1,y_1),(x_1,y_1)$}
+%-----------------------------------------------------------------
+\leveldown{Input: $(x_0,y_0),(x_1,y_1),(x_1,y_1)$}
 
 This is the standard case, and the basis functions are,
 for example:
@@ -4192,7 +4216,8 @@ x_{01} x_{02} x_{12} y_{12}
 \end{pmatrix}
 \end{equation}
 
-\subsubsection{yyd}
+%-----------------------------------------------------------------
+\levelstay{yyd}
 
 We need 
 $\lambda^{\text{yyd}}_0(x_0) = 1$, 
@@ -4240,7 +4265,9 @@ $\partial{f}(x_2) = (x_2 - x_0) + (x_2 - x_1)$:
 {(x_2 - x_0) + (x_2 - x_1)}
 \end{equation}
 
-\subsubsection{ydd}\label{sec:lagrange-ydd}
+%-----------------------------------------------------------------
+\levelstay{ydd}
+\label{sec:lagrange-ydd}
 
 (Secant)
 
@@ -4283,9 +4310,11 @@ and, by symmetry,
 {2 (x_2 - x_1)}
 \end{equation}
 
-\subsection{Cubic Lagrange}
+%-----------------------------------------------------------------
+\levelup{Cubic Lagrange}
  
-\subsubsection{yyyy}
+%-----------------------------------------------------------------
+\leveldown{yyyy}
 
 For example:
 
@@ -4354,7 +4383,8 @@ For example:
 % normalized for unit slope rather unit value, and fairly obviously
 % satisfies its constraintz.
  
-\subsubsection{yydd}\label{sec:lagrange-yydd}
+%-----------------------------------------------------------------
+\levelstay{yydd}\label{sec:lagrange-yydd}
 
 We need 
 \begin{align}
@@ -4441,7 +4471,9 @@ so
 \nonumber
 \end{align}
 
-\paragraph{Hermite interpolation}\label{sec:Hermite-yydd}
+%-----------------------------------------------------------------
+\levelstay{Hermite interpolation}
+\label{sec:Hermite-yydd}
 
 When $x_0 = x_2$ and $x_1 = x_3$ --- $2$ knots with value and 
 slope specified at each --- 
@@ -4489,7 +4521,8 @@ section~\ref{sec:lagrange-yydd}:
 \nonumber
 \end{align}
 
-% \subsection{yddd}\label{sec:lagrange-yddd}
+%-----------------------------------------------------------------
+%\levelstay{yddd}\label{sec:lagrange-yddd}
 % 
 % For $\lambda^{\text{yddd}}_0$, we need 
 % \begin{align}
@@ -4537,8 +4570,11 @@ section~\ref{sec:lagrange-yydd}:
 % \end{align}
 % and similarly for $a_2,b_2$ and $a_3,b_3$.
  
-\section{Newton basis}
- \cite{wiki:Newton-polynomial}
+%-----------------------------------------------------------------
+\setcounter{currentlevel}{\value{baseSectionLevel}}
+\levelstay{Newton basis}{2}
+
+\cite{wiki:Newton-polynomial}
 
 One advantage of the Lagrange basis 
 (section~\ref{sec:Lagrange-basis})
@@ -4589,7 +4625,8 @@ all the quadratic and cubic cases, since the result depends
 on the order in which constraints are specified, not just
 how many of each kind there are.
 
-\subsection{Quadratic: $(x_0,y_0),(x_1,y_1,d_1)$}
+%-----------------------------------------------------------------
+\leveldown{Quadratic: $(x_0,y_0),(x_1,y_1,d_1)$}
 
 Quadratic case where value is specified at $x_0$ and $x_1$,
 and slope is also specified at $x_1$.
@@ -4621,7 +4658,8 @@ This is a global minimum if
 $\nu_2 = \frac{y_{01} - d_1 x_{01}}{x_{01}^2}$
 is positive.
 
-\subsection{Cubic: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}
+%-----------------------------------------------------------------
+\levelstay{Cubic: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}
 
 Cubic (Hermite~\cite{wiki:cubic-hermite-spline}) 
 case where value and slope are specified at $x_0$ and $x_1$.
@@ -4704,8 +4742,11 @@ One of these is a local minimum when the $2$nd derivative is positive:
 \end{equation}
 
 \newpage
-\section{Divided differences}\label{sec:Divided-differences}
- \cite{wiki:Divided-differences}
+%-----------------------------------------------------------------
+\setcounter{currentlevel}{\value{baseSectionLevel}}
+\levelstay{Divided differences}{2}
+\label{sec:Divided-differences}
+\cite{wiki:Divided-differences}
 Given $k+1$ pairs 
 $\left( x_0, y_0 \right) \ldots \left( x_k, y_k \right) $:
 

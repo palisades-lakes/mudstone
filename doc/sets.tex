@@ -1,4 +1,5 @@
-\section{Sets}
+%-----------------------------------------------------------------
+\levelstay{Sets}
 \index{Set}
 \epigraph{A pack of wolves, a bunch of grapes, or a flock of
 pigeons are all examples of sets of things.
@@ -32,7 +33,8 @@ from first principles, without introducing paradoxes.
 \label{sec:math-sets}
 \lstset{language=Clojure}
 
-\subsection{Defining sets}
+%-----------------------------------------------------------------
+\leveldown{Defining sets}
 \epigraph{All the basic principles of set theory, except only the
 axiom of extension, are designed to make new sets out of old ones.
 The first and most important of these basic principles of set
@@ -133,7 +135,8 @@ Pragmatically, we will have to restrict ourselves to sets where we
 can guarantee an answer fast enough for the context in which the
 sets are being used.
 
-\subsubsection{Cardinality}
+%-----------------------------------------------------------------
+\levelstay{Cardinality}
 
 % \gls{cardinality}  \gls{countable infinity} \gls{uncountable
 % infinity} \gls{cardinal numbers}
@@ -156,8 +159,8 @@ with something (eg $\#\{ 0 \, 1 \, 2 \} = 3$ vs
 \lstinline|#{1 2 3}| Clojure set syntax).
 I will use $\text{cardinality}(\aSet{S})$.
 
- 
-\subsubsection{Identity}
+%-----------------------------------------------------------------
+\levelstay{Identity}
 
 The question of whether two sets are the same set is a recurring
 locus of ambiguity in mathematics.
@@ -193,7 +196,8 @@ from the integer $i$, but it's nearly universal to identify the
 subset of the rationals with denominator $1$ with the integers and
 take $\glssymbol{Integers} \subset \glssymbol{RationalNumbers}$.
 
-\subsubsection{Subsets, partitions, and quotients}
+%-----------------------------------------------------------------
+\levelstay{Subsets, partitions, and quotients}
 
 Families: $\{ \aSet{S}_{i} | i \in \, \text{index set} \, \aSet{I}
 \}$.
@@ -238,7 +242,8 @@ not in $\aSet{B}$.
 A partition of $\aSet{S}$ is a set of disjoint nonempty subsets of
 $\aSet{S}$ whose union is $\aSet{S}$.
 
-\subsubsection{Cartesian products}
+%-----------------------------------------------------------------
+\levelstay{Cartesian products}
 
 % \gls{tuple}
 A tuple is a fixed length list, which I will write, for example,
@@ -265,9 +270,11 @@ Strictly speaking,
 \end{itemize}
 are 3 distinct sets.
 
-\subsection{computation}
+%-----------------------------------------------------------------
+\levelstay{computation}
 
-\subsubsection{Java}
+%-----------------------------------------------------------------
+\leveldown{Java}
 \lstset{language=Java}
 
 Java provides an interface \lstinline|java.util.Set| intended for
@@ -325,7 +332,8 @@ boolean retainAll (Collection c) //$\;\aSet{S}\leftarrow\aSet{S}\cap\aSet{C}$
 More Java set classes? Guava or Apache Commons?
 Set operations, union, cartesian products, \ldots.
 
-\subsubsection{Clojure}
+%-----------------------------------------------------------------
+\levelstay{Clojure}
 \lstset{language=Clojure}
 
 Idiomatic Clojure sets are immutable, although it provides easy
@@ -375,10 +383,10 @@ where the key and value are constrained to be the same.
 However, other functions designed for dictionaries (eg
 \lstinline|keys|) don't work for sets.
  
-\subsubsection{mthcmp}
+%-----------------------------------------------------------------
+\levelstay{Les Elemens}
 
 Set interface:
-
 
 % \begin{lstlisting}[
 % caption={[checksum namespace]Checksum and related functions via
@@ -434,7 +442,8 @@ Set interface:
 % label=checksum,
 % firstline=11,lastline=18]{listings/checksum.clj}
  
-\subsection{examples}
+%-----------------------------------------------------------------
+\levelstay{examples}
  
 1d and 2d intervals.
  
