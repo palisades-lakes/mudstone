@@ -1,5 +1,12 @@
 %-------------------------------------------------------------------------------
 \errorcontextlines 10000
+%-------------------------------------------------------------------------------
+%input path
+%-------------------------------------------------------------------------------
+\makeatletter
+\def\input@path{{../figs/}{../tex/}{../rawtex/}{..}}
+\makeatother
+%-------------------------------------------------------------------------------
 % TODO: try these
 % \usepackage{amsmath,amsfonts,amssymb,mathrsfs,theorem}
 % \usepackage{multicol,multirow,calc,achicago,graphicx,color,colortab,rotating,enumerate}
@@ -20,6 +27,8 @@
 % \usepackage{hyperref}
 %-------------------------------------------------------------------------------
 \usepackage{coseoul}
+% used to revert to sub-document's top level
+\newcounter{baseSectionLevel}
 %-------------------------------------------------------------------------------
 % layout file determines 1/2 col, landscape/portrait...
 \usepackage{geometry}
