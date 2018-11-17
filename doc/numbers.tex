@@ -1,4 +1,6 @@
-\section{Numbers}\label{sec:Numbers}
+%-----------------------------------------------------------------
+\levelstay{Numbers}
+\label{sec:Numbers}
 
 % In this chapter, I'm listing a number of things I'm taken as \emph{given,} in
 % the sense that I'm assuming we both know what I mean, without further
@@ -90,7 +92,7 @@ when I feel the need to be clear about, eg, non-negative versus
 strictly positive.
 
 %-----------------------------------------------------------------
-\subsection{Generating spaces by 'closure'}
+\leveldown{Generating spaces by 'closure'}
 
 Generating these 'spaces' by closure under arithmetic operations
 \cite{pickert-gorke-real-numbers-1974}.
@@ -157,7 +159,7 @@ with quick arg or ref to why it converges, but not to a rational
 number.
 
 %-----------------------------------------------------------------
-\subsection{Intervals}
+\levelstay{Intervals}
 
 Open and closed intervals, half open, etc.:
 $[a,b] \subset \glssymbol{GenericSpace} = 
@@ -171,12 +173,15 @@ $[a,b) \subset \glssymbol{GenericSpace} =
 {a \leq s < b}$;
 and so on.
 
-\subsection{Java}
+%-----------------------------------------------------------------
+\levelstay{Java}
 \lstset{language=Java}
 
-\subsubsection{Primitives}
+%-----------------------------------------------------------------
+\leveldown{Primitives}
 
-\subsubsection{Integers}
+%-----------------------------------------------------------------
+\leveldown{Integers}
 Finite subsets of \glssymbol{Integers} are exactly
 represented by the primitive integer types using two's complement arithmetic, 
 covering $[−2^{n−1}, 2^{n−1} − 1]$ where $n$ is the number of bits used:
@@ -199,7 +204,8 @@ $\pm 1.7976931348623157 x 10^{308}$, with special values for $\pm\infty$;
 smallest non-zero value $4.9406564584124654 x 10^{-324}$.
 \end{description}
 
-\subsubsection{Objects}
+%-----------------------------------------------------------------
+\levelup{Objects}
 
 \begin{figure}[htbp]
 \centering
@@ -212,7 +218,8 @@ Boxed vs primitive arithmetic benchmark;
 int vs long vs float vs double vs Integer \ldots vs BigDecimal.
 
 
-\subsection{Clojure}
+%-----------------------------------------------------------------
+\levelup{Clojure}
 \lstset{language=Clojure}
 
 Clojure provides the primitive and boxed object numbers from Java,

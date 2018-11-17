@@ -1,6 +1,5 @@
-% jam 2004-09-02
-
-\section{Derivatives}
+%-----------------------------------------------------------------
+\levelstay{Derivatives}
 \label{sec:Derivatives}
 
 One way to view the derivative of a function
@@ -167,14 +166,11 @@ It is sometimes useful to express this in terms of the partial derivatives:
 
 See Spivak \cite{spivak-1965}, Theorem 2-2.
 
+%-----------------------------------------------------------------
+\leveldown{Vector-valued functions}
 
-%-------------------------------------------------------------------------------
-
-\subsection{Vector-valued functions}
-
-%-------------------------------------------------------------------------------
-
-\subsubsection{Multilinear functions}
+%-----------------------------------------------------------------
+\leveldown{Multilinear functions}
 \label{sec:Multilinear-functions}
 
 A map $\f(\v_0 \ldots \v_k):\Vspace_0 \oplus \ldots \oplus \Vspace_k \mapsto \Wspace$
@@ -194,10 +190,8 @@ at the point $(\v_0 \ldots \v_k)$, applied to the vector $(\u_0 \ldots \u_k)$ is
 
 See Spivak \cite{spivak-1965}, ex. 2-14.
 
-
-%-------------------------------------------------------------------------------
-
-\subsubsection{Bilinear maps}
+%-----------------------------------------------------------------
+\levelstay{Bilinear maps}
 \label{sec:Bilinear-functions}
 
 Bilinear functions are a useful special case of multilinear functions.
@@ -223,10 +217,8 @@ at the point $(\v_0,\u_0)$, applied to the vector $(\v,\u)$ is
 
 See Spivak \cite{spivak-1965}, ex. 2-12.
 
-
-%-------------------------------------------------------------------------------
-
-\subsubsection{Cross products}
+%-----------------------------------------------------------------
+\levelstay{Cross products}
 \label{sec:cross-products}
 
 We can view the 3-dimensional cross product
@@ -249,9 +241,8 @@ The derivative of $\f \times \g$ is:
 & \f(\v_0) \times \Dc{\g}{\v_0}{\v} + \Dc{\f}{\v_0}{\v} \times \g(\v_0) \nonumber
 \end{eqnarray}
 
-%-------------------------------------------------------------------------------
-
-\subsubsection{Scalar products}
+%-----------------------------------------------------------------
+\levelstay{Scalar products}
 \label{sec:Scalar-products}
 
 Suppose
@@ -263,10 +254,8 @@ It follows from the chain rule that the derivative of $\h = f\g$ is:
 \Db{(f\g)}{\v} =  f(\v) \Db{\g}{\v} + \g(\v) \otimes \Gb{f}{\v}
 \end{equation}
 
-
-%-------------------------------------------------------------------------------
-
-\subsubsection{Normalized functions}
+%-----------------------------------------------------------------
+\levelstay{Normalized functions}
 \label{sec:Normalized-functions}
 
 Let $\tilde{\f}$ be the normalized version of $\f$:
@@ -341,14 +330,12 @@ it follows that:
 {\| \u \|^3}
 \end{equation}
 
-%-------------------------------------------------------------------------------
-
-\subsection{Real-valued functions}
+%-----------------------------------------------------------------
+\levelup{Real-valued functions}
 \label{sec:Real-valued-functions}
 
-%-------------------------------------------------------------------------------
-
-\subsubsection{Inner products}
+%-----------------------------------------------------------------
+\leveldown{Inner products}
 \label{sec:Inner-products}
 
 We can view the inner product on $\Vspace$, $\v \bullet \u$,
@@ -374,9 +361,8 @@ The derivative of $\f \bullet \g$ is:
 
 See Spivak \cite{spivak-1965}, ex. 2-13.
 
-%-------------------------------------------------------------------------------
-
-\subsubsection{Angles}
+%-----------------------------------------------------------------
+\levelstay{Angles}
 \label{sec:Angles}
 
 The angle between 2 vectors $\v_0, \v_1 \in \Vspace$,
@@ -440,9 +426,8 @@ which results in
 \nonumber
 \end{eqnarray}
 
-%-------------------------------------------------------------------------------
-
-\subsubsection{Euclidean norm}
+%-----------------------------------------------------------------
+\levelstay{Euclidean norm}
 \label{sec:Euclidean-norm}
 
 Let $l_2(\v) = \| \v  \|: \Vspace \mapsto \Reals$
@@ -475,9 +460,8 @@ $\Gb{\| \f \|^2}{\v}  =  2 \Db{\f}{\v}^\dagger \circ \f(\v)$.
 \label{eq:norm_gradient}
 \end{eqnarray}
 
-%-------------------------------------------------------------------------------
-
-\subsection{Linear-function-valued functions}
+%-----------------------------------------------------------------
+\levelup{Linear-function-valued functions}
 \label{sec:Linear-function-valued-functions}
 
 The set of linear functions between two inner product spaces
@@ -547,9 +531,8 @@ To do this I will first establish partial derivatives and gradients of:
 &&\text{See section \ref{sec:Inverse} }
 \end{align}
 
-%-------------------------------------------------------------------------------
-
-\subsubsection{Map product}
+%-----------------------------------------------------------------
+\leveldown{Map product}
 \label{sec:Map-product}
 
 Let
@@ -598,9 +581,8 @@ Therefore
 \f(\Lmap) \left( \db{ij}{\g}{\Lmap} \right)
 \end{equation}
 
-%-------------------------------------------------------------------------------
-
-\subsubsection{$\Lmap^{\dagger} \Lmap$}
+%-----------------------------------------------------------------
+\leveldown{$\Lmap^{\dagger} \Lmap$}
 \label{sec:LTL}
 
 A simple function on linear functions
@@ -681,9 +663,8 @@ where $\c_j^{\Lmap} \in \Wspace$ is the $j$th 'column' of $\Lmap$
 in the representation
 $\Lmap = \sum_{j=0}^{n-1} \c_j^{\Lmap} \otimes \e_j^{\Vspace}$.
 
-%-------------------------------------------------------------------------------
-
-\subsubsection{Inverse}
+%-----------------------------------------------------------------
+\levelstay{Inverse}
 \label{sec:Inverse}
 
 $\Inverse()$ here is interpreted in the traditional sense:
@@ -740,7 +721,8 @@ which implies
 
 \newgeometry{onecolumn=true}
 
-\subsubsection{Pseudo-inverse}
+%-----------------------------------------------------------------
+\levelstay{Pseudo-inverse}
 \label{sec:Pseudo-inverse}
 
 $\Pseudoinverse(\Lmap) \equiv \Lmap^{-}$

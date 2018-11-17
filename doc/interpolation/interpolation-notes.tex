@@ -59,7 +59,8 @@
 % 3 for subsubsection level
 % 2 for paragraph level
 % 1 for subparagraph level
-\setcounter{currentlevel}{5}
+\setcounter{baseSectionLevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../interpolation}
 
 %\glsaddallunused
@@ -74,26 +75,28 @@
 % 3 for subsubsection level
 % 2 for paragraph level
 % 1 for subparagraph level
-\setcounter{currentlevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../sets}
-\setcounter{currentlevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../functions}
-\setcounter{currentlevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../algebra}
-\setcounter{currentlevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../numbers}
-\setcounter{currentlevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../spaces}
-\setcounter{currentlevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../derivatives}
-\setcounter{currentlevel}{5}
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../polynomial}
 \pagebreak
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../tex/typesetting}
 %-----------------------------------------------------------------
 %\backmatter
 %\part{Backmatter}
 \pagebreak
+\setcounter{currentlevel}{\value{baseSectionLevel}}
 \input{../tex/tail}
 %-------------------------------------------------------------------------------
 \end{document}

@@ -1,4 +1,5 @@
-\section{Algebraic structures}
+%-----------------------------------------------------------------
+\levelstay{Algebraic structures}
 \label{sec:Algebraic-structures}
 
 An algebraic 
@@ -39,7 +40,8 @@ Algebraic structure and topology make Lie group.
 
 Some relevant examples:
 
-\subsection{Monoid}
+%-----------------------------------------------------------------
+\leveldown{Monoid}
 
 Set $\Set{S}$ and operation $\diamond$ such that,
 if $a, b, c \in \Set{S}$, then
@@ -60,7 +62,8 @@ Operation $\diamond$ is function composition:
 $\left( f \diamond g \right) (x) = 
 f \left( g \left( x \right) \right)$.
 
-\subsection{Group}
+%-----------------------------------------------------------------
+\levelstay{Group}
 
 Monoid $\left[ \Set{S}, \diamond \right]$ such that
 \begin{description}
@@ -69,7 +72,8 @@ Monoid $\left[ \Set{S}, \diamond \right]$ such that
  Exercise: show that this implies that $a \diamond a^{-1} = i$ .
 \end{description}
 
-\subsection{Commutative group}
+%-----------------------------------------------------------------
+\levelstay{Commutative group}
 
 (aka abelian group.)
 
@@ -81,8 +85,9 @@ A group $\left[ \Set{S}, \diamond \right]$ where
 Example: 
 $\left[ \glssymbol{Integers}, *_{\glssymbol{Integers}} \right]$
 
-\subsection{Rings}
-\label{sec:Rings}
+%-----------------------------------------------------------------
+\levelstay{Ring}
+\label{sec:Ring}
 \cite{wiki:Ring-mathematics}
 
 A set and 2 operations: $\left[ \Set{S}, +, * \right]$
@@ -100,7 +105,8 @@ where
 
 Example:
 
-\subsection{Fields}
+%-----------------------------------------------------------------
+\levelstay{Fields}
 \label{sec:Fields}
 \cite{wiki:Field-mathematics}
 
@@ -142,7 +148,8 @@ where
 Examples: 
 \glssymbol{RationalNumbers}, \glssymbol{RealNumbers}.
 
-\subsection{Floating point numbers as an algebraic structure}
+%-----------------------------------------------------------------
+\levelstay{Floating point numbers as an algebraic structure}
 
 Two non-associative commutative operations on a finite,
 almost ordered set.
@@ -158,6 +165,4 @@ Absorbing elements at $\pm\infty$, \texttt{NaN} make that hard.
 Is it possible to replace $\pm\infty$ and \texttt{NaN}
 by symbolic expressions that can later be combined to get 
 accurate finite values?
-
-
 
