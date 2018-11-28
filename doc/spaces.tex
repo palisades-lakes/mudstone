@@ -111,12 +111,12 @@ then
 
 In general, the functions discussed here map between real inner product spaces:
 $\f:\Vspace \mapsto \Wspace$, where $\Vspace$ is the
-{\it domain} and $\Wspace$ is the {\it codomain}.
+\textit{domain} and $\Wspace$ is the \textit{codomain}.
 The real inner product spaces are almost derived from some $\Reals^n$.
 
-The {\it range} of $\f$, $\range(f)$, is the set $\f(\Vspace)$,
+The \textit{range} of $\f$, $\range(f)$, is the set $\f(\Vspace)$,
 which may be a proper subset of its codomain $\Wspace$.
-The {\it kernel} of $\f$, $\kernel(f)$, is the set
+The \textit{kernel} of $\f$, $\kernel(f)$, is the set
 $\kernel(\f) = \{ \v \in \Vspace : \f(\v) = \0 \}$.
 
 When I want to distinguish between real- and vector-valued functions,
@@ -136,7 +136,7 @@ case of real-valued functions.
 The domains of many interesting functions,
 such as those that depend on vertex positions,
 are direct sum of inner product spaces.
-The {\it direct sum} $\Vspace \oplus \Wspace$ is the inner product space
+The \textit{direct sum} $\Vspace \oplus \Wspace$ is the inner product space
 consisting of the ordered pairs $\{ (\v,\w) : \v \in \Vspace, \w \in \Wspace \}$
 inheriting the inner product space operations in the obvious way:
 $(\v_0,\w_0) \bullet (\v_1,\w_1) = (\v_0 \bullet \v_1) + (\w_0 \bullet \w_1).$
@@ -151,7 +151,7 @@ for a function that depends on $n$ vectors.
 \label{sec:linear-functions}
 
 A function $\Lmap(\v):\Vspace \mapsto \Wspace$
-is {\it linear} iff
+is \textit{linear} iff
 $\Lmap(a_0 \v_0 + a_1 \v_1) = a_0 \Lmap(\v_0) + a_1 \Lmap(\v_1)$.
 I will often write $\Lmap\v \equiv \Lmap(\v)$.
 
@@ -163,7 +163,7 @@ divides its domain and codomain each into 2 orthogonal subspaces.
 The domain is divided into $\Vspace = \kernel(\Lmap) \oplus \kernel^{\perp}(\Lmap)$,
 and the codomain is divided into $\Wspace = \range(\Lmap) \oplus \range^{\perp}(\Lmap)$.
 
-The most common representation for linear functions is the {\it matrix:}
+The most common representation for linear functions is the \textit{matrix:}
 Let $\Lmap(\v):\Vspace \mapsto \Wspace$ be linear,
 $\{ \e_0^{\Vspace} \ldots  \e_{m-1}^{\Vspace} \}$ an orthonormal basis for $\Vspace$,
 and
@@ -217,14 +217,14 @@ indices, say, $[i_0,\ldots,i_n)$.
 \label{sec:affine-functions}
 
 A function $\Amap(\v):\Vspace \mapsto \Wspace$
-is {\it affine} if distributes over affine combinations:
+is \textit{affine} if distributes over affine combinations:
 $\Amap(\sum_{i=0}^{n-1} a_i \v_i) = \sum_{i=0}^{n-1} a_i \Amap(\v_i) $
 for all $\{a_i\}$ such that $1 = \sum_{i=0}^{n-1} a_i$.
 (Note that I am describing affine functions on vector (linear) spaces,
 rather than the slightly more general notion of affine functions on affine spaces.)
 Any linear function between linear spaces is automatically affine.
 The other major class of affine functions on linear spaces are the translations.
-A {\it translation,} $\Tmap_{\t}$, $\Vspace \mapsto \Vspace$,
+A \textit{translation,} $\Tmap_{\t}$, $\Vspace \mapsto \Vspace$,
 simply adds a vector ($\t$) to its argument:
 $\Tmap_{\t} \v = \v + \t$.
 It's not hard to see that any affine function between two linear spaces
@@ -239,14 +239,14 @@ $\t \in \Wspace$, and $\Amap(\v) = \Lmap(\v) + \t$.
 
 Let $\Vspace$ be an $n$-dimensional inner product space.
 
-The {\it linear span} of a set of $m$ vectors in $\Vspace$
+The \textit{linear span} of a set of $m$ vectors in $\Vspace$
 is the set of linear combinations of those vectors:
 \begin{equation}
 \\linearspan\{ \v_0 \ldots \v_{m-1} \} = \{\v \in \Vspace : \v = \sum_{i=0}^{m-1} a_i \v_i\}
 \end{equation}
 $\\linearspan\{ \v_0 \ldots \v_{m-1} \}$ is a linear subspace of $\Vspace$.
 
-The {\it projection} $\Projection_{\Sset} \v$ of a vector $\v \in \Vspace$
+The \textit{projection} $\Projection_{\Sset} \v$ of a vector $\v \in \Vspace$
 onto an arbitrary subset $\Sset \subset \Vspace$
 is the closest point in $\Sset$ to $\v$.
 Projection onto a linear subspace is a linear function and
@@ -260,14 +260,14 @@ of the function $\Vmap = \sum_{i=0}^{m-1} \v_i \otimes \e_i$,
 (the $n \times m$ matrix whose columns are the $\v_i$)
 \cite[See][sec. 5.2 ]{golub-vanloan-2012}.
 
-The {\it affine span} of a set of $m+1$ vectors in $\Vspace$
+The \textit{affine span} of a set of $m+1$ vectors in $\Vspace$
 is the set of affine combinations of those vectors:
 \begin{equation}
 \affinespan\{ \p_0 \ldots \p_{m} \} = \{\v \in \Vspace : \v = \sum_{i=0}^{m} b_i \p_i;
 1 = \sum_{i=0}^{m} b_i \}.
 \end{equation}
 $\affinespan\{ \p_0 \ldots \p_{m} \}$ is an affine subspace of $\Vspace$.
-$\b = ( b_0 \ldots b_m )$ are {\it barycentric coordinates}
+$\b = ( b_0 \ldots b_m )$ are \textit{barycentric coordinates}
 for $\v$ with respect to $\{ \p_0 \ldots \p_{m} \}$.
 The barycentric coordinates are unique if $\{ \p_0 \ldots \p_{m} \}$
 are affinely independent.
@@ -299,7 +299,7 @@ of $\Vmap = \sum_{i=0}^{m-1} \v_i \otimes \e_i$.
 \levelstay{Inverses and pseudo-inverses}
 \label{sec:Inverses-and-pseudo-inverses}
 
-A convenient definition for the {\it true inverse}
+A convenient definition for the \textit{true inverse}
 of a function $\f(\v):\Vspace \mapsto \Wspace$ is
 $\f^{-1}(\w) = \{ \v : \f(\v) = \w \}$.
 The usual definition of inverse treats $\f^{-1}$
@@ -308,7 +308,7 @@ which is undefined where the value of the true
 inverse is not a set containing a single point.
 
 For functions between inner product spaces,
-the {\it pseudo-inverse}, $f^{-}$, is a function $\Wspace \mapsto \Vspace$
+the \textit{pseudo-inverse}, $f^{-}$, is a function $\Wspace \mapsto \Vspace$
 defined everywhere on $\Wspace$.
 Let $\hat{\w}$ be an element of $\Wspace$ closest to $\w$
 such that $\f^{-1}(\w)$ is not empty.

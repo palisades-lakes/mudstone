@@ -1,0 +1,72 @@
+off echo$
+on nat$
+linelength(120);
+on ratpri;
+off allfac;
+off div;
+off rat;
+on list;
+on factor;
+on gcd;
+off horner;
+on revpri;
+on varopt;
+realvalued a,b,a0,a1,a2,a3,y0,y1,y2,y3,d0,d1,d1,d3,x0,x1,x2,x3;
+order a,b,y0,y1,y2,y3,a0,a1,a2,a3,d0,d1,d1,d3,x0,x1,x2,x3;
+load_package "rlfi";
+LALINE!* := 120;
+off verbatim;
+mathstyle equation;
+%------------------------------------------------------
+out "docs/interpolation/lagrange-yydd.rawtex"$
+c := { 
+0 = (x3-a1)*(x3-a2) + (x3-a2)*(x3-a0) + (x3-a0)*(x3-a1) 
+, 
+0 = (x2-a0)*(x2-a1) + (x2-a1)*(x2-a2) + (x2-a2)*(x2-a0)
+, 
+0 = (x1-a0) * (x1-a1) * (x1-a2)
+}$
+
+v := { a0, a1, a2 }$
+s := solve(c,v)$
+on latex;
+on exp$
+write c;
+on lasimp;
+write s;
+off latex;      
+shut "docs/interpolation/lagrange-yydd.rawtex";
+%------------------------------------------------------
+on factor;
+off exp;
+on gcd;
+x1^2 - (3/2)*(x2+x3)*x1 +3*x2*x3;
+solve(0 = x1^2 - (3/2)*(x2+x3)*x1 +3*x2*x3, x1);
+%------------------------------------------------------
+out "docs/interpolation/lagrange-yydd.rawtex"$
+s := solve(
+0 = (x2-x1)*(x2-a) + (x2-a)*(x2+a) + (x2+a)*(x2-x1),
+a)$
+on lasimp;
+on latex;
+on exp$
+write c;
+write s;
+off latex;      
+shut "docs/interpolation/lagrange-yydd.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/lagrange-yydd.rawtex"$
+c := { 
+0 = (x2-x1)*(x2-a) + (x2-a)*(x2-b) + (x2-b)*(x2-x1) , 
+0 = (x3-x1)*(x3-a) + (x3-a)*(x3-b) + (x3-b)*(x3-x1) }$
+v := { a, b }$
+s := first(solve(c,v))$
+on lasimp;
+on latex;
+on exp$
+write c;
+write s;
+off latex;      
+shut "docs/interpolation/lagrange-yydd.rawtex";
+%------------------------------------------------------
+;END;

@@ -37,7 +37,7 @@ the domain of $\f$ to the codomain of $\f$.
 
 \item $\Dc{\f}{\u}{\t}$
 
-The derivative is most often represented by the {\it Jacobian},
+The derivative is most often represented by the \textit{Jacobian},
 the $m \times n$ matrix of partial derivatives
 with respect to some bases for $\Vspace$ and $\Wspace$.
 However, it's often easier to express the derivative clearly if we
@@ -100,7 +100,7 @@ In minimizing a real-valued function, $f(\v)$, $\v \in \Vspace$,
 we frequently need to know both the direction of maximum increase of $f$
 the rate of increase, or slope, of $f$ in that direction.
 
-$\Ga{f}$ is the {\it gradient} of $f$.
+$\Ga{f}$ is the \textit{gradient} of $f$.
 The gradient has a close relationship to the derivative, $\Da{f}$,
 and the two are often confused.
 Recall that the derivative is a linear transformation
@@ -144,7 +144,7 @@ in a way simlilar to the relationship between $\Da{\f}$ and its partials $\da{j}
 \Db{\f}{\u} = \sum_{i=0}^{n-1}  \e_i^{\Wspace} \otimes \Gb{\f_i}{\u}
 \end{equation}
 
-The most general identity used in computing derivatives is the {\it chain rule.}
+The most general identity used in computing derivatives is the \textit{chain rule.}
 Suppose
 $\f:\Uspace \mapsto \Vspace$,
 $\g:\Vspace \mapsto \Wspace$,
@@ -174,7 +174,7 @@ See Spivak \cite{spivak-1965}, Theorem 2-2.
 \label{sec:Multilinear-functions}
 
 A map $\f(\v_0 \ldots \v_k):\Vspace_0 \oplus \ldots \oplus \Vspace_k \mapsto \Wspace$
-is {\it multilinear} if
+is \textit{multilinear} if
 \begin{equation}
 \f(a_{00} \v_{00} + a_{01} \v_{01}, \ldots, a_{k0} \v_{k0} + a_{k1} \v_{k1})
  =  \sum_{i_0 \ldots i_k = 0,1} (a_{0i_0} \ldots a_{ki_k}) \f(\v_{0i_0} \ldots \v_{ki_k}).
@@ -197,7 +197,7 @@ See Spivak \cite{spivak-1965}, ex. 2-14.
 Bilinear functions are a useful special case of multilinear functions.
 
 A function $\f(\v,\u):\Vspace_0 \oplus \Vspace_1 \mapsto \Wspace$
-is {\it bilinear} if
+is \textit{bilinear} if
 \begin{eqnarray}
 \f(a_0 \v_0 + a_1 \v_1, b_0 \u_0 + b_1 \u_1)
 & =  & a_0 b_0 f(\v_0,\u_0)
@@ -671,7 +671,7 @@ $\Inverse()$ here is interpreted in the traditional sense:
 $\Lmap^{-1}(\w) = \v$ if there exists a unique $\v$ such that $\w = \Lmap(\v)$,
 and is either considered undefined, or assigned an arbitrary
 value, such as $\0$, otherwise.
-A function $\Lmap : \Vspace \mapsto \Wspace$ is {\it invertible}
+A function $\Lmap : \Vspace \mapsto \Wspace$ is \textit{invertible}
 if, for all $\w \in \Wspace$, there exists a $\v$ such that
 $\w = \Lmap \v$.
 In any reasonable topology,
@@ -727,7 +727,7 @@ which implies
 
 $\Pseudoinverse(\Lmap) \equiv \Lmap^{-}$
 
-If $\kernel(\Lmap) = \0$, $\Lmap$ is said to have {\it full rank}.
+If $\kernel(\Lmap) = \0$, $\Lmap$ is said to have \textit{full rank}.
 The set of full rank linear functions is an open set,
 and we can define the derivative of $\Pseudoinverse(\Lmap)$ there.
 For a full rank function,

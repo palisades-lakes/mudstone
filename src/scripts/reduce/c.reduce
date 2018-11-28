@@ -1,0 +1,171 @@
+% Fails
+% can't figure out how to turn result of SOLVE into assignments
+% gentran will accept.
+
+off echo$
+on nat$
+linelength(60);
+off ratpri;
+off allfac;
+off div;
+off rat;
+off list;
+on factor;
+off gcd;
+off horner;
+on nosplit;
+on revpri;
+off varopt;
+on exp$
+realvalued a0,a1,a2,a3,y0,y1,y2,y3,d0,d1,d1,d3,x0,x1,x2,x3;
+order y0,y1,y2,y3,a0,a1,a2,a3,d0,d1,d1,d3,x0,x1,x2,x3;
+load_package "gentran";
+on GENTRANOPT;
+on DOUBLE;
+on GETDECS;
+off GENTRANSEG;
+gentranlang!* := 'c;
+%------------------------------------------------------
+out "docs/interpolation/monomial-yd.c"$
+constraints := { y0 = a0 + a1 * x0, d1 = a1 }$
+variables := { a0, a1 };
+solution := first(solve(constraints,variables));
+eq0 := part(solution,1);
+eq1 := part(solution,2);
+eq00 := lhs(eq0);
+eq01 := rhs(eq0);
+assgnmnt := lhs(eq0) := rhs(eq0);
+gentran eval(assgnmnt) NIL;
+shut "docs/interpolation/monomial-yd.c";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yy.rawtex"$
+c := { y0 = a0 + a1 * x0,
+       y1 = a0 + a1 * x1 }$
+v := { a0, a1 }$
+s := first(solve(c,v))$
+on lasimp;
+on latex;
+on exp$
+write c;
+write s;
+off latex;      
+shut "docs/interpolation/monomial-yy.rawtex";
+%------------------------------------------------------
+c := { y0 = a0 + a1 * x0 + a2 * x0^2,
+       y1 = a0 + a1 * x1 + a2 * x1^2,
+       y2 = a0 + a1 * x2 + a2 * x2^2}$
+v := { a0, a1, a2 }$
+s := first(solve(c,v))$
+out "docs/interpolation/monomial-yyy.rawtex"$
+on latex; on lasimp$
+on exp$ write c; off exp$ write s;
+off latex;      
+shut "docs/interpolation/monomial-yyy.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yyd3.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2,
+       y1 = a0 + a1 * x1 + a2 * x1^2,
+       d2 = a1 + 2 * a2 * x2 }$
+v := { a0, a1, a2 }$
+s := first(solve(c,v))$
+on lasimp;
+on latex;
+on exp$ write c; off exp$ write s;
+off latex;      
+shut "docs/interpolation/monomial-yyd3.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yyd2.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2,
+       y1 = a0 + a1 * x0 + a2 * x1^2,
+       d1 = a1 + 2 * a2 * x1 }$
+v := { a0, a1, a2 }$
+s := first(solve(c,v))$
+on lasimp;
+on latex;
+on exp$ write c; off exp$ write s;
+off latex;      
+shut "docs/interpolation/monomial-yyd2.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-ydd3.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2,
+       d1 = a1 + 2 * a2 * x1,
+       d2 = a1 + 2 * a2 * x2 }$
+v := { a0, a1, a2 }$
+s := first(solve(c,v))$
+on lasimp;
+on latex;
+on exp$ write c; off exp$ write s;
+off latex;      
+shut "docs/interpolation/monomial-ydd3.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-ydd2.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2,
+       d0 = a1 + 2 * a2 * x0,
+       d1 = a1 + 2 * a2 * x1 }$
+v := { a0, a1, a2 }$
+s := first(solve(c,v))$
+on lasimp; on latex; on exp$ write c; off exp$ write s; off latex;      
+shut "docs/interpolation/monomial-ydd2.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yyyy.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       y2 = a0 + a1 * x2 + a2 * x2^2 + a3 * x2^3,
+       y3 = a0 + a1 * x3 + a2 * x3^2 + a3 * x3^3 }$
+v := { a0, a1, a2, a3 }$
+s := first(solve(c,v))$
+on lasimp; on latex; on exp$ write c; off exp$ write s; off latex;      
+shut "docs/interpolation/monomial-yyyy.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yyyd4.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       y2 = a0 + a1 * x2 + a2 * x2^2 + a3 * x2^3,
+       d3 = a1 + 2 * a2 * x3 + 3 * a3 * x3^2 }$
+v := { a0, a1, a2, a3 }$
+s := first(solve(c,v))$
+on lasimp; on latex; on exp$ write c; off exp$ write s; off latex;      
+shut "docs/interpolation/monomial-yyyd4.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yyyd3.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       y2 = a0 + a1 * x2 + a2 * x2^2 + a3 * x2^3,
+       d2 = a1 + 2 * a2 * x2 + 3 * a3 * x2^2 }$
+v := { a0, a1, a2, a3 }$
+s := first(solve(c,v))$
+on lasimp; on latex; on exp$ write c; off exp$ write s; off latex;      
+shut "docs/interpolation/monomial-yyyd3.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yydd4.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       d2 = a1 + 2 * a2 * x2 + 3 * a3 * x2^2,
+       d3 = a1 + 2 * a2 * x3 + 3 * a3 * x3^2 }$
+v := { a0, a1, a2, a3 }$
+s := first(solve(c,v))$
+on lasimp; on latex; on exp$ write c; off exp$ write s; off latex;      
+shut "docs/interpolation/monomial-yydd4.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yydd2.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       y1 = a0 + a1 * x1 + a2 * x1^2 + a3 * x1^3,
+       d0 = a1 + 2 * a2 * x0 + 3 * a3 * x0^2,
+       d1 = a1 + 2 * a2 * x1 + 3 * a3 * x1^2 }$
+v := { a0, a1, a2, a3 }$
+s := first(solve(c,v))$
+on lasimp; on latex; on exp$ write c; off exp$ write s; off latex;      
+shut "docs/interpolation/monomial-yydd2.rawtex";
+%------------------------------------------------------
+out "docs/interpolation/monomial-yddd4.rawtex"$
+c := { y0 = a0 + a1 * x0 + a2 * x0^2 + a3 * x0^3,
+       d1 = a1 + 2 * a2 * x1 + 3 * a3 * x1^2,
+       d2 = a1 + 2 * a2 * x2 + 3 * a3 * x2^2,
+       d0 = a1 + 2 * a2 * x0 + 3 * a3 * x0^2} $
+v := { a0, a1, a2, a3 }$
+s := first(solve(c,v))$
+on lasimp; on latex; on exp$ write c; off exp$ write s; off latex;      
+shut "docs/interpolation/monomial-yddd4.rawtex";
+%------------------------------------------------------
+
+;END;

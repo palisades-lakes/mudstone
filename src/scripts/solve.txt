@@ -1,4 +1,4 @@
-Code in various sumbolic algebra systems
+Code in various symbolic algebra systems
 
 Reduce: http://www.reduce-algebra.com/
 
