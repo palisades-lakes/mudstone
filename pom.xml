@@ -61,23 +61,27 @@
   </plugins>
  </build>
  <dependencies>
- <!-- 
-  <dependency>
-   <groupId>expresso</groupId>
-   <artifactId>expresso</artifactId>
-   <version>0.2.2</version>
-  </dependency>
-  <dependency>
-   <groupId>expresso-tutorial</groupId>
-   <artifactId>expresso-tutorial</artifactId>
-   <version>0.1.0-SNAPSHOT</version>
-  </dependency>
-   -->
   <dependency>
    <groupId>org.apache.commons</groupId>
    <artifactId>commons-math3</artifactId>
    <version>${commons-math3-version}</version>
   </dependency>
+  <dependency>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-rng-sampling</artifactId>
+   <version>${commons-rng-version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-rng-simple</artifactId>
+   <version>${commons-rng-version}</version>
+  </dependency>
+  <!-- dependency>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-rng-examples</artifactId>
+   <version>${commons-rng-version}</version>
+   <type>pom</type>
+  </dependency -->
   <dependency>
    <groupId>com.google.guava</groupId>
    <artifactId>guava</artifactId>
