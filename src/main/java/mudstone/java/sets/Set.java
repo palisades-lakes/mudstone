@@ -203,6 +203,8 @@ public interface Set {
 
   //--------------------------------------------------------------
   // TODO: return a Supplier instead of an iterator?
+  // TODO: 'generator' instead of 'sampler', since it might not be
+  // 'random'?
 
   //  public default Iterator sampler (final UniformRandomProvider prng,
   //                                   final Map options) {
