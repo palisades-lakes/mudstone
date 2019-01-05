@@ -1,5 +1,6 @@
 package mudstone.java.sets;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ import mudstone.java.exceptions.Exceptions;
  * <b>TODO:</b> replace sampling iterators with 0-arg functions?
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-03
+ * @version 2019-01-04
  */
 public interface Set {
 
@@ -42,37 +43,37 @@ public interface Set {
   public default boolean contains (final Object element) {
     return false; }
 
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final boolean element) {
-//    return false; }
-//
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final byte element) {
-//    return false; }
-//
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final short element) {
-//    return false; }
-//
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final int element) {
-//    return false; }
-//
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final long element) {
-//    return false; }
-//
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final float element) {
-//    return false; }
-//
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final double element) {
-//    return false; }
-//
-//  @SuppressWarnings("unused")
-//  public default boolean contains (final char element) {
-//    return false; }
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final boolean element) {
+  //    return false; }
+  //
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final byte element) {
+  //    return false; }
+  //
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final short element) {
+  //    return false; }
+  //
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final int element) {
+  //    return false; }
+  //
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final long element) {
+  //    return false; }
+  //
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final float element) {
+  //    return false; }
+  //
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final double element) {
+  //    return false; }
+  //
+  //  @SuppressWarnings("unused")
+  //  public default boolean contains (final char element) {
+  //    return false; }
 
   //--------------------------------------------------------------
   // TODO: is this just a Function that maps options to values?
@@ -111,9 +112,9 @@ public interface Set {
   //    throw Exceptions.unsupportedOperation(
   //      this,"getChar",options); }
 
-  public default Object get (final Map options) {
-    throw Exceptions.unsupportedOperation(
-      this,"get",options); }
+  //  public default Object get (final Map options) {
+  //    throw Exceptions.unsupportedOperation(
+  //      this,"get",options); }
 
   //--------------------------------------------------------------
 
@@ -157,10 +158,10 @@ public interface Set {
   //    throw Exceptions.unsupportedOperation(
   //      this,"sampleChar",prng,options); }
 
-  public default Object sample (final UniformRandomProvider prng,
-                                final Map options) {
-    throw Exceptions.unsupportedOperation(
-      this,"sample",prng,options); }
+  //  public default Object sample (final UniformRandomProvider prng,
+  //                                final Map options) {
+  //    throw Exceptions.unsupportedOperation(
+  //      this,"sample",prng,options); }
 
   //--------------------------------------------------------------
   // Using default options
@@ -197,23 +198,28 @@ public interface Set {
   //    throw Exceptions.unsupportedOperation(
   //      this,"sampleChar",prng); }
 
-  public default Object sample (final UniformRandomProvider prng) {
-    return sample(prng,null); }
+  //  public default Object sample (final UniformRandomProvider prng) {
+  //    return sample(prng,null); }
 
   //--------------------------------------------------------------
   // TODO: return a Supplier instead of an iterator?
-  
+
+  //  public default Iterator sampler (final UniformRandomProvider prng,
+  //                                   final Map options) {
+  //    return 
+  //      new Iterator () {
+  //      @Override
+  //      public final boolean hasNext () { return true; }
+  //      @Override
+  //      public final Object next () { return sample(prng,options); } }; }
+
   public default Iterator sampler (final UniformRandomProvider prng,
                                    final Map options) {
-    return 
-      new Iterator () {
-      @Override
-      public final boolean hasNext () { return true; }
-      @Override
-      public final Object next () { return sample(prng,options); } }; }
+    throw Exceptions.unsupportedOperation(
+      this,"sampler",prng,options); }
 
   public default Iterator sampler (final UniformRandomProvider prng) {
-    return sampler(prng,null); }
+    return sampler(prng,Collections.emptyMap()); }
 
   //--------------------------------------------------------------
 }

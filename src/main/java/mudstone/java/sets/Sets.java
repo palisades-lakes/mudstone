@@ -14,9 +14,10 @@ import mudstone.java.exceptions.Exceptions;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-03
+ * @version 2019-01-04
  */
 
+@SuppressWarnings("unchecked")
 public final class Sets {
 
   //--------------------------------------------------------------

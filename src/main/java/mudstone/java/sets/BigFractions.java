@@ -48,17 +48,17 @@ public final class BigFractions implements Set {
 
   //--------------------------------------------------------------
 
-  @Override
-  public final Object sample (final UniformRandomProvider prng,
-                              final Map options) {
-    return 
-      new BigFraction(doubleSampler(prng,options).sample()); }
+//  @Override
+//  public final Object sample (final UniformRandomProvider prng,
+//                              final Map options) {
+//    return 
+//      new BigFraction(doubleSampler(prng,options).sample()); }
 
   //--------------------------------------------------------------
 
-  @Override
-  public final Object sample (final UniformRandomProvider prng) {
-    return sample(prng,Collections.emptyMap()); }
+//  @Override
+//  public final Object sample (final UniformRandomProvider prng) {
+//    return sample(prng,Collections.emptyMap()); }
 
   //--------------------------------------------------------------
 
