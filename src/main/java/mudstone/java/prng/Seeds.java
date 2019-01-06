@@ -129,11 +129,12 @@ public final class Seeds {
     if (r instanceof URL) { return seed((URL) r); }
 
     if (r instanceof String) {
-      return 
-        seed(
-          Thread.currentThread()
-          .getContextClassLoader()
-          .getResource((String) r)); }
+      final URL url = 
+        Thread.currentThread()
+        .getContextClassLoader()
+        .getResource((String) r);
+      assert null != url : "no resource at " + r;
+      return seed(url); }
 
     throw Exceptions.unsupportedOperation(null,"seed",r); }
 

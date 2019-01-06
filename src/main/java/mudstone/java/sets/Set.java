@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.rng.UniformRandomProvider;
 import mudstone.java.exceptions.Exceptions;
+import mudstone.java.prng.PRNG;
 
 /** General, possibly unbounded, sets of <code>Object</code>s, 
  * and primitive values, as opposed to <code>java.util.Set</code>
