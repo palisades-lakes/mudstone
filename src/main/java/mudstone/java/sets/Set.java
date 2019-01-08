@@ -3,10 +3,12 @@ package mudstone.java.sets;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiPredicate;
 
 import org.apache.commons.rng.UniformRandomProvider;
+
 import mudstone.java.exceptions.Exceptions;
-import mudstone.java.prng.PRNG;
 
 /** General, possibly unbounded, sets of <code>Object</code>s, 
  * and primitive values, as opposed to <code>java.util.Set</code>
@@ -35,10 +37,27 @@ import mudstone.java.prng.PRNG;
  * 
  * <b>TODO:</b> replace sampling iterators with 0-arg functions?
  * 
+ * <b>TODO:<.b> should a Set require an equality relation,
+ * not necessarily the same as <code>equals</code>?
+ * ...since multiple classes might be used to represent the 
+ * elements. Or the set might really be the set of equivalence
+ * classes, represented by some element of each equivalence class.
+ * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-04
+ * @version 2019-01-07
  */
 public interface Set {
+
+  /** The equivalence relation that's used to map implementations
+   * to true elements of the set.
+   */
+  
+  public default BiPredicate equivalence () {
+    return new BiPredicate() {
+      @Override
+      public final boolean test (final Object t, 
+                                 final Object u) {
+        return Objects.equals(t,u); } }; }
 
   @SuppressWarnings("unused")
   public default boolean contains (final Object element) {

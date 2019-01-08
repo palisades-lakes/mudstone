@@ -49,9 +49,16 @@ import mudstone.java.exceptions.Exceptions;
  * </ul>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2018-09-28
+ * @version 2019-01-07
  */
-public interface Function {
+public interface Function 
+
+// TODO: is it better to use adaptor classes? 
+// One large, maybe too large, dynamic interface vs many adaptor
+// classes?
+extends java.util.function.Function
+//, clojure.lang.IFn 
+{
 
   /** Valid inputs to the function belong to the domain.
    */
@@ -241,6 +248,16 @@ public interface Function {
     assert 1 == codomain().dimension();
     throw Exceptions.unsupportedOperation(
       this,"doubleArgmin",support); }
+
+  //--------------------------------------------------------------
+  // java.util.function methods
+  //--------------------------------------------------------------
+  /** Return <code>f(x)</code>
+   */
+
+  @Override
+  public default Object apply (final Object x) {
+    return value((Vektor) x); }
 
   //--------------------------------------------------------------
 }
