@@ -3,6 +3,7 @@ package mudstone.java.algebra;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 
 import org.apache.commons.rng.UniformRandomProvider;
@@ -16,7 +17,7 @@ import mudstone.java.sets.Set;
  * etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-07
+ * @version 2019-01-08
  */
 @SuppressWarnings("unchecked")
 public final class Magma implements Set {
@@ -29,7 +30,6 @@ public final class Magma implements Set {
   //--------------------------------------------------------------
 
   public final BinaryOperator operation () { return _operation; }
-
   public final Set elements () { return _elements; }
 
   //--------------------------------------------------------------
@@ -39,6 +39,10 @@ public final class Magma implements Set {
   @Override
   public final boolean contains (final Object x) {
     return _elements.contains(x); }
+
+  @Override
+  public final BiPredicate equivalence () {
+    return _elements.equivalence(); }
 
   @Override
   public final Iterator sampler (final UniformRandomProvider prng,
@@ -51,7 +55,9 @@ public final class Magma implements Set {
 
   @Override
   public final int hashCode () { 
-    return Objects.hash(_operation,_elements); } 
+    // DANGER: relying on equivalence() returning the same object
+    // each time
+    return Objects.hash(_operation,_elements,equivalence()); } 
 
   @Override
   public final boolean equals (final Object obj) {

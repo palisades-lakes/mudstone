@@ -2,6 +2,8 @@ package mudstone.java.sets;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiPredicate;
 
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.sampling.CollectionSampler;
@@ -14,12 +16,21 @@ import mudstone.java.exceptions.Exceptions;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-04
+ * @version 2019-01-08
  */
 
 @SuppressWarnings("unchecked")
 public final class Sets {
 
+  /** Default notion of equivalence for most sets.
+   */
+  public static final BiPredicate OBJECT_EQUALS =
+    new BiPredicate() {
+    @Override
+    public final boolean test (final Object t, 
+                               final Object u) {
+      return Objects.equals(t,u); } };
+    
   //--------------------------------------------------------------
   /** Does the set contain the element?
    */

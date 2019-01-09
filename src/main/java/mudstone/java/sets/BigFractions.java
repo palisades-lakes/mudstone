@@ -3,7 +3,10 @@ package mudstone.java.sets;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.rng.UniformRandomProvider;
@@ -16,7 +19,7 @@ import mudstone.java.prng.DoubleSampler;
  * <code>BigFraction</code>
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-05
+ * @version 2019-01-08
  */
 public final class BigFractions implements Set {
 
@@ -25,6 +28,20 @@ public final class BigFractions implements Set {
   @Override
   public final boolean contains (final Object element) {
     return element instanceof BigFraction; }
+
+  private static final BiPredicate<BigFraction,BigFraction> 
+  BIGFRACTION_EQUALS = 
+  new BiPredicate<BigFraction,BigFraction>() {
+
+    @Override
+    public final boolean test (final BigFraction q0, 
+                               final BigFraction q1) {
+      return Objects.equals(q0,q1); }
+  };
+  
+  @Override
+  public final BiPredicate equivalence () {
+    return BIGFRACTION_EQUALS; }
 
   //--------------------------------------------------------------
   // convert from a random double
@@ -97,20 +114,36 @@ public final class BigFractions implements Set {
   public static final BinaryOperator<BigFraction> ADD =
     new BinaryOperator<BigFraction>() {
     @Override
-    public final BigFraction apply (final BigFraction t, 
-                                    final BigFraction u) {
-      return t.add(u); } 
+    public final BigFraction apply (final BigFraction q0, 
+                                    final BigFraction q1) {
+      return q0.add(q1); } 
+  };
+
+  public static final UnaryOperator<BigFraction>
+  ADDITIVE_INVERSE =
+    new UnaryOperator<BigFraction>() {
+    @Override
+    public final BigFraction apply (final BigFraction q) {
+      return q.negate(); } 
   };
 
   public static final BinaryOperator<BigFraction> MULTIPLY =
     new BinaryOperator<BigFraction>() {
     @Override
-    public final BigFraction apply (final BigFraction t, 
-                                    final BigFraction u) {
-      return t.multiply(u); } 
-    };
+    public final BigFraction apply (final BigFraction q0, 
+                                    final BigFraction q1) {
+      return q0.multiply(q1); } 
+  };
 
-      //--------------------------------------------------------------
+  public static final UnaryOperator<BigFraction>
+  MULTIPLICATIVE_INVERSE =
+    new UnaryOperator<BigFraction>() {
+    @Override
+    public final BigFraction apply (final BigFraction q) {
+      return q.reciprocal(); } 
+  };
+
+  //--------------------------------------------------------------
 }
 //--------------------------------------------------------------
 

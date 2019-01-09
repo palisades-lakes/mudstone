@@ -3,7 +3,6 @@ package mudstone.java.sets;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiPredicate;
 
 import org.apache.commons.rng.UniformRandomProvider;
@@ -49,15 +48,12 @@ import mudstone.java.exceptions.Exceptions;
 public interface Set {
 
   /** The equivalence relation that's used to map implementations
-   * to true elements of the set.
+   * to the true elements of the set, which are equivalence 
+   * classes of objects.
    */
   
   public default BiPredicate equivalence () {
-    return new BiPredicate() {
-      @Override
-      public final boolean test (final Object t, 
-                                 final Object u) {
-        return Objects.equals(t,u); } }; }
+    return Sets.OBJECT_EQUALS; }
 
   @SuppressWarnings("unused")
   public default boolean contains (final Object element) {
