@@ -19,7 +19,7 @@ import mudstone.java.sets.Set;
  * etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-08
+ * @version 2019-01-09
  */
 @SuppressWarnings("unchecked")
 public final class Field implements Set {
@@ -38,9 +38,11 @@ public final class Field implements Set {
 
   public final BinaryOperator add () { return _add; }
   public final UnaryOperator additiveInverse () { return _additiveInverse; }
+  // TODO: return a Supplier (nullary operator) instead?
   public final Object additiveIdentity () { return _additiveIdentity; }
   public final BinaryOperator multiply () { return _multiply; }
   public final UnaryOperator multiplicativeInverse () { return _multiplicativeInverse; }
+  // TODO: return a Supplier (nullary operator) instead?
   public final Object multiplicativeIdentity () { return _multiplicativeIdentity; }
   public final Set elements () { return _elements; }
 

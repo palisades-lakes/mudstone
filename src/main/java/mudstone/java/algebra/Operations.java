@@ -1,5 +1,6 @@
 package mudstone.java.algebra;
 
+import java.util.Iterator;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
@@ -30,9 +31,10 @@ public final class Operations {
    */
   public final static boolean isClosed (final Set elements,
                                         final BinaryOperator operation,
-                                        final Object a,
-                                        final Object b) {
+                                        final Iterator samples) {
+    final Object a = samples.next();
     assert elements.contains(a);
+    final Object b = samples.next();
     assert elements.contains(b);
     return elements.contains(operation.apply(a,b)); }
 
@@ -42,12 +44,12 @@ public final class Operations {
 
   public final static boolean isAssociative (final Set elements,
                                              final BinaryOperator operation,
-                                             final Object a,
-                                             final Object b,
-                                             final Object c) {
-
+                                             final Iterator samples) {
+    final Object a = samples.next();
     assert elements.contains(a);
+    final Object b = samples.next();
     assert elements.contains(b);
+    final Object c = samples.next();
     assert elements.contains(c);
     final BiPredicate equal = elements.equivalence();
     return 
@@ -64,7 +66,8 @@ public final class Operations {
   public final static boolean isIdentity (final Set elements,
                                           final BinaryOperator operation,
                                           final Object identity,
-                                          final Object a) {
+                                          final Iterator samples) {
+    final Object a = samples.next();
     assert elements.contains(a);
     assert elements.contains(identity);
     final Object r = operation.apply(a,identity);
@@ -82,7 +85,8 @@ public final class Operations {
                                          final BinaryOperator operation,
                                          final Object identity,
                                          final UnaryOperator inverse,
-                                         final Object a) {
+                                         final Iterator samples) {
+    final Object a = samples.next();
     assert elements.contains(a);
     assert elements.contains(identity);
     final Object ainv = inverse.apply(a);
@@ -98,10 +102,11 @@ public final class Operations {
 
   public final static boolean isCommutative (final Set elements,
                                              final BinaryOperator operation,
-                                             final Object a,
-                                             final Object b) {
+                                             final Iterator samples) {
 
+    final Object a = samples.next();
     assert elements.contains(a);
+    final Object b = samples.next();
     assert elements.contains(b);
     final BiPredicate equal = elements.equivalence();
     return 
@@ -117,12 +122,13 @@ public final class Operations {
   public final static boolean isDistributive (final Set elements,
                                               final BinaryOperator add,
                                               final BinaryOperator multiply,
-                                              final Object a,
-                                              final Object b,
-                                              final Object c) {
+                                              final Iterator samples) {
 
+    final Object a = samples.next();
     assert elements.contains(a);
+    final Object b = samples.next();
     assert elements.contains(b);
+    final Object c = samples.next();
     assert elements.contains(c);
     final BiPredicate equal = elements.equivalence();
     return 

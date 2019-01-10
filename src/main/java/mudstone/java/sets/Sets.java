@@ -16,7 +16,7 @@ import mudstone.java.exceptions.Exceptions;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-08
+ * @version 2019-01-09
  */
 
 @SuppressWarnings("unchecked")
@@ -29,8 +29,9 @@ public final class Sets {
     @Override
     public final boolean test (final Object t, 
                                final Object u) {
-      return Objects.equals(t,u); } };
-    
+      return Objects.equals(t,u); }
+  };
+
   //--------------------------------------------------------------
   /** Does the set contain the element?
    */
@@ -51,7 +52,7 @@ public final class Sets {
                                         final Map options) {
     if (set instanceof Set) {
       return ((Set) set).sampler(prng,options); }
-    
+
     if (set instanceof java.util.Set) {
       assert null == options;
       final CollectionSampler cs =
@@ -62,9 +63,45 @@ public final class Sets {
         public final boolean hasNext () { return true; }
         @Override
         public final Object next () { return cs.sample(); } }; }
-    
+
     throw Exceptions.unsupportedOperation(
       null,"contains",set,prng,options); }
+
+  //--------------------------------------------------------------
+  // predicates on equivalence relation
+  //--------------------------------------------------------------
+  /** Is a = a?
+   */
+  public final static boolean isReflexive (final Set elements,
+                                           final BiPredicate equivalent,
+                                           final Iterator samples) {
+    final Object a = samples.next();
+    assert elements.contains(a);
+    return equivalent.test(a,a); }
+
+  /** Is a = a?
+   */
+  public final static boolean isReflexive (final Set elements,
+                                           final Iterator samples) {
+    return isReflexive(elements,elements.equivalence(),samples); }
+
+  //--------------------------------------------------------------
+  /** Is a = a?
+   */
+  public final static boolean isSymmetric (final Set elements,
+                                           final BiPredicate equivalent,
+                                           final Iterator samples) {
+    final Object a = samples.next();
+    assert elements.contains(a);
+    final Object b = samples.next();
+    assert elements.contains(b);
+    return equivalent.test(a,b) == equivalent.test(b,a); }
+
+  /** Is a = a?
+   */
+  public final static boolean isSymmetric (final Set elements,
+                                           final Iterator samples) {
+    return isSymmetric(elements,elements.equivalence(),samples); }
 
   //--------------------------------------------------------------
   // disable constructor

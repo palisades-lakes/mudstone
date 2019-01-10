@@ -12,20 +12,15 @@ import mudstone.java.sets.BigFractions;
  * </pre>
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-07
+ * @version 2019-01-09
  */
 
 public final class BigFractionsTest {
 
   @SuppressWarnings({ "static-method" })
   @Test
-  public final void membership () {
-    SetTests.testMembership(BigFractions.get()); }
-
-  @SuppressWarnings({ "static-method" })
-  @Test
-  public final void equivalence () {
-    SetTests.testEquivalence(BigFractions.get()); }
+  public final void setTests () {
+    SetTests.tests(BigFractions.get()); }
 
   //--------------------------------------------------------------
 }
