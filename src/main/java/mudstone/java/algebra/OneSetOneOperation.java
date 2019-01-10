@@ -1,12 +1,13 @@
 package mudstone.java.algebra;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import org.apache.commons.rng.UniformRandomProvider;
 
@@ -19,12 +20,17 @@ import mudstone.java.sets.Set;
  * etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-09
+ * @version 2019-01-10
  */
 @SuppressWarnings("unchecked")
-public final class GroupLike implements Set {
+public final class OneSetOneOperation implements Set {
 
   private final BinaryOperator _operation;
+  // may be null
+  private final Object _identity;
+  // may be null
+  private final UnaryOperator _inverse;
+
   private final Set _elements;
 
   //--------------------------------------------------------------
@@ -33,19 +39,37 @@ public final class GroupLike implements Set {
 
   public final BinaryOperator operation () { return _operation; }
   public final Set elements () { return _elements; }
+  /** may be null. */
+  public final Object identity () { return _identity; }
+  /** may be null. */
+  public final UnaryOperator inverse () { return _inverse; }
 
   //--------------------------------------------------------------
-  // Laws (see https://en.wikipedia.org/wiki/Universal_algebra)
-  //--------------------------------------------------------------
 
-  public static final List<BiPredicate> MAGMA_LAWS =
-    Arrays.asList(
-      new BiPredicate[] 
-        { (m, samples) -> {
-          final GroupLike mm = (GroupLike) m;
-          return 
-            Operations.isClosed(
-              mm.elements(),mm.operation(),(Iterator) samples); }, });
+  public final List<Predicate> magmaLaws () { 
+    return Laws.magma(elements(),operation());}
+
+  public final List<Predicate>  semigroupLaws  () {
+    return Laws.semigroup(elements(),operation());}
+
+  public final List<Predicate>  monoidLaws () {
+    assert Objects.nonNull(identity());
+    return Laws.monoid(elements(),operation(),identity());}
+
+  public final List<Predicate> 
+  groupLaws  () {
+    assert Objects.nonNull(identity());
+    assert Objects.nonNull(inverse());
+    return 
+      Laws.group(elements(),operation(),identity(),inverse());}
+
+  public final List<Predicate> 
+  commutativegroupLaws  () {
+    assert Objects.nonNull(identity());
+    assert Objects.nonNull(inverse());
+    return 
+      Laws.commutativegroup(
+        elements(),operation(),identity(),inverse());}
 
   //--------------------------------------------------------------
   // Set methods
@@ -80,8 +104,8 @@ public final class GroupLike implements Set {
   public final boolean equals (final Object obj) {
     if (this == obj) { return true; }
     if (obj == null) { return false; }
-    if (!(obj instanceof GroupLike)) { return false; }
-    GroupLike other = (GroupLike) obj;
+    if (!(obj instanceof OneSetOneOperation)) { return false; }
+    OneSetOneOperation other = (OneSetOneOperation) obj;
     // WARNING: hard to tell if 2 operations are the same,
     // unless the implementing class has some kind of singleton
     // constraint.
@@ -103,12 +127,16 @@ public final class GroupLike implements Set {
   // construction
   //--------------------------------------------------------------
 
-  private GroupLike (final BinaryOperator operation,
-                 final Set elements) { 
+  private OneSetOneOperation (final BinaryOperator operation,
+                     final Set elements,
+                     final Object identity,
+                     final UnaryOperator inverse) { 
     assert Objects.nonNull(operation);
-    assert Objects.nonNull(elements);
     _operation = operation;
-    _elements= elements; }
+    assert Objects.nonNull(elements);
+    _elements= elements; 
+    _identity = identity;
+    _inverse = inverse; }
 
   //--------------------------------------------------------------
   // TODO: is it worth implementing singleton constraint?
@@ -118,18 +146,18 @@ public final class GroupLike implements Set {
 
   //--------------------------------------------------------------
 
-  public static final GroupLike make (final BinaryOperator operation,
-                                  final Set elements) {
-    return new GroupLike(operation,elements); }
+  public static final OneSetOneOperation make (final BinaryOperator operation,
+                                      final Set elements) {
+    return new OneSetOneOperation(operation,elements,null,null); }
 
   //--------------------------------------------------------------
   // pre-define some standard magmas
 
-  public static final GroupLike BIGFRACTIONS_ADD = 
-    GroupLike.make(BigFractions.ADD,BigFractions.get());
+  public static final OneSetOneOperation BIGFRACTIONS_ADD = 
+    OneSetOneOperation.make(BigFractions.ADD,BigFractions.get());
 
-  public static final GroupLike BIGFRACTIONS_MULTIPLY = 
-    GroupLike.make(BigFractions.MULTIPLY,BigFractions.get());
+  public static final OneSetOneOperation BIGFRACTIONS_MULTIPLY = 
+    OneSetOneOperation.make(BigFractions.MULTIPLY,BigFractions.get());
 
   //--------------------------------------------------------------
 }

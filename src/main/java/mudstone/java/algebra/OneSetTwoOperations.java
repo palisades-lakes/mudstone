@@ -13,23 +13,25 @@ import org.apache.commons.rng.UniformRandomProvider;
 import mudstone.java.sets.BigFractions;
 import mudstone.java.sets.Set;
 
-/** Magma: set plus closed binary operation.
- * 
- * Not that useful (?), but a simple case for working out testing,
- * etc.
+/** One set plus 2 operations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-09
+ * @version 2019-01-10
  */
 @SuppressWarnings("unchecked")
-public final class Field implements Set {
+public final class OneSetTwoOperations implements Set {
 
   private final BinaryOperator _add;
+  // may be null
   private final Object _additiveIdentity;
+  // may be null
   private final UnaryOperator _additiveInverse;
   private final BinaryOperator _multiply;
+  // may be null
   private final Object _multiplicativeIdentity;
+  // may be null
   private final UnaryOperator _multiplicativeInverse;
+
   private final Set _elements;
 
   //--------------------------------------------------------------
@@ -84,7 +86,7 @@ public final class Field implements Set {
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
-    final Field other = (Field) obj;
+    final OneSetTwoOperations other = (OneSetTwoOperations) obj;
     if (! Objects.equals(_add,other._add)) { 
       return false; }
     if (! Objects.equals(
@@ -124,7 +126,7 @@ public final class Field implements Set {
   //--------------------------------------------------------------
 
 
-  private Field (final BinaryOperator add,
+  private OneSetTwoOperations (final BinaryOperator add,
                  final Object additiveIdentity,
                  final UnaryOperator additiveInverse,
                  final BinaryOperator multiply,
@@ -154,7 +156,7 @@ public final class Field implements Set {
 
   //--------------------------------------------------------------
 
-  public static final Field make (final BinaryOperator add,
+  public static final OneSetTwoOperations make (final BinaryOperator add,
                                   final Object additiveIdentity,
                                   final UnaryOperator additiveInverse,
                                   final BinaryOperator multiply,
@@ -162,7 +164,7 @@ public final class Field implements Set {
                                   final UnaryOperator multiplicativeInverse,
                                   final Set elements) {
 
-    return new Field(
+    return new OneSetTwoOperations(
       add,
       additiveIdentity,
       additiveInverse,
@@ -174,8 +176,8 @@ public final class Field implements Set {
   //--------------------------------------------------------------
   // pre-define some standard magmas
 
-  public static final Field BIGFRACTIONS_FIELD = 
-    Field.make(
+  public static final OneSetTwoOperations BIGFRACTIONS_FIELD = 
+    OneSetTwoOperations.make(
       BigFractions.ADD,
       BigFraction.ZERO,
       BigFractions.ADDITIVE_INVERSE,
