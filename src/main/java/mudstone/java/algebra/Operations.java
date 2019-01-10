@@ -19,7 +19,7 @@ import mudstone.java.sets.Set;
  * no instance state or methods.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-08
+ * @version 2019-01-09
  */
 
 @SuppressWarnings("unchecked")
@@ -30,13 +30,23 @@ public final class Operations {
   /** Is the value of the operation an element of the structure?
    */
   public final static boolean isClosed (final Set elements,
+                                        final Set scalars,
                                         final BinaryOperator operation,
-                                        final Iterator samples) {
-    final Object a = samples.next();
-    assert elements.contains(a);
-    final Object b = samples.next();
+                                        final Iterator elementSamples,
+                                        final Iterator scalarSamples) {
+    final Object a = scalarSamples.next();
+    assert scalars.contains(a);
+    final Object b = elementSamples.next();
     assert elements.contains(b);
     return elements.contains(operation.apply(a,b)); }
+
+  /** Is the value of the operation an element of the structure?
+   */
+  public final static boolean isClosed (final Set elements,
+                                        final BinaryOperator operation,
+                                        final Iterator samples) {
+    return 
+      isClosed(elements,elements,operation,samples,samples); }
 
   //--------------------------------------------------------------
   /** Is the operation associative?
@@ -80,13 +90,18 @@ public final class Operations {
 
   /** Does <code>(operation a (inverse a)) == 
    * (operation (inverse a) a) = identity</code>?
+   * ...except for excluded elements, as with the additive
+   * identity (zero) having no inverse element for the
+   * multiplicative operation in a ring-like structure.
    */
   public final static boolean isInverse (final Set elements,
                                          final BinaryOperator operation,
                                          final Object identity,
                                          final UnaryOperator inverse,
+                                         final java.util.Set excluded,
                                          final Iterator samples) {
     final Object a = samples.next();
+    if (excluded.contains(a)) { return true; }
     assert elements.contains(a);
     assert elements.contains(identity);
     final Object ainv = inverse.apply(a);
@@ -95,6 +110,20 @@ public final class Operations {
       equal.test(identity,operation.apply(a,ainv))
       && 
       equal.test(identity,operation.apply(ainv,a)); }
+
+/** Does <code>(operation a (inverse a)) == 
+ * (operation (inverse a) a) = identity</code>
+ * for all <code>a</code> in <code>elements</code>?
+ */
+public final static boolean isInverse (final Set elements,
+                                       final BinaryOperator operation,
+                                       final Object identity,
+                                       final UnaryOperator inverse,
+                                       final Iterator samples) {
+  return isInverse(
+    elements,operation,identity,inverse,
+    java.util.Set.of(),
+    samples); }
 
   //--------------------------------------------------------------
   /** Is the operation commutative (aka symmetric)?
@@ -117,6 +146,31 @@ public final class Operations {
   //--------------------------------------------------------------
   /** Does <code>multiply</code> distribute over <code>add</code>?
    * <code>a*(b+c) == (a*b) + (a*c)</code>?
+   * (Module-like version)
+   */
+
+  public final static boolean isDistributive (final Set elements,
+                                              final Set scalars,
+                                              final BinaryOperator add,
+                                              final BinaryOperator multiply,
+                                              final Iterator elementSamples,
+                                              final Iterator scalarSamples) {
+
+    final Object a = scalarSamples.next();
+    assert scalars.contains(a);
+    final Object b = elementSamples.next();
+    assert elements.contains(b);
+    final Object c = elementSamples.next();
+    assert elements.contains(c);
+    final BiPredicate equal = elements.equivalence();
+    return 
+      equal.test(
+        multiply.apply(a,add.apply(b,c)),
+        add.apply(multiply.apply(a,b),multiply.apply(a,c))); }
+
+  /** Does <code>multiply</code> distribute over <code>add</code>?
+   * <code>a*(b+c) == (a*b) + (a*c)</code>?
+   * (Ring-like version)
    */
 
   public final static boolean isDistributive (final Set elements,
@@ -124,17 +178,9 @@ public final class Operations {
                                               final BinaryOperator multiply,
                                               final Iterator samples) {
 
-    final Object a = samples.next();
-    assert elements.contains(a);
-    final Object b = samples.next();
-    assert elements.contains(b);
-    final Object c = samples.next();
-    assert elements.contains(c);
-    final BiPredicate equal = elements.equivalence();
     return 
-      equal.test(
-        multiply.apply(a,add.apply(b,c)),
-        add.apply(multiply.apply(a,b),multiply.apply(a,c))); }
+      isDistributive(
+        elements,elements,add,multiply,samples,samples); }
 
   //--------------------------------------------------------------
   // disable constructor

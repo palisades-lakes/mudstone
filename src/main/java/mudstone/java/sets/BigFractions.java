@@ -140,6 +140,8 @@ public final class BigFractions implements Set {
     new UnaryOperator<BigFraction>() {
     @Override
     public final BigFraction apply (final BigFraction q) {
+      // only a partial inverse
+      if (BigFraction.ZERO.equals(q)) { return null; }
       return q.reciprocal(); } 
   };
 
