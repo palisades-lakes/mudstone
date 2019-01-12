@@ -13,7 +13,7 @@ import mudstone.java.sets.Sets;
 /** Common code for testing sets. 
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-11
+ * @version 2019-01-12
  */
 
 @SuppressWarnings("unchecked")
@@ -27,7 +27,10 @@ public final class SetTests {
       PRNG.well44497b(
         Seeds.seed("seeds/Well44497b-2019-01-05.txt")));
     for (int i=0; i<TRYS; i++) {
-      assertTrue(set.contains(g.get())); } }
+      final Object x = g.get();
+      assertTrue(
+        set.contains(g.get()),
+        () -> set.toString() + " does not contain " + x); } }
 
   private static final void testEquivalence (final Set set) {
     final Supplier g = 

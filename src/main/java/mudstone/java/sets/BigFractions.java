@@ -1,6 +1,7 @@
 package mudstone.java.sets;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -10,7 +11,9 @@ import java.util.function.UnaryOperator;
 
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.rng.UniformRandomProvider;
+import org.apache.commons.rng.sampling.CollectionSampler;
 import org.apache.commons.rng.sampling.distribution.ContinuousSampler;
+import org.apache.commons.rng.sampling.distribution.ContinuousUniformSampler;
 
 import clojure.lang.Keyword;
 import mudstone.java.prng.DoubleSampler;
@@ -19,10 +22,12 @@ import mudstone.java.prng.DoubleSampler;
  * <code>BigFraction</code>
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-11
+ * @version 2019-01-12
  */
 public final class BigFractions implements Set {
 
+  //--------------------------------------------------------------
+  // Set methods
   //--------------------------------------------------------------
 
   @Override
@@ -38,7 +43,7 @@ public final class BigFractions implements Set {
                                final BigFraction q1) {
       return Objects.equals(q0,q1); }
   };
-  
+
   @Override
   public final BiPredicate equivalence () {
     return BIGFRACTION_EQUALS; }
@@ -80,15 +85,33 @@ public final class BigFractions implements Set {
     return DoubleSampler.make(urp); }
 
   //--------------------------------------------------------------
-
+  private static final double DOUBLE_P = 0.8;
+  
+  /** Intended primarily for testing. Sample a random double
+   * (see {@link mudstone.java.prng.DoubleSampler})
+   * and convert to <code>BigFraction</code>
+   * with {@link #DOUBLE_P} probability;
+   * otherwise return {@link #ADDITIVE_INVERSE} or 
+   * {@link #MULTIPLICATIVE_INVERSE},  with equal probability
+   */
   @Override
   public final Supplier generator (final UniformRandomProvider urp,
-                                 final Map options) {
+                                   final Map options) {
+    final ContinuousSampler choose = 
+      new ContinuousUniformSampler(urp,0.0,1.0);
     final ContinuousSampler cs = doubleSampler(urp,options);
+    final CollectionSampler edgeCases = 
+      new CollectionSampler(
+        urp,List.of(
+          BigFraction.ZERO,
+          BigFraction.ONE,
+          BigFraction.MINUS_ONE));
     return 
       new Supplier () {
       @Override
       public final Object get () { 
+        final boolean edge = choose.sample() > DOUBLE_P;
+        if (edge) { return edgeCases.sample(); }
         for (;;) { // WARNING: intinite loop?
           final double z = cs.sample();
           if (Double.isFinite(z)) { 
@@ -98,6 +121,21 @@ public final class BigFractions implements Set {
   public final Supplier generator (final UniformRandomProvider urp) {
     return generator(urp,Collections.emptyMap()); }
 
+  //--------------------------------------------------------------
+  // Object methods
+  //--------------------------------------------------------------
+  
+  @Override
+  public final int hashCode () { return 0; }
+  
+  // singleton
+  @Override
+  public final boolean equals (final Object that) {
+    return that instanceof BigFractions; }
+  
+  @Override
+  public final String toString () { return "BigFractions"; }
+  
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------
@@ -119,7 +157,7 @@ public final class BigFractions implements Set {
 
   public static final UnaryOperator<BigFraction>
   ADDITIVE_INVERSE =
-    new UnaryOperator<BigFraction>() {
+  new UnaryOperator<BigFraction>() {
     @Override
     public final BigFraction apply (final BigFraction q) {
       return q.negate(); } 
@@ -135,7 +173,7 @@ public final class BigFractions implements Set {
 
   public static final UnaryOperator<BigFraction>
   MULTIPLICATIVE_INVERSE =
-    new UnaryOperator<BigFraction>() {
+  new UnaryOperator<BigFraction>() {
     @Override
     public final BigFraction apply (final BigFraction q) {
       // only a partial inverse
