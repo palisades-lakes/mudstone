@@ -1,9 +1,9 @@
 package mudstone.java.sets;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
+import java.util.function.Supplier;
 
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.sampling.CollectionSampler;
@@ -47,22 +47,20 @@ public final class Sets {
 
   //--------------------------------------------------------------
 
-  public static final Iterator sampler (final Object set,
+  public static final Supplier sampler (final Object set,
                                         final UniformRandomProvider prng,
                                         final Map options) {
     if (set instanceof Set) {
-      return ((Set) set).sampler(prng,options); }
+      return ((Set) set).generator(prng,options); }
 
     if (set instanceof java.util.Set) {
       assert null == options;
       final CollectionSampler cs =
         new CollectionSampler(prng,((java.util.Set) set)); 
       return
-        new Iterator () {
+        new Supplier () {
         @Override
-        public final boolean hasNext () { return true; }
-        @Override
-        public final Object next () { return cs.sample(); } }; }
+        public final Object get () { return cs.sample(); } }; }
 
     throw Exceptions.unsupportedOperation(
       null,"contains",set,prng,options); }
@@ -74,15 +72,15 @@ public final class Sets {
    */
   public final static boolean isReflexive (final Set elements,
                                            final BiPredicate equivalent,
-                                           final Iterator samples) {
-    final Object a = samples.next();
+                                           final Supplier samples) {
+    final Object a = samples.get();
     assert elements.contains(a);
     return equivalent.test(a,a); }
 
   /** Is a = a?
    */
   public final static boolean isReflexive (final Set elements,
-                                           final Iterator samples) {
+                                           final Supplier samples) {
     return isReflexive(elements,elements.equivalence(),samples); }
 
   //--------------------------------------------------------------
@@ -90,17 +88,17 @@ public final class Sets {
    */
   public final static boolean isSymmetric (final Set elements,
                                            final BiPredicate equivalent,
-                                           final Iterator samples) {
-    final Object a = samples.next();
+                                           final Supplier samples) {
+    final Object a = samples.get();
     assert elements.contains(a);
-    final Object b = samples.next();
+    final Object b = samples.get();
     assert elements.contains(b);
     return equivalent.test(a,b) == equivalent.test(b,a); }
 
   /** Is a = a?
    */
   public final static boolean isSymmetric (final Set elements,
-                                           final Iterator samples) {
+                                           final Supplier samples) {
     return isSymmetric(elements,elements.equivalence(),samples); }
 
   //--------------------------------------------------------------

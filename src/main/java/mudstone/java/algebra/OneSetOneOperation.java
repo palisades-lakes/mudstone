@@ -1,12 +1,12 @@
 package mudstone.java.algebra;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import org.apache.commons.rng.UniformRandomProvider;
@@ -91,9 +91,9 @@ public final class OneSetOneOperation implements Set {
     return _elements.equivalence(); }
 
   @Override
-  public final Iterator sampler (final UniformRandomProvider prng,
-                                 final Map options) { 
-    return _elements.sampler(prng,options); }
+  public final Supplier generator (final UniformRandomProvider prng,
+                                   final Map options) { 
+    return _elements.generator(prng,options); }
 
   //--------------------------------------------------------------
   // Object methods

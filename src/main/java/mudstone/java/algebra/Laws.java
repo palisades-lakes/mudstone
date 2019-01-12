@@ -1,10 +1,10 @@
 package mudstone.java.algebra;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import mudstone.java.sets.Set;
@@ -42,15 +42,15 @@ public final class Laws {
   //--------------------------------------------------------------
   /** Is the value of the operation an element of the structure?
    */
-  public final static Predicate<Iterator> 
+  public final static Predicate<Supplier> 
   closed (final Set elements,
           final BinaryOperator operation) {
-    return new Predicate<Iterator> () {
+    return new Predicate<Supplier> () {
       @Override
-      public final boolean test (final Iterator samples) {
-        final Object a = samples.next();
+      public final boolean test (final Supplier samples) {
+        final Object a = samples.get();
         assert elements.contains(a);
-        final Object b = samples.next();
+        final Object b = samples.get();
         assert elements.contains(b);
         return elements.contains(operation.apply(a,b)); } }; }
 
@@ -58,17 +58,17 @@ public final class Laws {
   /** Is the operation associative?
    */
 
-  public final static Predicate<Iterator>  
+  public final static Predicate<Supplier>  
   associative (final Set elements,
                final BinaryOperator operation) {
-    return new Predicate<Iterator> () {
+    return new Predicate<Supplier> () {
       @Override
-      public final boolean test (final Iterator samples) {
-        final Object a = samples.next();
+      public final boolean test (final Supplier samples) {
+        final Object a = samples.get();
         assert elements.contains(a);
-        final Object b = samples.next();
+        final Object b = samples.get();
         assert elements.contains(b);
-        final Object c = samples.next();
+        final Object c = samples.get();
         assert elements.contains(c);
         final BiPredicate equal = elements.equivalence();
         return 
@@ -85,19 +85,19 @@ public final class Laws {
    * identity (zero) breaking multiplicative identity in a 
    * ring-like structure.
    */
-  public final static Predicate<Iterator> 
+  public final static Predicate<Supplier> 
   identity (final Set elements,
             final BinaryOperator operation,
             final Object identity,
             final Object excluded) {
-    return new Predicate<Iterator> () {
+    return new Predicate<Supplier> () {
       @Override
-      public final boolean test (final Iterator samples) {
+      public final boolean test (final Supplier samples) {
         // TODO: what if we want <code>null</code> 
         // to be the identity? IS there an example where null is
         // better than empty list, empty string, ...
         if (null == identity) { return false; }
-        final Object a = samples.next();
+        final Object a = samples.get();
         if (Sets.contains(excluded,a)) {return true; }
         assert elements.contains(a);
         assert elements.contains(identity);
@@ -109,18 +109,18 @@ public final class Laws {
   /** Does <code>(operation a identity) == 
    * (operation identity a) = a</code>?
    */
-  public final static Predicate<Iterator> 
+  public final static Predicate<Supplier> 
   identity (final Set elements,
             final BinaryOperator operation,
             final Object identity) {
-    return new Predicate<Iterator> () {
+    return new Predicate<Supplier> () {
       @Override
-      public final boolean test (final Iterator samples) {
+      public final boolean test (final Supplier samples) {
         // TODO: what if we want <code>null</code> 
         // to be the identity? IS there an example where null is
         // better than empty list, empty string, ...
         if (null == identity) { return false; }
-        final Object a = samples.next();
+        final Object a = samples.get();
         assert elements.contains(a);
         assert elements.contains(identity);
         final Object r = operation.apply(a,identity);
@@ -137,16 +137,16 @@ public final class Laws {
    * identity (zero) having no inverse element for the
    * multiplicative operation in a ring-like structure.
    */
-  public final static Predicate<Iterator>  
+  public final static Predicate<Supplier>  
   inverse (final Set elements,
            final BinaryOperator operation,
            final Object identity,
            final UnaryOperator inverse,
            final Object excluded) {
-    return new Predicate<Iterator> () {
+    return new Predicate<Supplier> () {
       @Override
-      public final boolean test (final Iterator samples) {
-        final Object a = samples.next();
+      public final boolean test (final Supplier samples) {
+        final Object a = samples.get();
         if (Sets.contains(excluded,a)) { return true; }
         assert elements.contains(a);
         assert elements.contains(identity);
@@ -161,7 +161,7 @@ public final class Laws {
    * (operation (inverse a) a) = identity</code>
    * for all <code>a</code> in <code>elements</code>?
    */
-  public final static Predicate<Iterator>  
+  public final static Predicate<Supplier>  
   inverse (final Set elements,
            final BinaryOperator operation,
            final Object identity,
@@ -173,15 +173,15 @@ public final class Laws {
   /** Is the operation commutative (aka symmetric)?
    */
 
-  public final static Predicate<Iterator>  
+  public final static Predicate<Supplier>  
   commutative (final Set elements,
                final BinaryOperator operation) {
-    return new Predicate<Iterator> () {
+    return new Predicate<Supplier> () {
       @Override
-      public final boolean test (final Iterator samples) {
-        final Object a = samples.next();
+      public final boolean test (final Supplier samples) {
+        final Object a = samples.get();
         assert elements.contains(a);
-        final Object b = samples.next();
+        final Object b = samples.get();
         assert elements.contains(b);
         final BiPredicate equal = elements.equivalence();
         return 
@@ -245,18 +245,18 @@ public final class Laws {
    * (Ring-like version)
    */
 
-  public final static Predicate<Iterator>  
+  public final static Predicate<Supplier>  
   distributive (final Set elements,
                 final BinaryOperator add,
                 final BinaryOperator multiply) {
-    return new Predicate<Iterator> () {
+    return new Predicate<Supplier> () {
       @Override
-      public final boolean test (final Iterator samples) {
-        final Object a = samples.next();
+      public final boolean test (final Supplier samples) {
+        final Object a = samples.get();
         assert elements.contains(a);
-        final Object b = samples.next();
+        final Object b = samples.get();
         assert elements.contains(b);
-        final Object c = samples.next();
+        final Object c = samples.get();
         assert elements.contains(c);
         final BiPredicate equal = elements.equivalence();
         return 
@@ -354,17 +354,17 @@ public final class Laws {
   //--------------------------------------------------------------
   /** Is the value of the operation an element of the structure?
    */
-  public final static BiPredicate<Iterator,Iterator> 
+  public final static BiPredicate<Supplier,Supplier> 
   closed (final Set elements,
           final Set scalars,
           final BinaryOperator operation) {
-    return new BiPredicate<Iterator,Iterator> () {
+    return new BiPredicate<Supplier,Supplier> () {
       @Override
-      public final boolean test (final Iterator elementSamples,
-                                 final Iterator scalarSamples) {
-        final Object a = scalarSamples.next();
+      public final boolean test (final Supplier elementSamples,
+                                 final Supplier scalarSamples) {
+        final Object a = scalarSamples.get();
         assert scalars.contains(a);
-        final Object b = elementSamples.next();
+        final Object b = elementSamples.get();
         assert elements.contains(b);
         return elements.contains(operation.apply(a,b)); } }; }
 
@@ -374,21 +374,21 @@ public final class Laws {
    * (Module-like version)
    */
 
-  public final static BiPredicate<Iterator,Iterator> 
+  public final static BiPredicate<Supplier,Supplier> 
   distributive (final Set elements,
                 final Set scalars,
                 final BinaryOperator add,
                 final BinaryOperator multiply) {
-    return new BiPredicate<Iterator,Iterator> () {
+    return new BiPredicate<Supplier,Supplier> () {
       @Override
-      public final boolean test (final Iterator elementSamples,
-                                 final Iterator scalarSamples) {
+      public final boolean test (final Supplier elementSamples,
+                                 final Supplier scalarSamples) {
 
-        final Object a = scalarSamples.next();
+        final Object a = scalarSamples.get();
         assert scalars.contains(a);
-        final Object b = elementSamples.next();
+        final Object b = elementSamples.get();
         assert elements.contains(b);
-        final Object c = elementSamples.next();
+        final Object c = elementSamples.get();
         assert elements.contains(c);
         final BiPredicate equal = elements.equivalence();
         return 

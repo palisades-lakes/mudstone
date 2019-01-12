@@ -1,11 +1,11 @@
 package mudstone.java.sets;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -82,23 +82,21 @@ public final class BigFractions implements Set {
   //--------------------------------------------------------------
 
   @Override
-  public final Iterator sampler (final UniformRandomProvider urp,
+  public final Supplier generator (final UniformRandomProvider urp,
                                  final Map options) {
     final ContinuousSampler cs = doubleSampler(urp,options);
     return 
-      new Iterator () {
+      new Supplier () {
       @Override
-      public final boolean hasNext () { return true; }
-      @Override
-      public final Object next () { 
+      public final Object get () { 
         for (;;) { // WARNING: intinite loop?
           final double z = cs.sample();
           if (Double.isFinite(z)) { 
             return new BigFraction(z); } } } }; }
 
   @Override
-  public final Iterator sampler (final UniformRandomProvider urp) {
-    return sampler(urp,Collections.emptyMap()); }
+  public final Supplier generator (final UniformRandomProvider urp) {
+    return generator(urp,Collections.emptyMap()); }
 
   //--------------------------------------------------------------
   // construction

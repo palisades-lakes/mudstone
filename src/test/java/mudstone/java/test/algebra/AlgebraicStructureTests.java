@@ -2,8 +2,8 @@ package mudstone.java.test.algebra;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Iterator;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,25 +27,25 @@ public final class AlgebraicStructureTests {
 
   private static final void magmaTests (final OneSetOneOperation magma) {
     SetTests.tests(magma);
-    final Iterator it = 
-      magma.sampler( 
+    final Supplier g = 
+      magma.generator( 
         PRNG.well44497b(
           Seeds.seed("seeds/Well44497b-2019-01-09.txt")));
 
     for(final Predicate law : magma.magmaLaws()) {
       for (int i=0; i<TRYS; i++) {
-        assertTrue(law.test(it)); } } }
+        assertTrue(law.test(g)); } } }
 
   private static final void fieldTests (final OneSetTwoOperations field) {
     SetTests.tests(field);
-    final Iterator it = 
-      field.sampler( 
+    final Supplier g = 
+      field.generator( 
         PRNG.well44497b(
           Seeds.seed("seeds/Well44497b-2019-01-11.txt")));
 
     for(final Predicate law : field.fieldLaws()) {
       for (int i=0; i<TRYS; i++) {
-        assertTrue(law.test(it)); } } }
+        assertTrue(law.test(g)); } } }
 
   @SuppressWarnings({ "static-method" })
   @Test
