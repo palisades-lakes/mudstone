@@ -16,7 +16,7 @@ import mudstone.java.exceptions.Exceptions;
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-09
+ * @version 2019-01-11
  */
 
 @SuppressWarnings("unchecked")

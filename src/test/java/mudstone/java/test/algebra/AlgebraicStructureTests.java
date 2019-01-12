@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import mudstone.java.algebra.OneSetOneOperation;
+import mudstone.java.algebra.OneSetTwoOperations;
 import mudstone.java.prng.PRNG;
 import mudstone.java.prng.Seeds;
 import mudstone.java.test.sets.SetTests;
@@ -16,7 +17,7 @@ import mudstone.java.test.sets.SetTests;
 /** Common code for testing sets. 
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-10
+ * @version 2019-01-11
  */
 
 @SuppressWarnings("unchecked")
@@ -35,11 +36,23 @@ public final class AlgebraicStructureTests {
       for (int i=0; i<TRYS; i++) {
         assertTrue(law.test(it)); } } }
 
+  private static final void fieldTests (final OneSetTwoOperations field) {
+    SetTests.tests(field);
+    final Iterator it = 
+      field.sampler( 
+        PRNG.well44497b(
+          Seeds.seed("seeds/Well44497b-2019-01-11.txt")));
+
+    for(final Predicate law : field.fieldLaws()) {
+      for (int i=0; i<TRYS; i++) {
+        assertTrue(law.test(it)); } } }
+
   @SuppressWarnings({ "static-method" })
   @Test
   public final void bigFractions () {
     magmaTests(OneSetOneOperation.BIGFRACTIONS_ADD);
-    magmaTests(OneSetOneOperation.BIGFRACTIONS_MULTIPLY); }
+    magmaTests(OneSetOneOperation.BIGFRACTIONS_MULTIPLY); 
+    fieldTests(OneSetTwoOperations.BIGFRACTIONS_FIELD); }
 
   //--------------------------------------------------------------
 }

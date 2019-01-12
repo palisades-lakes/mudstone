@@ -1,10 +1,12 @@
 package mudstone.java.algebra;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -16,22 +18,30 @@ import mudstone.java.sets.Set;
 /** One set plus 2 operations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-10
+ * @version 2019-01-11
  */
 @SuppressWarnings("unchecked")
 public final class OneSetTwoOperations implements Set {
 
+  // Two operations:
+  // TODO: additive identity usually doesn't have a
+  // multiplicative inverse. how should we indicate that?
+
+  // operation 0
   private final BinaryOperator _add;
   // may be null
   private final Object _additiveIdentity;
   // may be null
   private final UnaryOperator _additiveInverse;
+
+  // operation 1
   private final BinaryOperator _multiply;
   // may be null
   private final Object _multiplicativeIdentity;
   // may be null
   private final UnaryOperator _multiplicativeInverse;
 
+  // one set
   private final Set _elements;
 
   //--------------------------------------------------------------
@@ -39,14 +49,55 @@ public final class OneSetTwoOperations implements Set {
   //--------------------------------------------------------------
 
   public final BinaryOperator add () { return _add; }
-  public final UnaryOperator additiveInverse () { return _additiveInverse; }
+  public final UnaryOperator additiveInverse () { 
+    return _additiveInverse; }
   // TODO: return a Supplier (nullary operator) instead?
-  public final Object additiveIdentity () { return _additiveIdentity; }
+  public final Object additiveIdentity () { 
+    return _additiveIdentity; }
+
   public final BinaryOperator multiply () { return _multiply; }
-  public final UnaryOperator multiplicativeInverse () { return _multiplicativeInverse; }
+  /** Applying the <code>multiplicativeInverse</code> to the
+   * <code>additiveIdentity</code> will throw an exception.
+   * TODO: is that always true?
+   */
+  public final UnaryOperator multiplicativeInverse () { 
+    return _multiplicativeInverse; }
   // TODO: return a Supplier (nullary operator) instead?
-  public final Object multiplicativeIdentity () { return _multiplicativeIdentity; }
+  public final Object multiplicativeIdentity () { 
+    return _multiplicativeIdentity; }
+
   public final Set elements () { return _elements; }
+
+  //--------------------------------------------------------------
+  // laws for some specific algebraic structures, for testing
+
+  public final List<Predicate> 
+  semiringLaws () {
+    return Laws.semiring(
+      add(),additiveIdentity(),
+      multiply(),multiplicativeIdentity(),
+      elements()); }
+
+  public final List<Predicate> 
+  ringLaws () {
+    return Laws.ring(
+      add(),additiveIdentity(),additiveInverse(),
+      multiply(),multiplicativeIdentity(),
+      elements()); }
+
+  public final List<Predicate> 
+  commutativeringLaws () {
+    return Laws.commutativering(
+      add(),additiveIdentity(),additiveInverse(),
+      multiply(),multiplicativeIdentity(),
+      elements()); }
+
+  public final List<Predicate> 
+  fieldLaws () {
+    return Laws.field(
+      add(),additiveIdentity(),additiveInverse(),
+      multiply(),multiplicativeIdentity(),multiplicativeInverse(),
+      elements()); } 
 
   //--------------------------------------------------------------
   // Set methods
@@ -73,13 +124,13 @@ public final class OneSetTwoOperations implements Set {
   public final int hashCode () { 
     return 
       Objects.hash(
-        _add,
-        _additiveIdentity,
-        _additiveInverse,
-        _multiply,
-        _multiplicativeIdentity,
-        _multiplicativeInverse,
-        _elements); }
+        add(),
+        additiveIdentity(),
+        additiveInverse(),
+        multiply(),
+        multiplicativeIdentity(),
+        multiplicativeInverse(),
+        elements()); }
 
   @Override
   public boolean equals (Object obj) {
@@ -87,38 +138,37 @@ public final class OneSetTwoOperations implements Set {
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
     final OneSetTwoOperations other = (OneSetTwoOperations) obj;
-    if (! Objects.equals(_add,other._add)) { 
+    if (! Objects.equals(add(),other.add())) { 
       return false; }
     if (! Objects.equals(
-      _additiveIdentity,other._additiveIdentity)) { 
+      additiveIdentity(),other.additiveIdentity())) { 
       return false; }
     if (! Objects.equals(
-      _additiveInverse,other._additiveInverse)) { 
+      additiveInverse(),other.additiveInverse())) { 
       return false; }
-    if (! Objects.equals(_multiply,other._multiply)) {
+    if (! Objects.equals(multiply(),other.multiply())) {
       return false; }
     if (! Objects.equals(
-      _multiplicativeIdentity,other._multiplicativeIdentity)) { 
+      multiplicativeIdentity(),other.multiplicativeIdentity())) { 
       return false; }
     if (! Objects.equals
-      (_multiplicativeInverse,other._multiplicativeInverse)) { 
+      (multiplicativeInverse(),other.multiplicativeInverse())) { 
       return false; }
-    if (! Objects.equals
-      (_elements,other._elements)) { 
+    if (! Objects.equals(elements(),other.elements())) { 
       return false; }
-    return true;
-  }
+    return true; }
 
 
   @Override
   public final String toString () { 
     return "[" + _elements + 
-      ",\n" + _add + 
-      "," + _additiveIdentity + 
-      "," + _additiveInverse + 
-      ",\n" + _multiply + 
-      "," + _multiplicativeIdentity + 
-      "," + _multiplicativeInverse + 
+      ",\n" + add() + 
+      "," + additiveIdentity() + 
+      "," + additiveInverse() + 
+      ",\n" + multiply() + 
+      "," + multiplicativeIdentity() + 
+      "," + multiplicativeInverse() +
+      ",\n" + elements() +
       "]"; }
 
   //--------------------------------------------------------------
@@ -127,12 +177,12 @@ public final class OneSetTwoOperations implements Set {
 
 
   private OneSetTwoOperations (final BinaryOperator add,
-                 final Object additiveIdentity,
-                 final UnaryOperator additiveInverse,
-                 final BinaryOperator multiply,
-                 final Object multiplicativeIdentity,
-                 final UnaryOperator multiplicativeInverse,
-                 final Set elements) { 
+                               final Object additiveIdentity,
+                               final UnaryOperator additiveInverse,
+                               final BinaryOperator multiply,
+                               final Object multiplicativeIdentity,
+                               final UnaryOperator multiplicativeInverse,
+                               final Set elements) { 
     assert Objects.nonNull(add);
     assert Objects.nonNull(additiveIdentity);
     assert Objects.nonNull(additiveInverse);
@@ -156,13 +206,14 @@ public final class OneSetTwoOperations implements Set {
 
   //--------------------------------------------------------------
 
-  public static final OneSetTwoOperations make (final BinaryOperator add,
-                                  final Object additiveIdentity,
-                                  final UnaryOperator additiveInverse,
-                                  final BinaryOperator multiply,
-                                  final Object multiplicativeIdentity,
-                                  final UnaryOperator multiplicativeInverse,
-                                  final Set elements) {
+  public static final OneSetTwoOperations 
+  make (final BinaryOperator add,
+        final Object additiveIdentity,
+        final UnaryOperator additiveInverse,
+        final BinaryOperator multiply,
+        final Object multiplicativeIdentity,
+        final UnaryOperator multiplicativeInverse,
+        final Set elements) {
 
     return new OneSetTwoOperations(
       add,

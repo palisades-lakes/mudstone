@@ -14,13 +14,13 @@ import org.apache.commons.rng.UniformRandomProvider;
 import mudstone.java.sets.BigFractions;
 import mudstone.java.sets.Set;
 
-/** Group-like structures: Set plus closed binary operation.
+/** Group-like structures: One set plus closed binary operation.
  * 
  * Not that useful (?), but a simple case for working out testing,
  * etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-10
+ * @version 2019-01-11
  */
 @SuppressWarnings("unchecked")
 public final class OneSetOneOperation implements Set {
@@ -45,6 +45,7 @@ public final class OneSetOneOperation implements Set {
   public final UnaryOperator inverse () { return _inverse; }
 
   //--------------------------------------------------------------
+  // laws for some specific algebraic structures, for testing
 
   public final List<Predicate> magmaLaws () { 
     return Laws.magma(elements(),operation());}
@@ -81,6 +82,10 @@ public final class OneSetOneOperation implements Set {
 
   // TODO: should there be an _equivalence slot?
   // instead of inheriting from _elements?
+  // Would it be a good idea to allow an equivalence relation 
+  // different from the element set?
+  // ---probably not. could always have a wrapper set that changes
+  // the equivalence relation.
   @Override
   public final BiPredicate equivalence () {
     return _elements.equivalence(); }
@@ -93,12 +98,17 @@ public final class OneSetOneOperation implements Set {
   //--------------------------------------------------------------
   // Object methods
   //--------------------------------------------------------------
-  // DANGER: relying on equivalence() returning equivalent object
-  // each time
+  // DANGER: relying on equivalence(), etc., returning equivalent 
+  // objects each time
 
   @Override
   public final int hashCode () { 
-    return Objects.hash(_operation,equivalence(),_elements); } 
+    return Objects.hash(
+      operation(),
+      identity(),
+      inverse(),
+      equivalence(),
+      elements()); } 
 
   @Override
   public final boolean equals (final Object obj) {
@@ -110,17 +120,23 @@ public final class OneSetOneOperation implements Set {
     // unless the implementing class has some kind of singleton
     // constraint.
     return 
-      _operation.equals(other._operation)
+      Objects.equals(operation(),other.operation())
       &&
-      equivalence().equals(other.equivalence())
+      Objects.equals(identity(),other.identity())
       &&
-      _elements.equals(other._elements); }
+      Objects.equals(inverse(),other.inverse())
+      &&
+      Objects.equals(equivalence(),other.equivalence())
+      &&
+      Objects.equals(elements(),other.elements()); }
 
   @Override
   public final String toString () { 
-    return "[" + _elements 
-      + "," + equivalence()
-      + "," + _operation 
+    return 
+      "[" + operation()
+      + "," + identity()
+      + "," + inverse()
+      + ",\n" + elements()
       + "]"; }
 
   //--------------------------------------------------------------
@@ -128,9 +144,9 @@ public final class OneSetOneOperation implements Set {
   //--------------------------------------------------------------
 
   private OneSetOneOperation (final BinaryOperator operation,
-                     final Set elements,
-                     final Object identity,
-                     final UnaryOperator inverse) { 
+                              final Set elements,
+                              final Object identity,
+                              final UnaryOperator inverse) { 
     assert Objects.nonNull(operation);
     _operation = operation;
     assert Objects.nonNull(elements);
@@ -147,7 +163,7 @@ public final class OneSetOneOperation implements Set {
   //--------------------------------------------------------------
 
   public static final OneSetOneOperation make (final BinaryOperator operation,
-                                      final Set elements) {
+                                               final Set elements) {
     return new OneSetOneOperation(operation,elements,null,null); }
 
   //--------------------------------------------------------------

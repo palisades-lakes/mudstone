@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import mudstone.java.sets.Set;
+import mudstone.java.sets.Sets;
 
 /** Constructor methods for Predicates/BiPredicate closures on 
  * sets and operations.
@@ -30,29 +31,15 @@ import mudstone.java.sets.Set;
  * no instance state or methods.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-10
+ * @version 2019-01-11
  */
 
 @SuppressWarnings("unchecked")
 public final class Laws {
 
   //--------------------------------------------------------------
-  /** Is the value of the operation an element of the structure?
-   */
-  public final static BiPredicate<Iterator,Iterator> 
-  closed (final Set elements,
-          final Set scalars,
-          final BinaryOperator operation) {
-    return new BiPredicate<Iterator,Iterator> () {
-      @Override
-      public final boolean test (final Iterator elementSamples,
-                                 final Iterator scalarSamples) {
-        final Object a = scalarSamples.next();
-        assert scalars.contains(a);
-        final Object b = elementSamples.next();
-        assert elements.contains(b);
-        return elements.contains(operation.apply(a,b)); } }; }
-
+  // one set, one operation
+  //--------------------------------------------------------------
   /** Is the value of the operation an element of the structure?
    */
   public final static Predicate<Iterator> 
@@ -94,6 +81,33 @@ public final class Laws {
 
   /** Does <code>(operation a identity) == 
    * (operation identity a) = a</code>?
+   * ...except for excluded elements, as with the additive
+   * identity (zero) breaking multiplicative identity in a 
+   * ring-like structure.
+   */
+  public final static Predicate<Iterator> 
+  identity (final Set elements,
+            final BinaryOperator operation,
+            final Object identity,
+            final Object excluded) {
+    return new Predicate<Iterator> () {
+      @Override
+      public final boolean test (final Iterator samples) {
+        // TODO: what if we want <code>null</code> 
+        // to be the identity? IS there an example where null is
+        // better than empty list, empty string, ...
+        if (null == identity) { return false; }
+        final Object a = samples.next();
+        if (Sets.contains(excluded,a)) {return true; }
+        assert elements.contains(a);
+        assert elements.contains(identity);
+        final Object r = operation.apply(a,identity);
+        final Object l = operation.apply(identity,a);
+        final BiPredicate equal = elements.equivalence();
+        return equal.test(a,r) && equal.test(a,l); } }; }
+
+  /** Does <code>(operation a identity) == 
+   * (operation identity a) = a</code>?
    */
   public final static Predicate<Iterator> 
   identity (final Set elements,
@@ -102,6 +116,10 @@ public final class Laws {
     return new Predicate<Iterator> () {
       @Override
       public final boolean test (final Iterator samples) {
+        // TODO: what if we want <code>null</code> 
+        // to be the identity? IS there an example where null is
+        // better than empty list, empty string, ...
+        if (null == identity) { return false; }
         final Object a = samples.next();
         assert elements.contains(a);
         assert elements.contains(identity);
@@ -124,12 +142,12 @@ public final class Laws {
            final BinaryOperator operation,
            final Object identity,
            final UnaryOperator inverse,
-           final java.util.Set excluded) {
+           final Object excluded) {
     return new Predicate<Iterator> () {
       @Override
       public final boolean test (final Iterator samples) {
         final Object a = samples.next();
-        if (excluded.contains(a)) { return true; }
+        if (Sets.contains(excluded,a)) { return true; }
         assert elements.contains(a);
         assert elements.contains(identity);
         final Object ainv = inverse.apply(a);
@@ -172,6 +190,185 @@ public final class Laws {
             operation.apply(b,a)); } }; }
 
   //--------------------------------------------------------------
+  // by algebraic structure
+  // TODO: reuse code by adding elements to (immutable) lists
+
+  public static final List<Predicate> 
+  magma  (final Set elements,
+          final BinaryOperator operation) {
+    return List.of(closed(elements,operation));}
+
+  public static final List<Predicate> 
+  semigroup  (final Set elements,
+              final BinaryOperator operation) {
+    return List.of(
+      closed(elements,operation),
+      associative(elements,operation));}
+
+  public static final List<Predicate> 
+  monoid  (final Set elements,
+           final BinaryOperator operation,
+           final Object identity) {
+    return List.of(
+      closed(elements,operation),
+      associative(elements,operation),
+      identity(elements,operation,identity));}
+
+  public static final List<Predicate> 
+  group  (final Set elements,
+          final BinaryOperator operation,
+          final Object identity,
+          final UnaryOperator inverse) {
+    return List.of(
+      closed(elements,operation),
+      associative(elements,operation),
+      identity(elements,operation,identity),
+      inverse(elements,operation,identity,inverse));}
+
+  public static final List<Predicate> 
+  commutativegroup  (final Set elements,
+                     final BinaryOperator operation,
+                     final Object identity,
+                     final UnaryOperator inverse) {
+    return List.of(
+      closed(elements,operation),
+      associative(elements,operation),
+      identity(elements,operation,identity),
+      inverse(elements,operation,identity,inverse),
+      commutative(elements,operation));}
+
+  //--------------------------------------------------------------
+  // one set, two operations
+  //--------------------------------------------------------------
+  /** Does <code>multiply</code> distribute over <code>add</code>?
+   * <code>a*(b+c) == (a*b) + (a*c)</code>?
+   * (Ring-like version)
+   */
+
+  public final static Predicate<Iterator>  
+  distributive (final Set elements,
+                final BinaryOperator add,
+                final BinaryOperator multiply) {
+    return new Predicate<Iterator> () {
+      @Override
+      public final boolean test (final Iterator samples) {
+        final Object a = samples.next();
+        assert elements.contains(a);
+        final Object b = samples.next();
+        assert elements.contains(b);
+        final Object c = samples.next();
+        assert elements.contains(c);
+        final BiPredicate equal = elements.equivalence();
+        return 
+          equal.test(
+            multiply.apply(a,add.apply(b,c)),
+            add.apply(
+              multiply.apply(a,b),
+              multiply.apply(a,c))); } }; }
+
+  //--------------------------------------------------------------
+  // by algebraic structure
+
+  public static final List<Predicate> 
+  semiring (final BinaryOperator add,
+            final Object additiveIdentity,
+            final BinaryOperator multiply,
+            final Object multiplicativeIdentity,
+            final Set elements){
+    return List.of(
+      closed(elements,add),
+      associative(elements,add),
+      identity(elements,add,additiveIdentity),
+      commutative(elements,add),
+      closed(elements,multiply),
+      associative(elements,multiply),
+      identity(elements,multiply,multiplicativeIdentity,
+        java.util.Set.of(additiveIdentity)),
+      distributive(elements,add,multiply));}
+
+  public static final List<Predicate> 
+  ring (final BinaryOperator add,
+        final Object additiveIdentity,
+        final UnaryOperator additiveInverse,
+        final BinaryOperator multiply,
+        final Object multiplicativeIdentity,
+        final Set elements){
+    return List.of(
+      closed(elements,add),
+      associative(elements,add),
+      identity(elements,add,additiveIdentity),
+      inverse(elements,add,additiveIdentity,additiveInverse),
+      commutative(elements,add),
+      closed(elements,multiply),
+      associative(elements,multiply),
+      identity(elements,multiply,multiplicativeIdentity,
+        java.util.Set.of(additiveIdentity)),
+      distributive(elements,add,multiply));}
+
+  public static final List<Predicate> 
+  commutativering (final BinaryOperator add,
+                   final Object additiveIdentity,
+                   final UnaryOperator additiveInverse,
+                   final BinaryOperator multiply,
+                   final Object multiplicativeIdentity,
+                   final Set elements){
+    return List.of(
+      closed(elements,add),
+      associative(elements,add),
+      identity(elements,add,additiveIdentity),
+      inverse(elements,add,additiveIdentity,additiveInverse),
+      commutative(elements,add),
+      closed(elements,multiply),
+      associative(elements,multiply),
+      identity(elements,multiply,multiplicativeIdentity,
+        java.util.Set.of(additiveIdentity)),
+      commutative(elements,multiply),
+      distributive(elements,add,multiply));}
+
+  public static final List<Predicate> 
+  field (final BinaryOperator add,
+         final Object additiveIdentity,
+         final UnaryOperator additiveInverse,
+         final BinaryOperator multiply,
+         final Object multiplicativeIdentity,
+         final UnaryOperator multiplicativeInverse,
+         final Set elements) {
+    return List.of(
+      closed(elements,add),
+      associative(elements,add),
+      identity(elements,add,additiveIdentity),
+      inverse(elements,add,additiveIdentity,additiveInverse),
+      commutative(elements,add),
+      closed(elements,multiply),
+      associative(elements,multiply),
+      identity(elements,multiply,multiplicativeIdentity,
+        java.util.Set.of(additiveIdentity)),
+      inverse(elements,multiply,multiplicativeIdentity,
+        multiplicativeInverse,
+        java.util.Set.of(additiveIdentity)),
+      commutative(elements,multiply),
+      distributive(elements,add,multiply));}
+
+  //--------------------------------------------------------------
+  // Two sets: scalars and elements/vectors
+  //--------------------------------------------------------------
+  /** Is the value of the operation an element of the structure?
+   */
+  public final static BiPredicate<Iterator,Iterator> 
+  closed (final Set elements,
+          final Set scalars,
+          final BinaryOperator operation) {
+    return new BiPredicate<Iterator,Iterator> () {
+      @Override
+      public final boolean test (final Iterator elementSamples,
+                                 final Iterator scalarSamples) {
+        final Object a = scalarSamples.next();
+        assert scalars.contains(a);
+        final Object b = elementSamples.next();
+        assert elements.contains(b);
+        return elements.contains(operation.apply(a,b)); } }; }
+
+  //--------------------------------------------------------------
   /** Does <code>multiply</code> distribute over <code>add</code>?
    * <code>a*(b+c) == (a*b) + (a*c)</code>?
    * (Module-like version)
@@ -200,80 +397,6 @@ public final class Laws {
             add.apply(
               multiply.apply(a,b),
               multiply.apply(a,c))); } }; }
-
-  /** Does <code>multiply</code> distribute over <code>add</code>?
-   * <code>a*(b+c) == (a*b) + (a*c)</code>?
-   * (Ring-like version)
-   */
-
-  public final static Predicate<Iterator>  
-  distributive (final Set elements,
-                  final BinaryOperator add,
-                  final BinaryOperator multiply) {
-    return new Predicate<Iterator> () {
-      @Override
-      public final boolean test (final Iterator samples) {
-                 final Object a = samples.next();
-        assert elements.contains(a);
-        final Object b = samples.next();
-        assert elements.contains(b);
-        final Object c = samples.next();
-        assert elements.contains(c);
-        final BiPredicate equal = elements.equivalence();
-        return 
-          equal.test(
-            multiply.apply(a,add.apply(b,c)),
-            add.apply(
-              multiply.apply(a,b),
-              multiply.apply(a,c))); } }; }
-
-  //--------------------------------------------------------------
-  // by algebraic structure
-  //--------------------------------------------------------------
- 
-  public static final List<Predicate> 
-  magma  (final Set elements,
-              final BinaryOperator operation) {
-    return List.of(closed(elements,operation));}
-
-  public static final List<Predicate> 
-  semigroup  (final Set elements,
-                  final BinaryOperator operation) {
-    return List.of(
-      closed(elements,operation),
-      associative(elements,operation));}
-
-  public static final List<Predicate> 
-  monoid  (final Set elements,
-               final BinaryOperator operation,
-               final Object identity) {
-    return List.of(
-      closed(elements,operation),
-      associative(elements,operation),
-      identity(elements,operation,identity));}
-
-  public static final List<Predicate> 
-  group  (final Set elements,
-              final BinaryOperator operation,
-              final Object identity,
-              final UnaryOperator inverse) {
-    return List.of(
-      closed(elements,operation),
-      associative(elements,operation),
-      identity(elements,operation,identity),
-      inverse(elements,operation,identity,inverse));}
-
-  public static final List<Predicate> 
-  commutativegroup  (final Set elements,
-                         final BinaryOperator operation,
-                         final Object identity,
-                         final UnaryOperator inverse) {
-    return List.of(
-      closed(elements,operation),
-      associative(elements,operation),
-      identity(elements,operation,identity),
-      inverse(elements,operation,identity,inverse),
-      commutative(elements,operation));}
 
   //--------------------------------------------------------------
   // disable constructor

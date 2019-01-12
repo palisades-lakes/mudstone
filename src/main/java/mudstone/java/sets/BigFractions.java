@@ -19,7 +19,7 @@ import mudstone.java.prng.DoubleSampler;
  * <code>BigFraction</code>
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-08
+ * @version 2019-01-11
  */
 public final class BigFractions implements Set {
 

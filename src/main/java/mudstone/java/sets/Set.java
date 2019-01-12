@@ -43,11 +43,15 @@ import mudstone.java.exceptions.Exceptions;
  * classes, represented by some element of each equivalence class.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-07
+ * @version 2019-01-11
  */
 public interface Set {
 
-  /** The equivalence relation that's used to map implementations
+  // TODO: would it be better treat base sets as collections
+  // of objects with eq/identity equivalence, and add quotient
+  // sets (sets of equivalence classes) on top of that?
+  /** The equivalence relation that's used to map implementation
+   * objects
    * to the true elements of the set, which are equivalence 
    * classes of objects.
    */
