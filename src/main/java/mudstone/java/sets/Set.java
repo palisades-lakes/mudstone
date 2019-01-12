@@ -137,6 +137,13 @@ public interface Set {
   //      this,"get",options); }
 
   //--------------------------------------------------------------
+  // TODO: don't always need a prng, might be iterating over a
+  // set of edge cases
+  // TODO: is there a reasonable way to specify generating 
+  // n_k elements from k=1..m sets?
+  // In clojure, might take a map from set to count and return
+  // a map from set to list of elements?
+
   public default Supplier generator (final UniformRandomProvider prng,
                                      final Map options) {
     throw Exceptions.unsupportedOperation(
