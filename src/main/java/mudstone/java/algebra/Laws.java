@@ -1,11 +1,14 @@
 package mudstone.java.algebra;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+
+import com.google.common.collect.ImmutableList;
 
 import mudstone.java.sets.Set;
 import mudstone.java.sets.Sets;
@@ -31,7 +34,7 @@ import mudstone.java.sets.Sets;
  * no instance state or methods.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-11
+ * @version 2019-01-14
  */
 
 @SuppressWarnings("unchecked")
@@ -326,6 +329,29 @@ public final class Laws {
       distributive(elements,add,multiply));}
 
   public static final List<Predicate> 
+  divisionring (final BinaryOperator add,
+                final Object additiveIdentity,
+                final UnaryOperator additiveInverse,
+                final BinaryOperator multiply,
+                final Object multiplicativeIdentity,
+                final UnaryOperator multiplicativeInverse,
+                final Set elements) {
+    return List.of(
+      closed(elements,add),
+      associative(elements,add),
+      identity(elements,add,additiveIdentity),
+      inverse(elements,add,additiveIdentity,additiveInverse),
+      commutative(elements,add),
+      closed(elements,multiply),
+      associative(elements,multiply),
+      identity(elements,multiply,multiplicativeIdentity,
+        java.util.Set.of(additiveIdentity)),
+      inverse(elements,multiply,multiplicativeIdentity,
+        multiplicativeInverse,
+        java.util.Set.of(additiveIdentity)),
+      distributive(elements,add,multiply));}
+
+  public static final List<Predicate> 
   field (final BinaryOperator add,
          final Object additiveIdentity,
          final UnaryOperator additiveInverse,
@@ -354,6 +380,7 @@ public final class Laws {
   //--------------------------------------------------------------
   /** Is the value of the operation an element of the structure?
    */
+
   public final static BiPredicate<Supplier,Supplier> 
   closed (final Set elements,
           final Set scalars,
@@ -378,7 +405,7 @@ public final class Laws {
   distributive (final Set elements,
                 final Set scalars,
                 final BinaryOperator add,
-                final BinaryOperator multiply) {
+                final BiFunction multiply) {
     return new BiPredicate<Supplier,Supplier> () {
       @Override
       public final boolean test (final Supplier elementSamples,
@@ -397,6 +424,43 @@ public final class Laws {
             add.apply(
               multiply.apply(a,b),
               multiply.apply(a,c))); } }; }
+
+  //--------------------------------------------------------------
+  // by algebraic structure
+
+  // laws might be Predicate or BiPredicate
+  // TODO: define new interface for multi-arity predicates?
+
+  public static final List
+  module (final BinaryOperator add,
+          final Object additiveIdentity,
+          final UnaryOperator additiveInverse,
+          final BiFunction multiply,
+          final Set elements,
+          final OneSetTwoOperations scalars) {
+    final ImmutableList.Builder b = ImmutableList.builder();
+    b.addAll(scalars.ringLaws());
+    b.addAll(
+      commutativegroup(
+        elements,add,additiveIdentity,additiveInverse));
+    b.add(distributive(elements,scalars,add,multiply));
+    return b.build(); }
+
+  /** Perhaps more commonly called 'vector' space. */
+  public static final List
+  linearspace (final BinaryOperator add,
+               final Object additiveIdentity,
+               final UnaryOperator additiveInverse,
+               final BiFunction multiply,
+               final Set elements,
+               final OneSetTwoOperations scalars) {
+    final ImmutableList.Builder b = ImmutableList.builder();
+    //b.addAll(scalars.fieldLaws());
+    b.addAll(
+      commutativegroup(
+        elements,add,additiveIdentity,additiveInverse));
+    b.add(distributive(elements,scalars,add,multiply));
+    return b.build(); }
 
   //--------------------------------------------------------------
   // disable constructor

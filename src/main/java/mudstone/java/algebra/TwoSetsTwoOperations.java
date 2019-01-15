@@ -3,29 +3,44 @@ package mudstone.java.algebra;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.rng.UniformRandomProvider;
 
-import mudstone.java.sets.BigFractions;
+import com.carrotsearch.hppc.IntObjectHashMap;
+import com.carrotsearch.hppc.IntObjectMap;
+
+import mudstone.java.sets.BigFractionsN;
 import mudstone.java.sets.Set;
 
-/** One set plus 2 operations.
+/** Module-like structures, including linear (vector) spaces.
+ * Two sets, 'elements' and 'scalars'.
+ * Two operations: element 'addition' and 
+ * 'multiplication' of elements by scalars.
+ * The scalars are an instance of some one set (usually) two 
+ * operation structure, like a ring or a field.
+ * What kind of module-like structure an instance is is determined
+ * by the laws satisfied by the element-element operation,
+ * the operations on the scalar structure, and, less often,
+ * by scalar-element operation.
+ * 
+ * It is nearly always assumed that scalr multiplication
+ * distributes over element addition:
+ * <code>a*(v+w) = (a*v) + (a*w)</code>.
+ * 
+ * Note that this doesn't work if we want to generalize
+ * linear to affine spaces, etc.
  * 
  * @author palisades dot lakes at gmail dot com
  * @version 2019-01-14
  */
 @SuppressWarnings("unchecked")
-public final class OneSetTwoOperations implements Set {
-
-  // Two operations:
-  // TODO: additive identity usually doesn't have a
-  // multiplicative inverse. how should we indicate that?
+public final class TwoSetsTwoOperations implements Set {
 
   // operation 0
   private final BinaryOperator _add;
@@ -35,14 +50,11 @@ public final class OneSetTwoOperations implements Set {
   private final UnaryOperator _additiveInverse;
 
   // operation 1
-  private final BinaryOperator _multiply;
-  // may be null
-  private final Object _multiplicativeIdentity;
-  // may be null
-  private final UnaryOperator _multiplicativeInverse;
+  private final BiFunction _multiply;
 
-  // one set
+  //twe set
   private final Set _elements;
+  private final Set _scalars;
 
   //--------------------------------------------------------------
   // methods 
@@ -55,56 +67,29 @@ public final class OneSetTwoOperations implements Set {
   public final Object additiveIdentity () { 
     return _additiveIdentity; }
 
-  public final BinaryOperator multiply () { return _multiply; }
-  /** Applying the <code>multiplicativeInverse</code> to the
-   * <code>additiveIdentity</code> will throw an exception.
-   * TODO: is that always true?
-   */
-  public final UnaryOperator multiplicativeInverse () { 
-    return _multiplicativeInverse; }
-  // TODO: return a Supplier (nullary operator) instead?
-  public final Object multiplicativeIdentity () { 
-    return _multiplicativeIdentity; }
+  public final BiFunction multiply () { return _multiply; }
 
   public final Set elements () { return _elements; }
+  public final Set scalars () { return _scalars; }
 
   //--------------------------------------------------------------
   // laws for some specific algebraic structures, for testing
 
-  public final List<Predicate> 
-  semiringLaws () {
-    return Laws.semiring(
-      add(),additiveIdentity(),
-      multiply(),multiplicativeIdentity(),
-      elements()); }
+  public final List<BiPredicate> 
+  moduleLaws () {
+    return Laws.module(
+      add(),additiveIdentity(),additiveInverse(),
+      multiply(),
+      elements(),
+      (OneSetTwoOperations) scalars()); }
 
   public final List<Predicate> 
-  ringLaws () {
-    return Laws.ring(
+  linearspaceLaws () {
+    return Laws.linearspace(
       add(),additiveIdentity(),additiveInverse(),
-      multiply(),multiplicativeIdentity(),
-      elements()); }
-
-  public final List<Predicate> 
-  commutativeringLaws () {
-    return Laws.commutativering(
-      add(),additiveIdentity(),additiveInverse(),
-      multiply(),multiplicativeIdentity(),
-      elements()); }
-
-  public final List<Predicate> 
-  divisionreingLaws () {
-    return Laws.divisionring(
-      add(),additiveIdentity(),additiveInverse(),
-      multiply(),multiplicativeIdentity(),multiplicativeInverse(),
-      elements()); } 
-
-  public final List<Predicate> 
-  fieldLaws () {
-    return Laws.field(
-      add(),additiveIdentity(),additiveInverse(),
-      multiply(),multiplicativeIdentity(),multiplicativeInverse(),
-      elements()); } 
+      multiply(),
+      elements(),
+      (OneSetTwoOperations) scalars()); }
 
   //--------------------------------------------------------------
   // Set methods
@@ -135,16 +120,15 @@ public final class OneSetTwoOperations implements Set {
         additiveIdentity(),
         additiveInverse(),
         multiply(),
-        multiplicativeIdentity(),
-        multiplicativeInverse(),
-        elements()); }
+        elements(),
+        scalars()); }
 
   @Override
   public boolean equals (Object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
-    final OneSetTwoOperations other = (OneSetTwoOperations) obj;
+    final TwoSetsTwoOperations other = (TwoSetsTwoOperations) obj;
     if (! Objects.equals(add(),other.add())) { 
       return false; }
     if (! Objects.equals(
@@ -155,13 +139,9 @@ public final class OneSetTwoOperations implements Set {
       return false; }
     if (! Objects.equals(multiply(),other.multiply())) {
       return false; }
-    if (! Objects.equals(
-      multiplicativeIdentity(),other.multiplicativeIdentity())) { 
-      return false; }
-    if (! Objects.equals
-      (multiplicativeInverse(),other.multiplicativeInverse())) { 
-      return false; }
     if (! Objects.equals(elements(),other.elements())) { 
+      return false; }
+    if (! Objects.equals(scalars(),other.scalars())) { 
       return false; }
     return true; }
 
@@ -173,9 +153,8 @@ public final class OneSetTwoOperations implements Set {
       "," + additiveIdentity() + 
       "," + additiveInverse() + 
       ",\n" + multiply() + 
-      "," + multiplicativeIdentity() + 
-      "," + multiplicativeInverse() +
       ",\n" + elements() +
+      ",\n" + scalars() +
       "]"; }
 
   //--------------------------------------------------------------
@@ -183,66 +162,71 @@ public final class OneSetTwoOperations implements Set {
   //--------------------------------------------------------------
 
 
-  private OneSetTwoOperations (final BinaryOperator add,
+  private TwoSetsTwoOperations (final BinaryOperator add,
                                final Object additiveIdentity,
                                final UnaryOperator additiveInverse,
-                               final BinaryOperator multiply,
-                               final Object multiplicativeIdentity,
-                               final UnaryOperator multiplicativeInverse,
-                               final Set elements) { 
+                               final BiFunction multiply,
+                               final Set elements,
+                               final Set scalars) { 
     assert Objects.nonNull(add);
     assert Objects.nonNull(additiveIdentity);
     assert Objects.nonNull(additiveInverse);
     assert Objects.nonNull(multiply);
-    assert Objects.nonNull(multiplicativeIdentity);
-    assert Objects.nonNull(multiplicativeInverse);
     assert Objects.nonNull(elements);
     _add = add;
     _additiveIdentity = additiveIdentity;
     _additiveInverse = additiveInverse;
     _multiply = multiply;
-    _multiplicativeIdentity = multiplicativeIdentity;
-    _multiplicativeInverse = multiplicativeInverse;
-    _elements= elements; }
-
-  //--------------------------------------------------------------
-  // TODO: is it worth implementing singleton constraint?
-
-  //  private static final Map<Magma,Magma> _cache = 
-  //    new HashMap();
+    _elements = elements; 
+    _scalars = scalars; }
 
   //--------------------------------------------------------------
 
-  public static final OneSetTwoOperations 
+  public static final TwoSetsTwoOperations 
   make (final BinaryOperator add,
         final Object additiveIdentity,
         final UnaryOperator additiveInverse,
-        final BinaryOperator multiply,
-        final Object multiplicativeIdentity,
-        final UnaryOperator multiplicativeInverse,
-        final Set elements) {
+        final BiFunction multiply,
+        final Set elements,
+        final Set scalars) {
 
-    return new OneSetTwoOperations(
+    return new TwoSetsTwoOperations(
       add,
       additiveIdentity,
       additiveInverse,
       multiply,
-      multiplicativeIdentity,
-      multiplicativeInverse,
-      elements); }
+      elements,
+      scalars); }
 
   //--------------------------------------------------------------
-  // pre-define some standard magmas
+  // TODO: should this be its own class?
+  
+  /** n-dimensional rational vector space, implemented with
+  * <code>BigFraction</code>.
+  */
 
-  public static final OneSetTwoOperations BIGFRACTIONS_FIELD = 
-    OneSetTwoOperations.make(
-      BigFractions.ADD,
-      BigFraction.ZERO,
-      BigFractions.ADDITIVE_INVERSE,
-      BigFractions.MULTIPLY,
-      BigFraction.ONE,
-      BigFractions.MULTIPLICATIVE_INVERSE,
-      BigFractions.get());
+  private static final TwoSetsTwoOperations makeQn (final int n) { 
+    return
+      TwoSetsTwoOperations.make(
+      BigFractionsN.adder(n),
+      BigFractionsN.additiveIdentity(n),
+      BigFractionsN.additiveInverse(n),
+      BigFractionsN.multiplier(n),
+      BigFractionsN.get(n),
+      OneSetTwoOperations.BIGFRACTIONS_FIELD); }
+
+  private static final IntObjectMap<TwoSetsTwoOperations> 
+  _qnCache = new IntObjectHashMap();
+
+  /** n-dimensional rational vector space, implemented with
+  * <code>BigFraction[]</code>.
+  */
+  public static final TwoSetsTwoOperations getQn (final int dimension) {
+    final TwoSetsTwoOperations qn0 = _qnCache.get(dimension);
+    if (null != qn0) { return qn0; }
+    final TwoSetsTwoOperations qn1 = makeQn(dimension); 
+    _qnCache.put(dimension,qn1);
+    return qn1; }
 
   //--------------------------------------------------------------
 }

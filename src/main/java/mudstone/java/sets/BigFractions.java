@@ -1,9 +1,9 @@
 package mudstone.java.sets;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
 import java.util.function.Supplier;
@@ -34,14 +34,36 @@ public final class BigFractions implements Set {
   public final boolean contains (final Object element) {
     return element instanceof BigFraction; }
 
+  public static final boolean equalBigFractions (final BigFraction q0, 
+                                                 final BigFraction q1) {
+    if (q0 == q1) { return true; }
+    if (null == q0) {
+      if (null == q1) { return true; }
+      return false; }
+    final BigInteger n0 = q0.getNumerator(); 
+    final BigInteger d0 = q0.getDenominator(); 
+    final BigInteger n1 = q1.getNumerator(); 
+    final BigInteger d1 = q1.getDenominator(); 
+    return n0.multiply(d1).equals(n1.multiply(d0)); }
+
   private static final BiPredicate<BigFraction,BigFraction> 
   BIGFRACTION_EQUALS = 
   new BiPredicate<BigFraction,BigFraction>() {
 
+    // BigFraction.equals reduces both arguments before checking
+    // numerator and denominators are equal.
+    // Guessing our BigFractions are usually already reduced.
+    // Try n0*d1 == n1*d0 instead
+    // TODO: try using BigINteger.bitLength() to decide
+    // which method to use?
+    //    @Override
+    //    public final boolean test (final BigFraction q0, 
+    //                               final BigFraction q1) {
+    //     return Objects.deepEquals(q0,q1); }
     @Override
     public final boolean test (final BigFraction q0, 
                                final BigFraction q1) {
-      return Objects.equals(q0,q1); }
+      return equalBigFractions(q0,q1); }
   };
 
   @Override
@@ -86,7 +108,7 @@ public final class BigFractions implements Set {
 
   //--------------------------------------------------------------
   private static final double DOUBLE_P = 0.8;
-  
+
   /** Intended primarily for testing. Sample a random double
    * (see {@link mudstone.java.prng.DoubleSampler})
    * and convert to <code>BigFraction</code>
@@ -124,18 +146,18 @@ public final class BigFractions implements Set {
   //--------------------------------------------------------------
   // Object methods
   //--------------------------------------------------------------
-  
+
   @Override
   public final int hashCode () { return 0; }
-  
+
   // singleton
   @Override
   public final boolean equals (final Object that) {
     return that instanceof BigFractions; }
-  
+
   @Override
   public final String toString () { return "BigFractions"; }
-  
+
   //--------------------------------------------------------------
   // construction
   //--------------------------------------------------------------

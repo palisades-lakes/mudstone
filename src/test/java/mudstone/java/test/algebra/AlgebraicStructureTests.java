@@ -17,7 +17,7 @@ import mudstone.java.test.sets.SetTests;
 /** Common code for testing sets. 
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-11
+ * @version 2019-01-14
  */
 
 @SuppressWarnings("unchecked")
@@ -36,7 +36,7 @@ public final class AlgebraicStructureTests {
       for (int i=0; i<TRYS; i++) {
         assertTrue(law.test(g)); } } }
 
-  private static final void fieldTests (final OneSetTwoOperations field) {
+  public static final void fieldTests (final OneSetTwoOperations field) {
     SetTests.tests(field);
     final Supplier g = 
       field.generator( 
