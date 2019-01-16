@@ -43,57 +43,67 @@ import mudstone.java.exceptions.Exceptions;
  * classes, represented by some element of each equivalence class.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-11
+ * @version 2019-01-15
  */
 public interface Set {
 
   // TODO: would it be better treat base sets as collections
   // of objects with eq/identity equivalence, and add quotient
   // sets (sets of equivalence classes) on top of that?
+
+  // TODO: equivalence for primitives? Need to replace
+  // BiPredicate with an interface that handles all pairs of
+  // primtives? 8x8 = 64 methods, though we might reduce to
+  // (boolean,boolean), (char,char) + 6x6 number primitives
+  
+  // TODO: would identity (eq, ==) be better than Object.equals()
+  // as the default?
+  
   /** The equivalence relation that's used to map implementation
-   * objects
-   * to the true elements of the set, which are equivalence 
-   * classes of objects.
+   * objects to the true elements of the set, which are 
+   * equivalence classes of objects.
    */
 
   public default BiPredicate equivalence () {
     return Sets.OBJECT_EQUALS; }
 
+  //--------------------------------------------------------------
+  // TODO: should the default be an exception?
   @SuppressWarnings("unused")
   public default boolean contains (final Object element) {
     return false; }
 
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final boolean element) {
-  //    return false; }
-  //
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final byte element) {
-  //    return false; }
-  //
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final short element) {
-  //    return false; }
-  //
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final int element) {
-  //    return false; }
-  //
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final long element) {
-  //    return false; }
-  //
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final float element) {
-  //    return false; }
-  //
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final double element) {
-  //    return false; }
-  //
-  //  @SuppressWarnings("unused")
-  //  public default boolean contains (final char element) {
-  //    return false; }
+  @SuppressWarnings("unused")
+  public default boolean contains (final boolean element) {
+    return false; }
+
+  @SuppressWarnings("unused")
+  public default boolean contains (final byte element) {
+    return false; }
+
+  @SuppressWarnings("unused")
+  public default boolean contains (final short element) {
+    return false; }
+
+  @SuppressWarnings("unused")
+  public default boolean contains (final int element) {
+    return false; }
+
+  @SuppressWarnings("unused")
+  public default boolean contains (final long element) {
+    return false; }
+
+  @SuppressWarnings("unused")
+  public default boolean contains (final float element) {
+    return false; }
+
+  @SuppressWarnings("unused")
+  public default boolean contains (final double element) {
+    return false; }
+
+  @SuppressWarnings("unused")
+  public default boolean contains (final char element) {
+    return false; }
 
   //--------------------------------------------------------------
   // TODO: is this just a Function that maps options to values?
@@ -139,14 +149,17 @@ public interface Set {
   //--------------------------------------------------------------
   // TODO: don't always need a prng, might be iterating over a
   // set of edge cases, move prng to options?
-  
+
   // TODO: is there a reasonable way to specify generating 
   // n_k elements from k=1..m sets?
   // In clojure, might take a map from set to count and return
   // a map from set to list of elements?
-  
+
   // TODO: replace Supplier with an interface that has 
   // generateArray(), generateList(), etc, convenience methods.
+  
+  // TODO: replace Supplier with an interface than has 0-arity
+  // <i>primititive</i>Value() methods?
 
   public default Supplier generator (final UniformRandomProvider prng,
                                      final Map options) {

@@ -2,7 +2,6 @@ package mudstone.java.sets;
 
 import java.math.BigInteger;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.BinaryOperator;
@@ -11,12 +10,8 @@ import java.util.function.UnaryOperator;
 
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.rng.UniformRandomProvider;
-import org.apache.commons.rng.sampling.CollectionSampler;
-import org.apache.commons.rng.sampling.distribution.ContinuousSampler;
-import org.apache.commons.rng.sampling.distribution.ContinuousUniformSampler;
 
-import clojure.lang.Keyword;
-import mudstone.java.prng.DoubleSampler;
+import mudstone.java.prng.BigFractionSampler;
 
 /** The set of rational numbers represented by 
  * <code>BigFraction</code>
@@ -71,73 +66,14 @@ public final class BigFractions implements Set {
     return BIGFRACTION_EQUALS; }
 
   //--------------------------------------------------------------
-  // convert from a random double
-  // TODO: generate random BigIntegers for numerator 
-  // and denominator?
-
-  //  private static final Keyword LOWER = Keyword.intern("lower");
-  //  private static final Keyword UPPER = Keyword.intern("upper");
-  //
-  //  private static final ContinuousSampler 
-  //  doubleSampler (final UniformRandomProvider prng,
-  //                 final Map options) {
-  //    final double lower;
-  //    if (options.containsKey(LOWER)) {
-  //      lower = ((Number) options.get(LOWER)).doubleValue(); }
-  //    else { lower = -Double.MAX_VALUE; }
-  //    final double upper;
-  //    if (options.containsKey(UPPER)) {
-  //      upper = ((Number) options.get(UPPER)).doubleValue(); }
-  //    else { upper = Double.MAX_VALUE; }
-  //
-  //    return new ContinuousUniformSampler(prng,lower,upper); }
-
-  private static final Keyword DELTA = Keyword.intern("delta");
-
-  private static final ContinuousSampler 
-  doubleSampler (final UniformRandomProvider urp,
-                 final Map options) {
-
-    if (options.containsKey(DELTA)) {
-      return 
-        DoubleSampler.make(
-          urp,
-          ((Number) options.get(DELTA)).intValue()); }
-
-    return DoubleSampler.make(urp); }
-
-  //--------------------------------------------------------------
-  private static final double DOUBLE_P = 0.8;
-
-  /** Intended primarily for testing. Sample a random double
-   * (see {@link mudstone.java.prng.DoubleSampler})
-   * and convert to <code>BigFraction</code>
-   * with {@link #DOUBLE_P} probability;
-   * otherwise return {@link #ADDITIVE_INVERSE} or 
-   * {@link #MULTIPLICATIVE_INVERSE},  with equal probability
-   */
   @Override
   public final Supplier generator (final UniformRandomProvider urp,
                                    final Map options) {
-    final ContinuousSampler choose = 
-      new ContinuousUniformSampler(urp,0.0,1.0);
-    final ContinuousSampler cs = doubleSampler(urp,options);
-    final CollectionSampler edgeCases = 
-      new CollectionSampler(
-        urp,List.of(
-          BigFraction.ZERO,
-          BigFraction.ONE,
-          BigFraction.MINUS_ONE));
+    final BigFractionSampler bfs = BigFractionSampler.make(urp);
     return 
       new Supplier () {
       @Override
-      public final Object get () { 
-        final boolean edge = choose.sample() > DOUBLE_P;
-        if (edge) { return edgeCases.sample(); }
-        for (;;) { // WARNING: intinite loop?
-          final double z = cs.sample();
-          if (Double.isFinite(z)) { 
-            return new BigFraction(z); } } } }; }
+      public final Object get () { return bfs.next(); } }; }
 
   @Override
   public final Supplier generator (final UniformRandomProvider urp) {

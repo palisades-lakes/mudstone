@@ -13,6 +13,7 @@ import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.rng.UniformRandomProvider;
 
 import mudstone.java.sets.BigFractions;
+import mudstone.java.sets.Q;
 import mudstone.java.sets.Set;
 
 /** One set plus 2 operations.
@@ -232,7 +233,6 @@ public final class OneSetTwoOperations implements Set {
       elements); }
 
   //--------------------------------------------------------------
-  // pre-define some standard magmas
 
   public static final OneSetTwoOperations BIGFRACTIONS_FIELD = 
     OneSetTwoOperations.make(
@@ -243,6 +243,17 @@ public final class OneSetTwoOperations implements Set {
       BigFraction.ONE,
       BigFractions.MULTIPLICATIVE_INVERSE,
       BigFractions.get());
+
+
+  public static final OneSetTwoOperations Q_FIELD = 
+    OneSetTwoOperations.make(
+      Q.ADD,
+      BigFraction.ZERO,
+      Q.ADDITIVE_INVERSE,
+      Q.MULTIPLY,
+      BigFraction.ONE,
+      Q.MULTIPLICATIVE_INVERSE,
+      Q.get());
 
   //--------------------------------------------------------------
 }

@@ -54,6 +54,11 @@ public final class AlgebraicStructureTests {
     magmaTests(OneSetOneOperation.BIGFRACTIONS_MULTIPLY); 
     fieldTests(OneSetTwoOperations.BIGFRACTIONS_FIELD); }
 
+  @SuppressWarnings({ "static-method" })
+  @Test
+  public final void qTests () {
+    fieldTests(OneSetTwoOperations.Q_FIELD); }
+
   //--------------------------------------------------------------
 }
 //--------------------------------------------------------------

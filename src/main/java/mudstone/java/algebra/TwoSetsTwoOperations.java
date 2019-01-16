@@ -22,14 +22,14 @@ import mudstone.java.sets.Set;
  * Two sets, 'elements' and 'scalars'.
  * Two operations: element 'addition' and 
  * 'multiplication' of elements by scalars.
- * The scalars are an instance of some one set (usually) two 
+ * The scalars are (usually) an instance of some one set two 
  * operation structure, like a ring or a field.
  * What kind of module-like structure an instance is is determined
  * by the laws satisfied by the element-element operation,
  * the operations on the scalar structure, and, less often,
  * by scalar-element operation.
  * 
- * It is nearly always assumed that scalr multiplication
+ * It is nearly always assumed that scalar multiplication
  * distributes over element addition:
  * <code>a*(v+w) = (a*v) + (a*w)</code>.
  * 
@@ -37,7 +37,7 @@ import mudstone.java.sets.Set;
  * linear to affine spaces, etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-14
+ * @version 2019-01-15
  */
 @SuppressWarnings("unchecked")
 public final class TwoSetsTwoOperations implements Set {
@@ -52,7 +52,7 @@ public final class TwoSetsTwoOperations implements Set {
   // operation 1
   private final BiFunction _multiply;
 
-  //twe set
+  // two structures
   private final Set _elements;
   private final Set _scalars;
 
@@ -60,9 +60,15 @@ public final class TwoSetsTwoOperations implements Set {
   // methods 
   //--------------------------------------------------------------
 
+  // TODO: let the elements be a group-like structure instead?
+  // Then don't need <code>add</code>, etc., operations, just get 
+  // them, and relevant laws, from <code>elements</code> 
+  // structure.
+
   public final BinaryOperator add () { return _add; }
   public final UnaryOperator additiveInverse () { 
     return _additiveInverse; }
+
   // TODO: return a Supplier (nullary operator) instead?
   public final Object additiveIdentity () { 
     return _additiveIdentity; }
@@ -75,21 +81,21 @@ public final class TwoSetsTwoOperations implements Set {
   //--------------------------------------------------------------
   // laws for some specific algebraic structures, for testing
 
-  public final List<BiPredicate> 
-  moduleLaws () {
-    return Laws.module(
-      add(),additiveIdentity(),additiveInverse(),
-      multiply(),
-      elements(),
-      (OneSetTwoOperations) scalars()); }
+  public final List<BiPredicate> moduleLaws () {
+    return 
+      Laws.module(
+        add(),additiveIdentity(),additiveInverse(),
+        multiply(),
+        elements(),
+        (OneSetTwoOperations) scalars()); }
 
-  public final List<Predicate> 
-  linearspaceLaws () {
-    return Laws.linearspace(
-      add(),additiveIdentity(),additiveInverse(),
-      multiply(),
-      elements(),
-      (OneSetTwoOperations) scalars()); }
+  public final List<Predicate> linearspaceLaws () {
+    return
+      Laws.linearspace(
+        add(),additiveIdentity(),additiveInverse(),
+        multiply(),
+        elements(),
+        (OneSetTwoOperations) scalars()); }
 
   //--------------------------------------------------------------
   // Set methods
@@ -105,7 +111,7 @@ public final class TwoSetsTwoOperations implements Set {
 
   @Override
   public final Supplier generator (final UniformRandomProvider prng,
-                                 final Map options) { 
+                                   final Map options) { 
     return _elements.generator(prng,options); }
 
   //--------------------------------------------------------------
@@ -163,11 +169,11 @@ public final class TwoSetsTwoOperations implements Set {
 
 
   private TwoSetsTwoOperations (final BinaryOperator add,
-                               final Object additiveIdentity,
-                               final UnaryOperator additiveInverse,
-                               final BiFunction multiply,
-                               final Set elements,
-                               final Set scalars) { 
+                                final Object additiveIdentity,
+                                final UnaryOperator additiveInverse,
+                                final BiFunction multiply,
+                                final Set elements,
+                                final Set scalars) { 
     assert Objects.nonNull(add);
     assert Objects.nonNull(additiveIdentity);
     assert Objects.nonNull(additiveInverse);
@@ -200,27 +206,27 @@ public final class TwoSetsTwoOperations implements Set {
 
   //--------------------------------------------------------------
   // TODO: should this be its own class?
-  
+
   /** n-dimensional rational vector space, implemented with
-  * <code>BigFraction</code>.
-  */
+   * <code>BigFraction</code>.
+   */
 
   private static final TwoSetsTwoOperations makeQn (final int n) { 
     return
       TwoSetsTwoOperations.make(
-      BigFractionsN.adder(n),
-      BigFractionsN.additiveIdentity(n),
-      BigFractionsN.additiveInverse(n),
-      BigFractionsN.multiplier(n),
-      BigFractionsN.get(n),
-      OneSetTwoOperations.BIGFRACTIONS_FIELD); }
+        BigFractionsN.adder(n),
+        BigFractionsN.additiveIdentity(n),
+        BigFractionsN.additiveInverse(n),
+        BigFractionsN.multiplier(n),
+        BigFractionsN.get(n),
+        OneSetTwoOperations.BIGFRACTIONS_FIELD); }
 
   private static final IntObjectMap<TwoSetsTwoOperations> 
   _qnCache = new IntObjectHashMap();
 
   /** n-dimensional rational vector space, implemented with
-  * <code>BigFraction[]</code>.
-  */
+   * <code>BigFraction[]</code>.
+   */
   public static final TwoSetsTwoOperations getQn (final int dimension) {
     final TwoSetsTwoOperations qn0 = _qnCache.get(dimension);
     if (null != qn0) { return qn0; }

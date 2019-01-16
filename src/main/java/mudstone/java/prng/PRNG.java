@@ -3,12 +3,12 @@ package mudstone.java.prng;
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.simple.RandomSource;
 
-/** Seeds for pseduo-random number generators.
+/** Providers for pseduo-random number generators.
  *
  * Static methods only; no state.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-05
+ * @version 2019-01-15
  */
 
 public final class PRNG {

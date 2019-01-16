@@ -17,9 +17,10 @@ import org.apache.commons.rng.sampling.distribution.ContinuousSampler;
  * the set with equal probability.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-05
+ * @version 2019-01-15
  */
-public final class DoubleSampler implements ContinuousSampler {
+public final class DoubleSampler 
+implements ContinuousSampler, NumberSampler {
 
   private final UniformRandomProvider _urp;
   private final int _delta;
@@ -84,12 +85,16 @@ public final class DoubleSampler implements ContinuousSampler {
   // patterns may have equal values?
   // TODO: What about NaN? corresponds to multiple bit patterns
   @Override
-  public double sample () {
+  public final double sample () {
     return
       makeDouble(
         _urp.nextInt(2),
         _urp.nextInt(_delta),
         _urp.nextLong() & SIGNIFICAND_MASK);  }
+
+  @Override
+  public final Number next () {
+    return Double.valueOf(sample());  }
 
   //--------------------------------------------------------------
 
