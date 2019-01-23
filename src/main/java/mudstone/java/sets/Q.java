@@ -19,7 +19,7 @@ import mudstone.java.prng.NumberSampler;
  * necessary.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-15
+ * @version 2019-01-22
  */
 public final class Q implements Set {
 
@@ -35,7 +35,7 @@ public final class Q implements Set {
   // Also, we only want immutable classes here...
   // TODO: collect some stats and order tests by frequency?
 
-  private static final boolean isKnownRational (final Object x) {
+  public static final boolean knownRational (final Object x) {
     return 
       (x instanceof BigFraction) 
       ||
@@ -53,30 +53,58 @@ public final class Q implements Set {
       ||
       (x instanceof BigInteger); }
 
+  public static final boolean knownRational (final Class c) {
+    if (BigFraction.class.equals(c)) { return true; }
+    if (BigInteger.class.equals(c)) { return true; }
+    if (Byte.class.equals(c)) { return true; }
+    if (Short.class.equals(c)) { return true; }
+    if (Integer.class.equals(c)) { return true; }
+    if (Long.class.equals(c)) { return true; }
+    if (Float.class.equals(c)) { return true; }
+    if (Double.class.equals(c)) { return true; }
+    if (Byte.TYPE.equals(c)) { return true; }
+    if (Short.TYPE.equals(c)) { return true; }
+    if (Integer.TYPE.equals(c)) { return true; }
+    if (Long.TYPE.equals(c)) { return true; }
+    if (Float.TYPE.equals(c)) { return true; }
+    if (Double.TYPE.equals(c)) { return true; }
+    return false; }
+
   //--------------------------------------------------------------
 
-  private static final BigFraction toBigFraction (final Object x) {
-    assert isKnownRational(x) : 
+  public static final BigFraction toBigFraction (final int x) {
+    return new BigFraction(x); }
+
+  public static final BigFraction toBigFraction (final long x) {
+    return new BigFraction(x); }
+
+  public static final BigFraction toBigFraction (final float x) {
+    return new BigFraction(x); }
+
+  public static final BigFraction toBigFraction (final double x) {
+    return new BigFraction(x); }
+
+  public static final BigFraction toBigFraction (final Object x) {
+    assert knownRational(x) : 
       x + " is not a known rational number type";
     if (x instanceof BigFraction) { 
       return (BigFraction) x; }
-    else if (x instanceof Double) { 
+    if (x instanceof Double) { 
       return new BigFraction(((Double) x).doubleValue()); }
-    else if (x instanceof Integer) {
+    if (x instanceof Integer) {
       return new BigFraction(((Integer) x).intValue()); }
-    else if (x instanceof Long) { 
+    if (x instanceof Long) { 
       return new BigFraction(((Long) x).longValue()); }
-    else if (x instanceof Float) {
+    if (x instanceof Float) {
       return new BigFraction(((Float) x).floatValue()); }
-    else if (x instanceof Short) {
+    if (x instanceof Short) {
       return new BigFraction(((Short) x).intValue()); }
-    else if (x instanceof Byte) {
+    if (x instanceof Byte) {
       return new BigFraction(((Byte) x).intValue()); }
-    else if (x instanceof BigInteger) {
+    if (x instanceof BigInteger) {
       return new BigFraction(((BigInteger) x)); }
-    else {
-      throw Exceptions.unsupportedOperation(
-        Q.class,"toBigFraction",x); } }
+    throw Exceptions.unsupportedOperation(
+      Q.class,"toBigFraction",x); }
 
   // BigFraction.equals reduces both arguments before checking
   // numerator and denominators are equal.
@@ -114,7 +142,7 @@ public final class Q implements Set {
 
   @Override
   public final boolean contains (final Object element) {
-    return isKnownRational(element); }
+    return knownRational(element); }
 
   //  @Override
   //  public final boolean contains (final byte element) {

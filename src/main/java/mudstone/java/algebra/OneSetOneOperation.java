@@ -12,6 +12,8 @@ import java.util.function.UnaryOperator;
 import org.apache.commons.rng.UniformRandomProvider;
 
 import mudstone.java.sets.BigFractions;
+import mudstone.java.sets.BigFractionsN;
+import mudstone.java.sets.Qn;
 import mudstone.java.sets.Set;
 
 /** Group-like structures: One set plus closed binary operation.
@@ -155,16 +157,19 @@ public final class OneSetOneOperation implements Set {
     _inverse = inverse; }
 
   //--------------------------------------------------------------
-  // TODO: is it worth implementing singleton constraint?
 
-  //  private static final Map<Magma,Magma> _cache = 
-  //    new HashMap();
+  public static final OneSetOneOperation 
+  make (final BinaryOperator operation,
+        final Set elements,
+        final Object identity,
+        final UnaryOperator inverse) { 
+    return new OneSetOneOperation(
+      operation,elements,identity,inverse); }
 
-  //--------------------------------------------------------------
-
-  public static final OneSetOneOperation make (final BinaryOperator operation,
-                                               final Set elements) {
-    return new OneSetOneOperation(operation,elements,null,null); }
+  public static final OneSetOneOperation 
+  make (final BinaryOperator operation,
+        final Set elements) {
+    return make(operation,elements,null,null); }
 
   //--------------------------------------------------------------
   // pre-define some standard magmas
@@ -174,6 +179,30 @@ public final class OneSetOneOperation implements Set {
 
   public static final OneSetOneOperation BIGFRACTIONS_MULTIPLY = 
     OneSetOneOperation.make(BigFractions.MULTIPLY,BigFractions.get());
+
+  //--------------------------------------------------------------
+  // TODO: cache by n?
+  
+  public static final OneSetOneOperation 
+  bigFractionsNGroup (final int n) {
+    return
+      OneSetOneOperation.make(
+        BigFractionsN.adder(n),
+        BigFractionsN.get(n),
+        BigFractionsN.additiveIdentity(n),
+        BigFractionsN.additiveInverse(n)); }
+
+  //--------------------------------------------------------------
+  // TODO: cache by n?
+  
+  public static final OneSetOneOperation 
+  qnGroup (final int n) {
+    return
+      OneSetOneOperation.make(
+        Qn.adder(n),
+        Qn.get(n),
+        Qn.additiveIdentity(n),
+        Qn.additiveInverse(n)); }
 
   //--------------------------------------------------------------
 }

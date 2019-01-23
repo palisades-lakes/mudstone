@@ -178,7 +178,7 @@ public final class BigFractionsN implements Set {
 
   public static final 
   BiFunction<BigFraction,BigFraction[],BigFraction[]> 
-  multiplier (final int dimension) {
+  scaler (final int dimension) {
     assert dimension > 0;
     return
       new BiFunction<BigFraction,BigFraction[],BigFraction[]>() {

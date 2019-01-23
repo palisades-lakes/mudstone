@@ -5,10 +5,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 import org.apache.commons.rng.UniformRandomProvider;
 
@@ -16,6 +14,7 @@ import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;
 
 import mudstone.java.sets.BigFractionsN;
+import mudstone.java.sets.Qn;
 import mudstone.java.sets.Set;
 
 /** Module-like structures, including linear (vector) spaces.
@@ -37,45 +36,31 @@ import mudstone.java.sets.Set;
  * linear to affine spaces, etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-15
+ * @version 2019-01-22
  */
 @SuppressWarnings("unchecked")
 public final class TwoSetsTwoOperations implements Set {
 
-  // operation 0
-  private final BinaryOperator _add;
-  // may be null
-  private final Object _additiveIdentity;
-  // may be null
-  private final UnaryOperator _additiveInverse;
-
-  // operation 1
-  private final BiFunction _multiply;
-
-  // two structures
+    // two structures
   private final Set _elements;
   private final Set _scalars;
 
-  //--------------------------------------------------------------
+//operation
+ private final BiFunction _scale;
+
+//--------------------------------------------------------------
   // methods 
   //--------------------------------------------------------------
 
-  // TODO: let the elements be a group-like structure instead?
-  // Then don't need <code>add</code>, etc., operations, just get 
-  // them, and relevant laws, from <code>elements</code> 
-  // structure.
+  /** Multiply an element by a scalar. */
+  public final BiFunction multiply () { return _scale; }
 
-  public final BinaryOperator add () { return _add; }
-  public final UnaryOperator additiveInverse () { 
-    return _additiveInverse; }
-
-  // TODO: return a Supplier (nullary operator) instead?
-  public final Object additiveIdentity () { 
-    return _additiveIdentity; }
-
-  public final BiFunction multiply () { return _multiply; }
-
+  /** Typically a group-like structure. */
   public final Set elements () { return _elements; }
+
+  /** Typically a ring (giving a module) or a field (giving a 
+   * vector/linear space).
+   */
   public final Set scalars () { return _scalars; }
 
   //--------------------------------------------------------------
@@ -84,17 +69,15 @@ public final class TwoSetsTwoOperations implements Set {
   public final List<BiPredicate> moduleLaws () {
     return 
       Laws.module(
-        add(),additiveIdentity(),additiveInverse(),
         multiply(),
-        elements(),
+        (OneSetOneOperation) elements(),
         (OneSetTwoOperations) scalars()); }
 
   public final List<Predicate> linearspaceLaws () {
     return
       Laws.linearspace(
-        add(),additiveIdentity(),additiveInverse(),
         multiply(),
-        elements(),
+        (OneSetOneOperation) elements(),
         (OneSetTwoOperations) scalars()); }
 
   //--------------------------------------------------------------
@@ -122,9 +105,6 @@ public final class TwoSetsTwoOperations implements Set {
   public final int hashCode () { 
     return 
       Objects.hash(
-        add(),
-        additiveIdentity(),
-        additiveInverse(),
         multiply(),
         elements(),
         scalars()); }
@@ -135,14 +115,6 @@ public final class TwoSetsTwoOperations implements Set {
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
     final TwoSetsTwoOperations other = (TwoSetsTwoOperations) obj;
-    if (! Objects.equals(add(),other.add())) { 
-      return false; }
-    if (! Objects.equals(
-      additiveIdentity(),other.additiveIdentity())) { 
-      return false; }
-    if (! Objects.equals(
-      additiveInverse(),other.additiveInverse())) { 
-      return false; }
     if (! Objects.equals(multiply(),other.multiply())) {
       return false; }
     if (! Objects.equals(elements(),other.elements())) { 
@@ -155,9 +127,6 @@ public final class TwoSetsTwoOperations implements Set {
   @Override
   public final String toString () { 
     return "[" + _elements + 
-      ",\n" + add() + 
-      "," + additiveIdentity() + 
-      "," + additiveInverse() + 
       ",\n" + multiply() + 
       ",\n" + elements() +
       ",\n" + scalars() +
@@ -168,38 +137,24 @@ public final class TwoSetsTwoOperations implements Set {
   //--------------------------------------------------------------
 
 
-  private TwoSetsTwoOperations (final BinaryOperator add,
-                                final Object additiveIdentity,
-                                final UnaryOperator additiveInverse,
-                                final BiFunction multiply,
+  private TwoSetsTwoOperations (final BiFunction multiply,
                                 final Set elements,
                                 final Set scalars) { 
-    assert Objects.nonNull(add);
-    assert Objects.nonNull(additiveIdentity);
-    assert Objects.nonNull(additiveInverse);
     assert Objects.nonNull(multiply);
     assert Objects.nonNull(elements);
-    _add = add;
-    _additiveIdentity = additiveIdentity;
-    _additiveInverse = additiveInverse;
-    _multiply = multiply;
+    assert Objects.nonNull(scalars);
+    _scale = multiply;
     _elements = elements; 
     _scalars = scalars; }
 
   //--------------------------------------------------------------
 
   public static final TwoSetsTwoOperations 
-  make (final BinaryOperator add,
-        final Object additiveIdentity,
-        final UnaryOperator additiveInverse,
-        final BiFunction multiply,
+  make (final BiFunction multiply,
         final Set elements,
         final Set scalars) {
 
     return new TwoSetsTwoOperations(
-      add,
-      additiveIdentity,
-      additiveInverse,
       multiply,
       elements,
       scalars); }
@@ -208,17 +163,41 @@ public final class TwoSetsTwoOperations implements Set {
   // TODO: should this be its own class?
 
   /** n-dimensional rational vector space, implemented with
-   * <code>BigFraction</code>.
+   * <code>BigFraction[n]</code>.
+   */
+
+  private static final TwoSetsTwoOperations makeBFn (final int n) { 
+    return
+      TwoSetsTwoOperations.make(
+        BigFractionsN.scaler(n),
+        OneSetOneOperation.bigFractionsNGroup(n),
+        OneSetTwoOperations.BIGFRACTIONS_FIELD); }
+
+  private static final IntObjectMap<TwoSetsTwoOperations> 
+  _bfnCache = new IntObjectHashMap();
+
+  /** n-dimensional rational vector space, implemented with
+   * <code>BigFraction[]</code>.
+   */
+  public static final TwoSetsTwoOperations getBFn (final int dimension) {
+    final TwoSetsTwoOperations qn0 = _bfnCache.get(dimension);
+    if (null != qn0) { return qn0; }
+    final TwoSetsTwoOperations qn1 = makeBFn(dimension); 
+    _bfnCache.put(dimension,qn1);
+    return qn1; }
+
+  //--------------------------------------------------------------
+  // TODO: should this be its own class?
+
+  /** n-dimensional rational vector space, implemented with
+   * any known rational array.
    */
 
   private static final TwoSetsTwoOperations makeQn (final int n) { 
     return
       TwoSetsTwoOperations.make(
-        BigFractionsN.adder(n),
-        BigFractionsN.additiveIdentity(n),
-        BigFractionsN.additiveInverse(n),
-        BigFractionsN.multiplier(n),
-        BigFractionsN.get(n),
+        Qn.scaler(n),
+        OneSetOneOperation.qnGroup(n),
         OneSetTwoOperations.BIGFRACTIONS_FIELD); }
 
   private static final IntObjectMap<TwoSetsTwoOperations> 

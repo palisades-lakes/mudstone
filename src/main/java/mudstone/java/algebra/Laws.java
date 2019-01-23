@@ -34,7 +34,7 @@ import mudstone.java.sets.Sets;
  * no instance state or methods.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-14
+ * @version 2019-01-22
  */
 
 @SuppressWarnings("unchecked")
@@ -52,9 +52,11 @@ public final class Laws {
       @Override
       public final boolean test (final Supplier samples) {
         final Object a = samples.get();
-        assert elements.contains(a);
+        assert elements.contains(a) :
+          a + " is not an element of " + elements;
         final Object b = samples.get();
-        assert elements.contains(b);
+        assert elements.contains(b):
+          b + " is not an element of " + elements;
         return elements.contains(operation.apply(a,b)); } }; }
 
   //--------------------------------------------------------------
@@ -430,36 +432,30 @@ public final class Laws {
 
   // laws might be Predicate or BiPredicate
   // TODO: define new interface for multi-arity predicates?
+  // some laws apply to scalars alone, some to elements alone,
+  // some to elements and scalars together..
 
   public static final List
-  module (final BinaryOperator add,
-          final Object additiveIdentity,
-          final UnaryOperator additiveInverse,
-          final BiFunction multiply,
-          final Set elements,
+  module (final BiFunction scale,
+          final OneSetOneOperation elements,
           final OneSetTwoOperations scalars) {
     final ImmutableList.Builder b = ImmutableList.builder();
-    b.addAll(scalars.ringLaws());
-    b.addAll(
-      commutativegroup(
-        elements,add,additiveIdentity,additiveInverse));
-    b.add(distributive(elements,scalars,add,multiply));
+//    b.addAll(scalars.ringLaws());
+//    b.addAll(elements.commutativegroupLaws());
+    b.add(
+      distributive(elements,scalars,elements.operation(),scale));
     return b.build(); }
 
   /** Perhaps more commonly called 'vector' space. */
   public static final List
-  linearspace (final BinaryOperator add,
-               final Object additiveIdentity,
-               final UnaryOperator additiveInverse,
-               final BiFunction multiply,
-               final Set elements,
+  linearspace (final BiFunction scale,
+               final OneSetOneOperation elements,
                final OneSetTwoOperations scalars) {
     final ImmutableList.Builder b = ImmutableList.builder();
-    //b.addAll(scalars.fieldLaws());
-    b.addAll(
-      commutativegroup(
-        elements,add,additiveIdentity,additiveInverse));
-    b.add(distributive(elements,scalars,add,multiply));
+//    b.addAll(scalars.fieldLaws());
+//    b.addAll(elements.commutativegroupLaws());
+    b.add(
+      distributive(elements,scalars,elements.operation(),scale));
     return b.build(); }
 
   //--------------------------------------------------------------

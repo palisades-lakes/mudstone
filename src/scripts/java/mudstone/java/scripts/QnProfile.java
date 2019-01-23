@@ -58,7 +58,7 @@ public final class QnProfile {
     for (final int n : new int[] { 1, 3, 13, 127, 1023}) {
       System.out.println(n);
       final TwoSetsTwoOperations qn = 
-        TwoSetsTwoOperations.getQn(n);
+        TwoSetsTwoOperations.getBFn(n);
       linearspaceTests(qn); } }
 
   //--------------------------------------------------------------
