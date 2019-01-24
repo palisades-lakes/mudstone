@@ -19,7 +19,7 @@ import mudstone.java.prng.NumberSampler;
  * necessary.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-22
+ * @version 2019-01-23
  */
 public final class Q implements Set {
 
@@ -36,22 +36,15 @@ public final class Q implements Set {
   // TODO: collect some stats and order tests by frequency?
 
   public static final boolean knownRational (final Object x) {
-    return 
-      (x instanceof BigFraction) 
-      ||
-      (x instanceof Double) 
-      ||
-      (x instanceof Integer) 
-      ||
-      (x instanceof Long) 
-      ||
-      (x instanceof Float) 
-      ||
-      (x instanceof Short) 
-      ||
-      (x instanceof Byte) 
-      ||
-      (x instanceof BigInteger); }
+    if (x instanceof BigFraction) { return true; }
+    if (x instanceof Double) { return true; }
+    if (x instanceof Integer) { return true; }
+    if (x instanceof Long) { return true; }
+    if (x instanceof Float) { return true; }
+    if (x instanceof Short) { return true; }
+    if (x instanceof Byte) { return true; }
+    if (x instanceof BigInteger){ return true; }
+    return false; }
 
   public static final boolean knownRational (final Class c) {
     if (BigFraction.class.equals(c)) { return true; }
@@ -71,6 +64,12 @@ public final class Q implements Set {
     return false; }
 
   //--------------------------------------------------------------
+
+  public static final BigFraction toBigFraction (final byte x) {
+    return new BigFraction(x); }
+
+  public static final BigFraction toBigFraction (final short x) {
+    return new BigFraction(x); }
 
   public static final BigFraction toBigFraction (final int x) {
     return new BigFraction(x); }
@@ -144,35 +143,35 @@ public final class Q implements Set {
   public final boolean contains (final Object element) {
     return knownRational(element); }
 
-  //  @Override
-  //  public final boolean contains (final byte element) {
-  //    // all java numbers are rational
-  //    return true; }
-  //
-  //  @Override
-  //  public final boolean contains (final short element) {
-  //    // all java numbers are rational
-  //    return true; }
-  //
-  //  @Override
-  //  public final boolean contains (final int element) {
-  //    // all java numbers are rational
-  //    return true; }
-  //
-  //  @Override
-  //  public final boolean contains (final long element) {
-  //    // all java numbers are rational
-  //    return true; }
-  //
-  //  @Override
-  //  public final boolean contains (final float element) {
-  //    // all java numbers are rational
-  //    return true; }
-  //
-  //  @Override
-  //  public final boolean contains (final double element) {
-  //    // all java numbers are rational
-  //    return true; }
+  @Override
+  public final boolean contains (final byte element) {
+    // all java numbers are rational
+    return true; }
+
+  @Override
+  public final boolean contains (final short element) {
+    // all java numbers are rational
+    return true; }
+
+  @Override
+  public final boolean contains (final int element) {
+    // all java numbers are rational
+    return true; }
+
+  @Override
+  public final boolean contains (final long element) {
+    // all java numbers are rational
+    return true; }
+
+  @Override
+  public final boolean contains (final float element) {
+    // all java numbers are rational
+    return true; }
+
+  @Override
+  public final boolean contains (final double element) {
+    // all java numbers are rational
+    return true; }
 
   //--------------------------------------------------------------
 

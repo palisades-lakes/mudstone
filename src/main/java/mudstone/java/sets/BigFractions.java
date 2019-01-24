@@ -17,7 +17,7 @@ import mudstone.java.prng.BigFractionSampler;
  * <code>BigFraction</code>
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-12
+ * @version 2019-01-23
  */
 public final class BigFractions implements Set {
 
@@ -106,7 +106,7 @@ public final class BigFractions implements Set {
   public static final BigFractions get () { return SINGLETON; } 
 
   public static final BinaryOperator<BigFraction> ADD =
-    new BinaryOperator<BigFraction>() {
+    new BinaryOperator<BigFraction> () {
     @Override
     public final BigFraction apply (final BigFraction q0, 
                                     final BigFraction q1) {
@@ -115,7 +115,7 @@ public final class BigFractions implements Set {
 
   public static final UnaryOperator<BigFraction>
   ADDITIVE_INVERSE =
-  new UnaryOperator<BigFraction>() {
+  new UnaryOperator<BigFraction> () {
     @Override
     public final BigFraction apply (final BigFraction q) {
       return q.negate(); } 
@@ -131,7 +131,7 @@ public final class BigFractions implements Set {
 
   public static final UnaryOperator<BigFraction>
   MULTIPLICATIVE_INVERSE =
-  new UnaryOperator<BigFraction>() {
+  new UnaryOperator<BigFraction> () {
     @Override
     public final BigFraction apply (final BigFraction q) {
       // only a partial inverse

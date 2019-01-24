@@ -35,7 +35,7 @@ import mudstone.java.exceptions.Exceptions;
  * that can be used to represent tuples of rational numbers.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-22
+ * @version 2019-01-23
  */
 @SuppressWarnings("unchecked")
 public final class Qn implements Set {
@@ -47,83 +47,83 @@ public final class Qn implements Set {
   //--------------------------------------------------------------
 
   private static final BigFraction[]
-    toBigFractions (final byte[] x) {
+    toBigFraction (final byte[] x) {
     final int n = x.length;
     final BigFraction[] y = new BigFraction[n];
     for (int i=0;i<n;i++) { y[i] = Q.toBigFraction(x[i]); }
     return y; }
 
   private static final BigFraction[]
-    toBigFractions (final short[] x) {
+    toBigFraction (final short[] x) {
     final int n = x.length;
     final BigFraction[] y = new BigFraction[n];
     for (int i=0;i<n;i++) { y[i] = Q.toBigFraction(x[i]); }
     return y; }
 
   private static final BigFraction[]
-    toBigFractions (final int[] x) {
+    toBigFraction (final int[] x) {
     final int n = x.length;
     final BigFraction[] y = new BigFraction[n];
     for (int i=0;i<n;i++) { y[i] = Q.toBigFraction(x[i]); }
     return y; }
 
   private static final BigFraction[]
-    toBigFractions (final long[] x) {
+    toBigFraction (final long[] x) {
     final int n = x.length;
     final BigFraction[] y = new BigFraction[n];
     for (int i=0;i<n;i++) { y[i] = Q.toBigFraction(x[i]); }
     return y; }
 
   private static final BigFraction[]
-    toBigFractions (final float[] x) {
+    toBigFraction (final float[] x) {
     final int n = x.length;
     final BigFraction[] y = new BigFraction[n];
     for (int i=0;i<n;i++) { y[i] = Q.toBigFraction(x[i]); }
     return y; }
 
   private static final BigFraction[]
-    toBigFractions (final double[] x) {
+    toBigFraction (final double[] x) {
     final int n = x.length;
     final BigFraction[] y = new BigFraction[n];
     for (int i=0;i<n;i++) { y[i] = Q.toBigFraction(x[i]); }
     return y; }
 
   private static final BigFraction[]
-    toBigFractions (final Number[] x) {
+    toBigFraction (final Number[] x) {
     final int n = x.length;
     final BigFraction[] y = new BigFraction[n];
     for (int i=0;i<n;i++) { y[i] = Q.toBigFraction(x[i]); }
     return y; }
 
   private static final BigFraction[] 
-    toBigFractions (final Object x) {
+    toBigFraction (final Object x) {
 
     if (x instanceof BigFraction[]) { 
       return (BigFraction[]) x; }
 
     if (x instanceof byte[]) { 
-      return toBigFractions((byte[]) x); }
+      return toBigFraction((byte[]) x); }
 
     if (x instanceof short[]) { 
-      return toBigFractions((short[]) x); }
+      return toBigFraction((short[]) x); }
 
     if (x instanceof int[]) { 
-      return toBigFractions((int[]) x); }
+      return toBigFraction((int[]) x); }
 
     if (x instanceof long[]) { 
-      return toBigFractions((long[]) x); }
+      return toBigFraction((long[]) x); }
 
     if (x instanceof float[]) { 
-      return toBigFractions((float[]) x); }
+      return toBigFraction((float[]) x); }
 
     if (x instanceof double[]) { 
-      return toBigFractions((double[]) x); }
+      return toBigFraction((double[]) x); }
 
     if (x instanceof Number[]) { 
-      return toBigFractions((Number[]) x); }
+      return toBigFraction((Number[]) x); }
 
     throw Exceptions.unsupportedOperation(
-      Qn.class,"toBigFractions",x); }
+      Qn.class,"toBigFraction",x); }
 
   //--------------------------------------------------------------
   // Set methods
@@ -141,8 +141,8 @@ public final class Qn implements Set {
       assert contains(x1);
 
       // TODO: don't need to convert, fix this
-      final BigFraction[] q0 = toBigFractions(x0);
-      final BigFraction[] q1 = toBigFractions(x1);
+      final BigFraction[] q0 = toBigFraction(x0);
+      final BigFraction[] q1 = toBigFraction(x1);
       assert _dimension == q0.length;
       assert _dimension == q1.length;
       for (int i=0;i<_dimension;i++) {
@@ -244,8 +244,8 @@ public final class Qn implements Set {
         assert null != x0;
         assert null != x1;
         // TODO: conversion rarely necessary, fix this
-        final BigFraction[] q0 = toBigFractions(x0);
-        final BigFraction[] q1 = toBigFractions(x1);
+        final BigFraction[] q0 = toBigFraction(x0);
+        final BigFraction[] q1 = toBigFraction(x1);
         assert dimension == q0.length;
         assert dimension == q1.length;
         final BigFraction[] qq = new BigFraction[dimension];
@@ -265,13 +265,13 @@ public final class Qn implements Set {
   additiveInverse (final int dimension) {
     assert dimension > 0;
     return 
-      new UnaryOperator() {
+      new UnaryOperator () {
       @Override
       public final Object apply (final Object x) {
         assert null != x;
         // TODO: direct negation to BigFraction[] 
         // saves intermediate array, fix this
-        final BigFraction[] q = toBigFractions(x);
+        final BigFraction[] q = toBigFraction(x);
         assert dimension == q.length;
         final BigFraction[] qq = new BigFraction[dimension];
         for (int i=0;i<dimension;i++) { qq[i] = q[i].negate(); }
@@ -281,7 +281,7 @@ public final class Qn implements Set {
   BiFunction scaler (final int dimension) {
     assert dimension > 0;
     return
-      new BiFunction() {
+      new BiFunction () {
       @Override
       public final Object apply (final Object a, 
                                  final Object x) {
@@ -289,7 +289,7 @@ public final class Qn implements Set {
         // fix this
         final BigFraction qa =Q.toBigFraction(a);
         assert null != x;
-        final BigFraction[] q = toBigFractions(x);
+        final BigFraction[] q = toBigFraction(x);
         assert dimension == q.length;
         final BigFraction[] qq = new BigFraction[dimension];
         for (int i=0;i<dimension;i++) { 

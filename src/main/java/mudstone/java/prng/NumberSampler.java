@@ -11,7 +11,7 @@ import org.apache.commons.rng.sampling.CollectionSampler;
  * generate edge cases (zero, min, max, ...).
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-15
+ * @version 2019-01-23
  */
 
 @SuppressWarnings("unchecked")
@@ -58,7 +58,7 @@ public interface NumberSampler {
             BigFractionSampler.make(urp)));
       @Override
       public final Number next () {
-        return samplers.sample().next(); } }; }
+        return samplers.sample().next (); } }; }
 
   //--------------------------------------------------------------
 }
