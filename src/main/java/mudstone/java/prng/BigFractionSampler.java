@@ -10,7 +10,7 @@ import org.apache.commons.rng.sampling.distribution.ContinuousUniformSampler;
 
 /** 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-15
+ * @version 2019-01-28
  */
 @SuppressWarnings("unchecked")
 public interface BigFractionSampler extends NumberSampler {
@@ -18,8 +18,7 @@ public interface BigFractionSampler extends NumberSampler {
   BigFraction sample ();  
 
   @Override
-  public default Number next () {
-    return sample();  } 
+  public default Number next () { return sample();  } 
 
   // TODO: options?
   // TODO: using a DoubleSampler: those are (?) the most likely
@@ -30,8 +29,9 @@ public interface BigFractionSampler extends NumberSampler {
    * (see {@link mudstone.java.prng.DoubleSampler})
    * and convert to <code>BigFraction</code>
    * with {@link #DOUBLE_P} probability;
-   * otherwise return {@link #ADDITIVE_INVERSE} or 
-   * {@link #MULTIPLICATIVE_INVERSE},  with equal probability
+   * otherwise return {@link BigFraction#ZERO} or 
+   * {@link BigFractrion#ONE}, {@link BigFractrion#MINUS_ONE},  
+   * with equal probability (these are potential edge cases).
    */
  
   public static BigFractionSampler 
@@ -44,7 +44,8 @@ public interface BigFractionSampler extends NumberSampler {
         DoubleSampler.make(urp);
       private final CollectionSampler edgeCases = 
         new CollectionSampler(
-          urp,List.of(
+          urp,
+          List.of(
             BigFraction.ZERO,
             BigFraction.ONE,
             BigFraction.MINUS_ONE));
