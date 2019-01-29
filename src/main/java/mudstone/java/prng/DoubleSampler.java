@@ -3,6 +3,8 @@ package mudstone.java.prng;
 import org.apache.commons.rng.UniformRandomProvider;
 import org.apache.commons.rng.sampling.distribution.ContinuousSampler;
 
+import mudstone.java.numbers.Doubles;
+
 /** Return any possible <code>double</code> with equal 
  * probability.
  * 
@@ -17,67 +19,13 @@ import org.apache.commons.rng.sampling.distribution.ContinuousSampler;
  * the set with equal probability.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-15
+ * @version 2019-01-29
  */
 public final class DoubleSampler 
 implements ContinuousSampler, NumberSampler {
 
   private final UniformRandomProvider _urp;
   private final int _delta;
-
-  //--------------------------------------------------------------
-  // private
-  //--------------------------------------------------------------
-  // TODO: move to a Doubles class?
-
-//  private static final int SIGN_BITS = 1;
-  private static final int EXPONENT_BITS = 11;
-  private static final int SIGNIFICAND_BITS = 52;
-
-//  private static final long SIGN_MASK =
-//    1L << (EXPONENT_BITS + SIGNIFICAND_BITS);
-
-//  private static final long EXPONENT_MASK =
-//    ((1L << EXPONENT_BITS) - 1L) << SIGNIFICAND_BITS;
-
-  private static final long SIGNIFICAND_MASK =
-    (1L << SIGNIFICAND_BITS) - 1L;
-
-//  private static final int EXPONENT_BIAS =
-//    (1 << (EXPONENT_BITS - 1)) - 1;
-
-  private static final int MAXIMUM_BIASED_EXPONENT =
-    (1 << EXPONENT_BITS) - 1;
-
-//  private static final int MAXIMUM_EXPONENT =
-//    EXPONENT_BIAS;
-
-//  private static final int MINIMUM_NORMAL_EXPONENT =
-//    1 - MAXIMUM_EXPONENT;
-
-//  private static final int MINIMUM_SUBNORMAL_EXPONENT =
-//    MINIMUM_NORMAL_EXPONENT - SIGNIFICAND_BITS;
-
-  private static final double makeDouble (final int s,
-                                          final int e,
-                                          final long t) {
-    assert ((0 == s) || (1 ==s)) : "Invalid sign bit:" + s;
-    assert (0 <= e) :
-      "Negative exponent:" + Integer.toHexString(e);
-    assert (e <= MAXIMUM_BIASED_EXPONENT) :
-      "Exponent too large:" + Integer.toHexString(e) +
-      ">" + Integer.toHexString(MAXIMUM_BIASED_EXPONENT);
-    assert (0 <= t) :
-      "Negative significand:" + Long.toHexString(t);
-    assert (t <= SIGNIFICAND_MASK) :
-      "Significand too large:" + Long.toHexString(t) +
-      ">" + Long.toHexString(SIGNIFICAND_MASK);
-
-    final long ss = ((long) s) << (EXPONENT_BITS + SIGNIFICAND_BITS);
-    final long se = ((long) e) << SIGNIFICAND_BITS;
-
-    assert (0L == (ss & se & t));
-    return Double.longBitsToDouble(ss | se | t); }
 
   //--------------------------------------------------------------
   // TODO: Does this sample distinct double *values* with equal
@@ -87,10 +35,10 @@ implements ContinuousSampler, NumberSampler {
   @Override
   public final double sample () {
     return
-      makeDouble(
+      Doubles.makeDouble(
         _urp.nextInt(2),
         _urp.nextInt(_delta),
-        _urp.nextLong() & SIGNIFICAND_MASK);  }
+        _urp.nextLong() & Doubles.SIGNIFICAND_MASK);  }
 
   @Override
   public final Number next () {
@@ -118,7 +66,9 @@ implements ContinuousSampler, NumberSampler {
    */
   public static final DoubleSampler 
   make (final UniformRandomProvider urp) {
-    return DoubleSampler.make(urp,1+MAXIMUM_BIASED_EXPONENT); }
+    return DoubleSampler.make(
+      urp,
+      1+Doubles.MAXIMUM_BIASED_EXPONENT); }
   
   public static final DoubleSampler 
   make (final int delta) {

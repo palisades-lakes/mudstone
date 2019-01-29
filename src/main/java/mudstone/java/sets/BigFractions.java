@@ -17,7 +17,7 @@ import mudstone.java.prng.BigFractionSampler;
  * <code>BigFraction</code>
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-23
+ * @version 2019-01-29
  */
 public final class BigFractions implements Set {
 
@@ -66,6 +66,7 @@ public final class BigFractions implements Set {
     return BIGFRACTION_EQUALS; }
 
   //--------------------------------------------------------------
+
   @Override
   public final Supplier generator (final UniformRandomProvider urp,
                                    final Map options) {

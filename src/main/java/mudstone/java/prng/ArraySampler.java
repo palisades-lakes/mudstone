@@ -13,31 +13,16 @@ import org.apache.commons.rng.sampling.distribution.ContinuousUniformSampler;
  * @version 2019-01-29
  */
 @SuppressWarnings("unchecked")
-public interface BigFractionSampler extends NumberSampler {
+public interface ArraySampler {
 
-  BigFraction sample ();  
+  Object next ();  
 
-  @Override
-  public default Number next () { return sample();  } 
+  //--------------------------------------------------------------
 
-  // TODO: options?
-  // TODO: using a DoubleSampler: those are (?) the most likely
-  // values to see, but could do something to extend the 
-  // range to values not representable as double.
-  
-  /** Intended primarily for testing. Sample a random double
-   * (see {@link mudstone.java.prng.DoubleSampler})
-   * and convert to <code>BigFraction</code>
-   * with {@link #DOUBLE_P} probability;
-   * otherwise return {@link BigFraction#ZERO} or 
-   * {@link BigFractrion#ONE}, {@link BigFractrion#MINUS_ONE},  
-   * with equal probability (these are potential edge cases).
-   */
- 
-  public static BigFractionSampler 
-  make (final UniformRandomProvider urp) {
-    final double dp = 0.9;
-    return new BigFractionSampler () {
+  public static final ArraySampler 
+  make (final UniformRandomProvider urp,
+        final Class elementType) {
+    return new ArraySampler () {
       private final ContinuousSampler choose = 
         new ContinuousUniformSampler(urp,0.0,1.0);
       private final ContinuousSampler cs = 
