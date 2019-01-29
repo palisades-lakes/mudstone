@@ -11,7 +11,8 @@ import java.util.function.UnaryOperator;
 import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.rng.UniformRandomProvider;
 
-import mudstone.java.prng.BigFractionSampler;
+import mudstone.java.prng.Generator;
+import mudstone.java.prng.Generators;
 
 /** The set of rational numbers represented by 
  * <code>BigFraction</code>
@@ -70,7 +71,7 @@ public final class BigFractions implements Set {
   @Override
   public final Supplier generator (final UniformRandomProvider urp,
                                    final Map options) {
-    final BigFractionSampler bfs = BigFractionSampler.make(urp);
+    final Generator bfs = Generators.bigFractionGenerator(urp);
     return 
       new Supplier () {
       @Override

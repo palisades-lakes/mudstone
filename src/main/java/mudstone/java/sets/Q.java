@@ -12,14 +12,15 @@ import org.apache.commons.math3.fraction.BigFraction;
 import org.apache.commons.rng.UniformRandomProvider;
 
 import mudstone.java.exceptions.Exceptions;
-import mudstone.java.prng.NumberSampler;
+import mudstone.java.prng.Generator;
+import mudstone.java.prng.Generators;
 
 /** The set of rational numbers, accepting any 'reasonable' 
  * representation. Calculation converts to BigFraction where
  * necessary.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-23
+ * @version 2019-01-29
  */
 public final class Q implements Set {
 
@@ -183,11 +184,11 @@ public final class Q implements Set {
   @Override
   public final Supplier generator (final UniformRandomProvider urp,
                                    final Map options) {
-    final NumberSampler sampler = NumberSampler.finite(urp); 
+    final Generator fng = Generators.finiteNumberGenerator(urp); 
     return 
       new Supplier () {
       @Override
-      public final Object get () { return sampler.next(); } }; }
+      public final Object get () { return fng.next(); } }; }
 
   @Override
   public final Supplier generator (final UniformRandomProvider urp) {
