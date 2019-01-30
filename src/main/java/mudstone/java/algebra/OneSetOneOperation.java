@@ -22,7 +22,7 @@ import mudstone.java.sets.Set;
  * etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-11
+ * @version 2019-01-29
  */
 @SuppressWarnings("unchecked")
 public final class OneSetOneOperation implements Set {
@@ -135,10 +135,11 @@ public final class OneSetOneOperation implements Set {
   @Override
   public final String toString () { 
     return 
-      "[" + operation()
-      + "," + identity()
-      + "," + inverse()
-      + ",\n" + elements()
+      "S1O1[" +
+      //operation() +
+      //"," + identity() +
+      //"," + inverse() + "," + 
+      elements()
       + "]"; }
 
   //--------------------------------------------------------------

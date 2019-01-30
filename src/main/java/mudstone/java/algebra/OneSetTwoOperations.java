@@ -19,7 +19,7 @@ import mudstone.java.sets.Set;
 /** One set plus 2 operations.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-14
+ * @version 2019-01-29
  */
 @SuppressWarnings("unchecked")
 public final class OneSetTwoOperations implements Set {
@@ -166,17 +166,17 @@ public final class OneSetTwoOperations implements Set {
       return false; }
     return true; }
 
-
   @Override
   public final String toString () { 
-    return "[" + _elements + 
-      ",\n" + add() + 
-      "," + additiveIdentity() + 
-      "," + additiveInverse() + 
-      ",\n" + multiply() + 
-      "," + multiplicativeIdentity() + 
-      "," + multiplicativeInverse() +
-      ",\n" + elements() +
+    return "S1O2[" + 
+      // add() + 
+      //"," + additiveIdentity() + 
+      //"," + additiveInverse() + 
+      //",\n" + multiply() + 
+      //"," + multiplicativeIdentity() + 
+      //"," + multiplicativeInverse() +
+      //",\n" + 
+      elements() +
       "]"; }
 
   //--------------------------------------------------------------

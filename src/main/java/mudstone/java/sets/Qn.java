@@ -17,6 +17,8 @@ import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;
 
 import mudstone.java.exceptions.Exceptions;
+import mudstone.java.prng.Generator;
+import mudstone.java.prng.Generators;
 
 /** The set of arrays of some fixed length <code>n</code>,
  *  of primitive numbers, or 
@@ -35,7 +37,7 @@ import mudstone.java.exceptions.Exceptions;
  * that can be used to represent tuples of rational numbers.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-23
+ * @version 2019-01-29
  */
 @SuppressWarnings("unchecked")
 public final class Qn implements Set {
@@ -159,6 +161,8 @@ public final class Qn implements Set {
     if (null == element) { return false; }
     final Class c = element.getClass();
     if (! c.isArray()) { return false; }
+    // TODO: fix this hack!
+    if (element instanceof Number[]) { return true; }
     if (! Q.knownRational(c.getComponentType())) { return false; }
     if (_dimension != Array.getLength(element)) { return false; }
     return true; }
@@ -167,22 +171,16 @@ public final class Qn implements Set {
   public final BiPredicate equivalence () { return _equivalence; }
 
   //--------------------------------------------------------------
-  // TODO: need generators for all array types.
-
+  /** Intended primarily for testing. 
+   */
   @Override
   public final Supplier generator (final UniformRandomProvider urp,
                                    final Map options) {
-    final Supplier bf = BigFractions.get().generator(urp,options);
     return 
       new Supplier () {
-      // TODO: replace Supplier with an interface that has 
-      // generateArray(), generateList(), etc, methods.
+      final Generator g = Generators.qnGenerator(_dimension,urp);
       @Override
-      public final Object get () { 
-        final BigFraction[] q = new BigFraction[_dimension];
-        for (int i=0;i<_dimension;i++) { 
-          q[i] = (BigFraction) bf.get(); }
-        return q; } }; }
+      public final Object get () { return g.next(); } }; }
 
   @Override
   public final Supplier generator (final UniformRandomProvider urp) {
@@ -204,7 +202,7 @@ public final class Qn implements Set {
       (_dimension == ((Qn) that)._dimension); }
 
   @Override
-  public final String toString () { return "BigFractions"; }
+  public final String toString () { return "Q^" + _dimension; }
 
   //--------------------------------------------------------------
   // construction

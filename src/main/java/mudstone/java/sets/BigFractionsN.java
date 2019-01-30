@@ -15,6 +15,9 @@ import org.apache.commons.rng.UniformRandomProvider;
 import com.carrotsearch.hppc.IntObjectHashMap;
 import com.carrotsearch.hppc.IntObjectMap;
 
+import mudstone.java.prng.Generator;
+import mudstone.java.prng.Generators;
+
 /** The set of instances of <code>BigFraction[dimension]</code>).
  * 
  * TODO: generalize to tuples of <code>BigFraction</code>
@@ -22,7 +25,7 @@ import com.carrotsearch.hppc.IntObjectMap;
  * for sparse vectors, etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-14
+ * @version 2019-01-29
  */
 @SuppressWarnings("unchecked")
 public final class BigFractionsN implements Set {
@@ -80,17 +83,12 @@ public final class BigFractionsN implements Set {
   @Override
   public final Supplier generator (final UniformRandomProvider urp,
                                    final Map options) {
-    final Supplier bf = BigFractions.get().generator(urp,options);
     return 
       new Supplier () {
-      // TODO: replace Supplier with an interface that has 
-      // generateArray(), generateList(), etc, methods.
-      @Override
-      public final Object get () { 
-        final BigFraction[] q = new BigFraction[_dimension];
-        for (int i=0;i<_dimension;i++) { 
-          q[i] = (BigFraction) bf.get(); }
-        return q; } }; }
+      final Generator bf = 
+        Generators.bigFractionGenerator(_dimension,urp);
+        @Override
+      public final Object get () { return bf.next(); } }; }
 
   @Override
   public final Supplier generator (final UniformRandomProvider urp) {
@@ -109,7 +107,7 @@ public final class BigFractionsN implements Set {
     return that instanceof BigFractionsN; }
 
   @Override
-  public final String toString () { return "BigFractions"; }
+  public final String toString () { return "BF^" + _dimension; }
 
   //--------------------------------------------------------------
   // construction

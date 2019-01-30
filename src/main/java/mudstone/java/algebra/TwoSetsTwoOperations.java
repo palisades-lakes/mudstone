@@ -36,19 +36,19 @@ import mudstone.java.sets.Set;
  * linear to affine spaces, etc.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-22
+ * @version 2019-01-29
  */
 @SuppressWarnings("unchecked")
 public final class TwoSetsTwoOperations implements Set {
 
-    // two structures
+  // two structures
   private final Set _elements;
   private final Set _scalars;
 
-//operation
- private final BiFunction _scale;
+  //operation
+  private final BiFunction _scale;
 
-//--------------------------------------------------------------
+  //--------------------------------------------------------------
   // methods 
   //--------------------------------------------------------------
 
@@ -126,10 +126,9 @@ public final class TwoSetsTwoOperations implements Set {
 
   @Override
   public final String toString () { 
-    return "[" + _elements + 
-      ",\n" + multiply() + 
-      ",\n" + elements() +
-      ",\n" + scalars() +
+    return "S2O2[" + 
+      //",\n" + multiply() + "," + 
+      elements() + "," + scalars() +
       "]"; }
 
   //--------------------------------------------------------------
@@ -198,7 +197,7 @@ public final class TwoSetsTwoOperations implements Set {
       TwoSetsTwoOperations.make(
         Qn.scaler(n),
         OneSetOneOperation.qnGroup(n),
-        OneSetTwoOperations.BIGFRACTIONS_FIELD); }
+        OneSetTwoOperations.Q_FIELD); }
 
   private static final IntObjectMap<TwoSetsTwoOperations> 
   _qnCache = new IntObjectHashMap();

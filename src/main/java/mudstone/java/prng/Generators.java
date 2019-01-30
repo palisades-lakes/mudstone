@@ -23,7 +23,7 @@ public final class Generators {
 
   //--------------------------------------------------------------
 
-  public static Generator 
+  public static final Generator 
   byteGenerator (final UniformRandomProvider urp) {
     return new Generator () {
       @Override
@@ -32,7 +32,18 @@ public final class Generators {
       public final Object next () {
         return Byte.valueOf(nextByte()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  byteGenerator (final int n,
+                 final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = byteGenerator(urp);
+      @Override
+      public final Object next () {
+        final byte[] z = new byte[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextByte(); }
+        return z; } }; }
+
+  public static final Generator 
   shortGenerator (final UniformRandomProvider urp) {
     return new Generator () {
       @Override
@@ -41,7 +52,18 @@ public final class Generators {
       public final Object next () {
         return Short.valueOf(nextShort()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  shortGenerator (final int n,
+                  final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = shortGenerator(urp);
+      @Override
+      public final Object next () {
+        final short[] z = new short[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextShort(); }
+        return z; } }; }
+
+  public static final Generator 
   intGenerator (final UniformRandomProvider urp) {
     return new Generator () {
       @Override
@@ -50,7 +72,18 @@ public final class Generators {
       public final Object next () {
         return Integer.valueOf(nextInt()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  intGenerator (final int n,
+                final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = intGenerator(urp);
+      @Override
+      public final Object next () {
+        final int[] z = new int[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextInt(); }
+        return z; } }; }
+
+  public static final Generator 
   longGenerator (final UniformRandomProvider urp) {
     return new Generator () {
       @Override
@@ -59,7 +92,18 @@ public final class Generators {
       public final Object next () {
         return Long.valueOf(nextLong()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  longGenerator (final int n,
+                 final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = longGenerator(urp);
+      @Override
+      public final Object next () {
+        final long[] z = new long[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextLong(); }
+        return z; } }; }
+
+  public static final Generator 
   floatGenerator (final UniformRandomProvider urp,
                   final int delta) {
     return new Generator () {
@@ -73,12 +117,35 @@ public final class Generators {
       public final Object next () {
         return Float.valueOf(nextFloat()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  floatGenerator (final int n,
+                  final UniformRandomProvider urp,
+                  final int delta) {
+    return new Generator () {
+      final Generator g = floatGenerator(urp,delta);
+      @Override
+      public final Object next () {
+        final float[] z = new float[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextFloat(); }
+        return z; } }; }
+
+  public static final Generator 
   floatGenerator (final UniformRandomProvider urp) {
     return 
       floatGenerator(urp,1+Floats.MAXIMUM_BIASED_EXPONENT); } 
 
-  public static Generator 
+  public static final Generator 
+  floatGenerator (final int n,
+                  final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = floatGenerator(urp);
+      @Override
+      public final Object next () {
+        final float[] z = new float[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextFloat(); }
+        return z; } }; }
+
+  public static final Generator 
   doubleGenerator (final UniformRandomProvider urp,
                    final int delta) {
     return new Generator () {
@@ -92,14 +159,37 @@ public final class Generators {
       public final Object next () {
         return Double.valueOf(nextDouble()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  doubleGenerator (final int n,
+                   final UniformRandomProvider urp,
+                   final int delta) {
+    return new Generator () {
+      final Generator g = doubleGenerator(urp,delta);
+      @Override
+      public final Object next () {
+        final double[] z = new double[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextDouble(); }
+        return z; } }; }
+
+  public static final Generator 
   doubleGenerator (final UniformRandomProvider urp) {
     return 
       doubleGenerator(urp,1+Doubles.MAXIMUM_BIASED_EXPONENT); } 
 
+  public static final Generator 
+  doubleGenerator (final int n,
+                   final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = doubleGenerator(urp);
+      @Override
+      public final Object next () {
+        final double[] z = new double[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextDouble(); }
+        return z; } }; }
+
   //--------------------------------------------------------------
 
-  public static Generator 
+  public static final Generator 
   finiteFloatGenerator (final UniformRandomProvider urp,
                         final int delta) {
     final Generator f = floatGenerator(urp,delta);
@@ -114,12 +204,35 @@ public final class Generators {
       public final Object next () {
         return Float.valueOf(nextFloat()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  finiteFloatGenerator (final int n,
+                        final UniformRandomProvider urp,
+                        final int delta) {
+    return new Generator () {
+      final Generator g = finiteFloatGenerator(urp,delta);
+      @Override
+      public final Object next () {
+        final float[] z = new float[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextFloat(); }
+        return z; } }; }
+
+  public static final Generator 
   finiteFloatGenerator (final UniformRandomProvider urp) {
     return 
       finiteFloatGenerator(urp,1+Floats.MAXIMUM_BIASED_EXPONENT); } 
 
-  public static Generator 
+  public static final Generator 
+  finiteFloatGenerator (final int n,
+                        final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = finiteFloatGenerator(urp);
+      @Override
+      public final Object next () {
+        final float[] z = new float[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextFloat(); }
+        return z; } }; }
+
+  public static final Generator 
   finiteDoubleGenerator (final UniformRandomProvider urp,
                          final int delta) {
     final Generator d = doubleGenerator(urp,delta);
@@ -134,11 +247,34 @@ public final class Generators {
       public final Object next () {
         return Double.valueOf(nextDouble()); } }; }
 
-  public static Generator 
+  public static final Generator 
+  finiteDoubleGenerator (final int n,
+                         final UniformRandomProvider urp,
+                         final int delta) {
+    return new Generator () {
+      final Generator g = finiteDoubleGenerator(urp,delta);
+      @Override
+      public final Object next () {
+        final double[] z = new double[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextDouble(); }
+        return z; } }; }
+
+  public static final Generator 
   finiteDoubleGenerator (final UniformRandomProvider urp) {
     return 
       finiteDoubleGenerator(
         urp,1+Doubles.MAXIMUM_BIASED_EXPONENT); } 
+
+  public static final Generator 
+  finiteDoubleGenerator (final int n,
+                         final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = finiteDoubleGenerator(urp);
+      @Override
+      public final Object next () {
+        final double[] z = new double[n];
+        for (int i=0;i<n;i++) { z[i] = g.nextDouble(); }
+        return z; } }; }
 
   //--------------------------------------------------------------
   // TODO: options?
@@ -155,7 +291,7 @@ public final class Generators {
    * with equal probability (these are potential edge cases).
    */
 
-  public static Generator 
+  public static final Generator 
   bigFractionGenerator (final UniformRandomProvider urp) {
     final double dp = 0.9;
     return new Generator () {
@@ -173,8 +309,18 @@ public final class Generators {
       public Object next () { 
         final boolean edge = choose.sample() > dp;
         if (edge) { return edgeCases.sample(); }
-        return new BigFraction(fdg.nextDouble()); } };
-  }
+        return new BigFraction(fdg.nextDouble()); } }; }
+
+  public static final Generator 
+  bigFractionGenerator (final int n,
+                        final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = bigFractionGenerator(urp);
+      @Override
+      public final Object next () {
+        final BigFraction[] z = new BigFraction[n];
+        for (int i=0;i<n;i++) { z[i] = (BigFraction) g.next(); }
+        return z; } }; }
 
   //--------------------------------------------------------------
   // TODO: options?
@@ -191,7 +337,7 @@ public final class Generators {
    * with equal probability (these are potential edge cases).
    */
 
-  public static Generator 
+  public static final Generator 
   numberGenerator (final UniformRandomProvider urp) {
     return new Generator () {
       private final CollectionSampler<Generator> generators = 
@@ -209,6 +355,17 @@ public final class Generators {
       public final Object next () {
         return generators.sample().next(); } }; }
 
+  public static final Generator 
+  numberGenerator (final int n,
+                   final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = numberGenerator(urp);
+      @Override
+      public final Object next () {
+        final Number[] z = new Number[n];
+        for (int i=0;i<n;i++) { z[i] = (Number) g.next(); }
+        return z; } }; }
+
 
   /** Intended primarily for testing. Sample a random double
    * (see {@link mudstone.java.prng.DoubleSampler})
@@ -219,7 +376,7 @@ public final class Generators {
    * with equal probability (these are potential edge cases).
    */
 
-  public static Generator 
+  public static final Generator 
   finiteNumberGenerator (final UniformRandomProvider urp) {
     return new Generator () {
       private final CollectionSampler<Generator> generators = 
@@ -233,6 +390,43 @@ public final class Generators {
             finiteFloatGenerator(urp),
             finiteDoubleGenerator(urp),
             bigFractionGenerator(urp)));
+      @Override
+      public final Object next () {
+        return generators.sample().next(); } }; }
+
+  public static final Generator 
+  finiteNumberGenerator (final int n,
+                         final UniformRandomProvider urp) {
+    return new Generator () {
+      final Generator g = finiteNumberGenerator(urp);
+      @Override
+      public final Object next () {
+        final Number[] z = new Number[n];
+        for (int i=0;i<n;i++) { z[i] = (Number) g.next(); }
+        return z; } }; }
+
+  //--------------------------------------------------------------
+  /** Generate arrays representing vectors in an n-dimnesional
+   * rational linear space, returning all possible number array 
+   * types.
+   */
+  
+  public static final Generator 
+  qnGenerator (final int n,
+               final UniformRandomProvider urp) {
+    return new Generator () {
+      private final CollectionSampler<Generator> generators = 
+        new CollectionSampler(
+          urp,
+          List.of(
+            byteGenerator(n,urp),
+            shortGenerator(n,urp),
+            intGenerator(n,urp),
+            longGenerator(n,urp),
+            finiteFloatGenerator(n,urp),
+            finiteDoubleGenerator(n,urp),
+            bigFractionGenerator(n,urp),
+            finiteNumberGenerator(n,urp)));
       @Override
       public final Object next () {
         return generators.sample().next(); } }; }

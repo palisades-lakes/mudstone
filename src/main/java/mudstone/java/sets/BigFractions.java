@@ -94,7 +94,7 @@ public final class BigFractions implements Set {
     return that instanceof BigFractions; }
 
   @Override
-  public final String toString () { return "BigFractions"; }
+  public final String toString () { return "BF"; }
 
   //--------------------------------------------------------------
   // construction

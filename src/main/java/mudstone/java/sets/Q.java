@@ -207,7 +207,7 @@ public final class Q implements Set {
     return that instanceof Q; }
 
   @Override
-  public final String toString () { return "BigFractions"; }
+  public final String toString () { return "Q"; }
 
   //--------------------------------------------------------------
   // construction
