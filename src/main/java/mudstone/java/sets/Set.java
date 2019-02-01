@@ -43,7 +43,7 @@ import mudstone.java.exceptions.Exceptions;
  * classes, represented by some element of each equivalence class.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-15
+ * @version 2019-01-31
  */
 public interface Set {
 
@@ -160,14 +160,31 @@ public interface Set {
   
   // TODO: replace Supplier with an interface than has 0-arity
   // <i>primititive</i>Value() methods?
+  
+  // TODO: move prng to options?
 
   public default Supplier generator (final UniformRandomProvider prng,
                                      final Map options) {
     throw Exceptions.unsupportedOperation(
-      this,"sampler",prng,options); }
+      this,"generator",prng,options); }
 
   public default Supplier generator (final UniformRandomProvider prng) {
     return generator(prng,Collections.emptyMap()); }
+
+  //--------------------------------------------------------------
+  /** should eventually cover the whole set.
+   * might be used for testing, so might make sense 'travel fast',
+   * and go back to fill in.
+   * 
+   * TODO: unify with {@link #generator(UniformRandomProvider, Map)}
+   * via options?
+   */
+  public default Supplier iterator (final Map options) {
+    throw Exceptions.unsupportedOperation(
+      this,"iterator",options); }
+
+  public default Supplier iterator () {
+    return iterator(Collections.emptyMap()); }
 
   //--------------------------------------------------------------
 }

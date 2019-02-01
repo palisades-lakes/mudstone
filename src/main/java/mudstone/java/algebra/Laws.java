@@ -398,7 +398,35 @@ public final class Laws {
         return elements.contains(operation.apply(a,b)); } }; }
 
   //--------------------------------------------------------------
-  /** Does <code>multiply</code> distribute over <code>add</code>?
+  /** Is code>multiply</code> associative with <code>scale</code>?
+   * <code>(scale (multiply a b) c) == (scale a (scale b c)</code>?
+   * (Module-like version)
+   */
+
+  public final static BiPredicate<Supplier,Supplier> 
+  associative (final Set elements,
+               final Set scalars,
+               final BiFunction multiply,
+               final BiFunction scale) {
+    return new BiPredicate<Supplier,Supplier> () {
+      @Override
+      public final boolean test (final Supplier elementSamples,
+                                 final Supplier scalarSamples) {
+
+        final Object a = scalarSamples.get();
+        assert scalars.contains(a);
+        final Object b = scalarSamples.get();
+        assert scalars.contains(b);
+        final Object c = elementSamples.get();
+        assert elements.contains(c);
+        final BiPredicate equal = elements.equivalence();
+        return 
+          equal.test(
+            scale.apply(a,scale.apply(b,c)),
+            scale.apply(multiply.apply(a,b),c)); } }; }
+
+  //--------------------------------------------------------------
+  /** Does <code>scale</code> distribute over <code>add</code>?
    * <code>a*(b+c) == (a*b) + (a*c)</code>?
    * (Module-like version)
    */
@@ -407,7 +435,7 @@ public final class Laws {
   distributive (final Set elements,
                 final Set scalars,
                 final BinaryOperator add,
-                final BiFunction multiply) {
+                final BiFunction scale) {
     return new BiPredicate<Supplier,Supplier> () {
       @Override
       public final boolean test (final Supplier elementSamples,
@@ -422,10 +450,10 @@ public final class Laws {
         final BiPredicate equal = elements.equivalence();
         return 
           equal.test(
-            multiply.apply(a,add.apply(b,c)),
+            scale.apply(a,add.apply(b,c)),
             add.apply(
-              multiply.apply(a,b),
-              multiply.apply(a,c))); } }; }
+              scale.apply(a,b),
+              scale.apply(a,c))); } }; }
 
   //--------------------------------------------------------------
   // by algebraic structure
@@ -440,9 +468,10 @@ public final class Laws {
           final OneSetOneOperation elements,
           final OneSetTwoOperations scalars) {
     final ImmutableList.Builder b = ImmutableList.builder();
-//    b.addAll(scalars.ringLaws());
-//    b.addAll(elements.commutativegroupLaws());
+    //    b.addAll(scalars.ringLaws());
+    //    b.addAll(elements.commutativegroupLaws());
     b.add(
+      associative(elements,scalars,scalars.multiply(),scale),
       distributive(elements,scalars,elements.operation(),scale));
     return b.build(); }
 
@@ -452,9 +481,10 @@ public final class Laws {
                final OneSetOneOperation elements,
                final OneSetTwoOperations scalars) {
     final ImmutableList.Builder b = ImmutableList.builder();
-//    b.addAll(scalars.fieldLaws());
-//    b.addAll(elements.commutativegroupLaws());
+    //    b.addAll(scalars.fieldLaws());
+    //    b.addAll(elements.commutativegroupLaws());
     b.add(
+      associative(elements,scalars,scalars.multiply(),scale),
       distributive(elements,scalars,elements.operation(),scale));
     return b.build(); }
 
