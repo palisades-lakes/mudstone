@@ -31,6 +31,10 @@ import mudstone.java.exceptions.Exceptions;
  * when desired. 
  * </ol>
  * 
+ * This might be more accurately called 
+ * (see <a href="https://en.wikipedia.org/wiki/Setoid">
+ * <code>Setoid</code></a>.
+ *  
  * Default <code>contains</code> return <code>false</code>
  * for every thing (ie, default is empty set).
  * 
@@ -185,6 +189,56 @@ public interface Set {
 
   public default Supplier iterator () {
     return iterator(Collections.emptyMap()); }
+
+  public static Set EMPTY_SET = new Set() {};
+  
+  /** Contains all Java Objects and primitives. */
+  public static Set ALL_JAVA_VALUES = new Set() {
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final Object element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final boolean element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final byte element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final short element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final int element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final long element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final float element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final double element) {
+      return true; }
+
+    @Override
+    @SuppressWarnings("unused")
+    public boolean contains (final char element) {
+      return true; } };
 
   //--------------------------------------------------------------
 }
