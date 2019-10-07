@@ -31,11 +31,11 @@ public abstract class Polynomial extends ScalarFunctional {
    */
   public static final boolean 
   isQQuadraticXYD2 (final BigFraction x0,
-    final BigFraction y0,
-    final BigFraction d0,
-    final BigFraction x1,
-    final BigFraction y1,
-    final BigFraction d1) {
+                    final BigFraction y0,
+                    final BigFraction d0,
+                    final BigFraction x1,
+                    final BigFraction y1,
+                    final BigFraction d1) {
     return 
       y1.subtract(y0)
       .multiply(2)
@@ -43,19 +43,19 @@ public abstract class Polynomial extends ScalarFunctional {
         d1.subtract(d0)
         .multiply(
           x1.subtract(x0))); }
-  
+
   /** Check if an arbitrary precision quadratic polynomial 
    * over the rationals ({@link BigFraction}) can match the given 
    * value and slope at <code>x0</code> and <code>x1</code>.
    */
-  
+
   public static final boolean 
   isQQuadraticXYD2 (final double x0,
-    final double y0,
-    final double d0,
-    final double x1,
-    final double y1,
-    final double d1) {
+                    final double y0,
+                    final double d0,
+                    final double x1,
+                    final double y1,
+                    final double d1) {
     return 
       isQQuadraticXYD2(
         new BigFraction(x0),
@@ -64,37 +64,37 @@ public abstract class Polynomial extends ScalarFunctional {
         new BigFraction(x1),
         new BigFraction(y1),
         new BigFraction(d1)); }
-  
+
   //--------------------------------------------------------------
 
   public static final double[] 
-  interpolatingMonomialCoefficients (final double x0, 
-                                     final double y0,
-                                     final double x1, 
-                                     final double y1,
-                                     final double x2, 
-                                     final double y2,
-                                     final double x3, 
-                                     final double y3) {
-  final BigFraction qx0 = new BigFraction(x0);
-  final BigFraction qx1 = new BigFraction(x1);
-  final BigFraction qx2 = new BigFraction(x2);
-  final BigFraction qx3 = new BigFraction(x3);
-  final BigFraction x01 = qx0.subtract(qx1);
-  final BigFraction x02 = qx0.subtract(qx2);
-  final BigFraction x03 = qx0.subtract(qx3);
-  final BigFraction l0 = new BigFraction(y0)
-    .divide(x01.multiply(x02).multiply(x03));
-  final BigFraction x12 = qx1.subtract(qx2);
-  final BigFraction x13 = qx1.subtract(qx3);
-  final BigFraction l1 = new BigFraction(y1).negate()
-    .divide(x01.multiply(x12).multiply(x13));
-  final BigFraction x23 = qx2.subtract(qx3);
-  final BigFraction l2 = new BigFraction(y2)
-    .divide(x23.multiply(x12).multiply(x02));
-  final BigFraction l3 = new BigFraction(y3).negate()
-    .divide(x23.multiply(x03).multiply(x13));
-  
+    interpolatingMonomialCoefficients (final double x0, 
+                                       final double y0,
+                                       final double x1, 
+                                       final double y1,
+                                       final double x2, 
+                                       final double y2,
+                                       final double x3, 
+                                       final double y3) {
+    final BigFraction qx0 = new BigFraction(x0);
+    final BigFraction qx1 = new BigFraction(x1);
+    final BigFraction qx2 = new BigFraction(x2);
+    final BigFraction qx3 = new BigFraction(x3);
+    final BigFraction x01 = qx0.subtract(qx1);
+    final BigFraction x02 = qx0.subtract(qx2);
+    final BigFraction x03 = qx0.subtract(qx3);
+    final BigFraction l0 = new BigFraction(y0)
+      .divide(x01.multiply(x02).multiply(x03));
+    final BigFraction x12 = qx1.subtract(qx2);
+    final BigFraction x13 = qx1.subtract(qx3);
+    final BigFraction l1 = new BigFraction(y1).negate()
+      .divide(x01.multiply(x12).multiply(x13));
+    final BigFraction x23 = qx2.subtract(qx3);
+    final BigFraction l2 = new BigFraction(y2)
+      .divide(x23.multiply(x12).multiply(x02));
+    final BigFraction l3 = new BigFraction(y3).negate()
+      .divide(x23.multiply(x03).multiply(x13));
+
     final double[] a = new double[4];
     a[3] = l0.add(l1).add(l2).add(l3).doubleValue();
     a[2] = 
@@ -130,7 +130,7 @@ public abstract class Polynomial extends ScalarFunctional {
    * interpolates <code>(x0,y0), (x1,y1), x2,y2)</code>.
    * Use {@link BigFraction} internally for accuracy.
    */
-  
+
   public static final double[] 
     interpolatingMonomialCoefficients (final double x0, 
                                        final double y0,
@@ -165,7 +165,7 @@ public abstract class Polynomial extends ScalarFunctional {
     final BigFraction a20 = qy0.divide(dx0120);
     final BigFraction a21 = qy1.divide(dx1201);
     final BigFraction a22 = qy2.divide(dx2012);
-  
+
     return new double[] 
       { a00.add(a01).add(a02).negate().doubleValue(), 
         a10.add(a11).add(a12).doubleValue(),
@@ -177,7 +177,7 @@ public abstract class Polynomial extends ScalarFunctional {
    * If there is onyl 1, return an array of length 1.
    * If there are no real roots, return an empty array.
    */
-  
+
   public static final double[] roots (final double a0,
                                       final double a1,
                                       final double a2) {
@@ -194,7 +194,7 @@ public abstract class Polynomial extends ScalarFunctional {
   /** do a couple newton steps for more accuracy in quadratic 
    * roots. modifies <code>roots</code>!!!
    */
-  
+
   public static final double[] improveRoots (final double a0,
                                              final double a1,
                                              final double a2,
@@ -222,7 +222,7 @@ public abstract class Polynomial extends ScalarFunctional {
    * final result is the exact answer rounded to 
    * <code>double</code>.
    */
-  
+
   public static final BigFraction[] roots (final BigFraction a0,
                                            final BigFraction a1,
                                            final BigFraction a2) {
@@ -235,7 +235,7 @@ public abstract class Polynomial extends ScalarFunctional {
       return new BigFraction[] { a1.divide(m2a2), }; }
     final BigFraction sqrtb2m4ac = 
       new BigFraction(sqrt(b2m4ac.doubleValue())); 
-  
+
     return new BigFraction [] 
       { a1.add(sqrtb2m4ac).divide(m2a2),
         a1.subtract(sqrtb2m4ac).divide(m2a2), }; }
