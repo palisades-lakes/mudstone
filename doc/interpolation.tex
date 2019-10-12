@@ -54,8 +54,8 @@ completeness.)
 Why not higher order? Are other interpolating functions useful?
 What about splines?
 
-An interpolating polynomial matches some number of $x,y$
-and $x,d$ pairs, where $x$ is a location in the domain,
+An interpolating polynomial matches some number of $(x,y)$
+and $(x,d)$ pairs, where $x$ is a location in the domain,
 $y$ a value in the codomain (range) and $d$ the slope.
 
 The polynomials of degree $k$ for a linear space of dimension
@@ -512,7 +512,7 @@ x_0 x_{10} \left( x_1 d_1 - x_0 y_1 \right)
 \hat{x} & =
 \dfrac{
 \left(x_0+x_1\right) x_{10} d_1 - 2 y_{10} x_1
-}{2 \left(x_{10}) d_1 - y_{10} \right)}
+}{2 \left(x_{10} d_1 - y_{10} \right)}
 \nonumber 
 \end{align}
 
@@ -3920,8 +3920,10 @@ y_1-y_3\right) x_2^{2}-y_{23} x_1^{2}-y_{12} x_3^{2}-
 % $3$ domain locations:
 % \input{rawtex/monomial-yyyd_3}
 
-\levelstay{Input: $(x_0,y_0,d_0),(x_1,y_1,d_1)$}
+\levelstay{Cubic Hermite}
 \label{sec:Monomial-cubic-hermite}
+
+Input: $(x_0,y_0,d_0),(x_1,y_1,d_1)$.
 
 Constraints:
 \begin{equation}
@@ -4344,7 +4346,7 @@ and, by symmetry,
 For example:
 
 \begin{equation}
-\lambda^{\text{yyy}}_0(x) = 
+\lambda^{\text{yyyy}}_0(x) = 
 \frac {(x - x_1) (x - x_2) (x - x_3)} 
 {(x_0 - x_1) (x_0 - x_2) (x_0 - x_3)}
 \end{equation}
@@ -4410,7 +4412,9 @@ For example:
 % satisfies its constraintz.
  
 %-----------------------------------------------------------------
-\levelstay{Input}\label{sec:lagrange-yydd}
+\levelstay{General yydd}\label{sec:lagrange-yydd}
+
+Input: $(x_0,y_0), (x_1,y_1)$$(x_2,d_2), (x_3,d_3)$.
 
 We need 
 \begin{align}
@@ -4498,10 +4502,10 @@ so
 \end{align}
 
 %-----------------------------------------------------------------
-\levelstay{Input: 
-$(x_0,y_0,d_0), (x_1,y_1,d_1)$
-(Hermite interpolation)}
+\levelstay{Hermite interpolation: yd2}
 \label{sec:Lagrange-cubic-hermite}
+
+Input: $(x_0,y_0,d_0), (x_1,y_1,d_1)$.
 
 When $x_0 = x_2$ and $x_1 = x_3$ --- $2$ knots with value and 
 slope specified at each --- 
