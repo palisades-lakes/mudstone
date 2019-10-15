@@ -446,7 +446,6 @@ public final class Common {
       assertEqualSlope(f,g,xi,dulps); } }
 
   //--------------------------------------------------------------
-  //--------------------------------------------------------------
   /** any input function; any model function. 
    * */
 
