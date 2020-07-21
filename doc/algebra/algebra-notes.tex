@@ -19,20 +19,30 @@
 % arara: clean: { files: [algebra-notes.synctex.gz] }
 %-------------------------------------------------------------------------------
 \documentclass[10pt,openany]{book}
-\input{../head}
-%\input{../kindle-paperwhite}
-\input{../landscape-2col-letter}
-%\input{../portrait-1col}
-\input{../clj-listings}
-\input{../glossary}
-\addbibresource{../bib/algebra.bib}
-\addbibresource{../bib/cactus.bib}
-\addbibresource{../bib/clojure.bib}
-\addbibresource{../bib/halmos.bib}
-\addbibresource{../bib/interpolation.bib}
-%\addbibresource{../bib/ieeestd.bib}
-\addbibresource{../bib/tex.bib}
-\addbibresource{../bib/fparith.bib}
+\usepackage{import}
+\def \texFolder {../../tex/}
+\def \bibFolder {../../bib/}
+\def \sharedFolder {../../shared/}
+\import{\texFolder}{head}
+\import{\texFolder}{landscape-2col-8x17}
+\import{\texFolder}{clj-listings}
+\import{\sharedFolder}{glossary}
+\addbibresource{{\bibFolder}algebra.bib}
+\addbibresource{{\bibFolder}arithmetic.bib}
+\addbibresource{{\bibFolder}cactus.bib}
+\addbibresource{{\bibFolder}proglang.bib}
+\addbibresource{{\bibFolder}halmos.bib}
+\addbibresource{{\bibFolder}interpolation.bib}
+\addbibresource{{\bibFolder}logic.bib}
+\addbibresource{{\bibFolder}mcdonald.bib}
+\addbibresource{{\bibFolder}mop.bib}
+\addbibresource{{\bibFolder}numbers.bib}
+\addbibresource{{\bibFolder}sets.bib}
+\addbibresource{{\bibFolder}tex.bib}
+\addbibresource{{\bibFolder}topos.bib}
+\addbibresource{{\bibFolder}feferman.bib}
+%\addbibresource{{\bibFolder}ieeestd.bib}
+\addbibresource{{\bibFolder}fparith.bib}
 %-------------------------------------------------------------------------------
 \title{Notes on algebra}
 \author{\textsc{John Alan McDonald}}
@@ -59,12 +69,12 @@
 %-------------------------------------------------------------------------------
 \appendix
 %\part{Appendices}
-\input{../typesetting}
+\import{\texFolder}{typesetting}
 %-------------------------------------------------------------------------------
 \backmatter
 
 
 %\part{Backmatter}
-\input{../tail}
+\import{\texFolder}{tail}
 %-------------------------------------------------------------------------------
 \end{document}
