@@ -1,3 +1,4 @@
+
 package mudstone.java.sets;
 
 import java.math.BigInteger;
@@ -20,7 +21,7 @@ import mudstone.java.prng.Generators;
  * necessary.
  * 
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-29
+ * @version 2021-01-27
  */
 public final class Q implements Set {
 
@@ -28,7 +29,7 @@ public final class Q implements Set {
   // class methods
   //--------------------------------------------------------------
 
-  // All known java numbers are rational, meaning there's an 
+  // All java numbers are rational, meaning there should be an 
   // exact, loss-less conversion to BigFraction, used by methods
   // below. But we can't know how to convert unknown
   // implementations of java.lang.Number, so we have to exclude 

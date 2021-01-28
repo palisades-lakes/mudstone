@@ -34,7 +34,7 @@ import mudstone.java.sets.Sets;
  * no instance state or methods.
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-22
+ * @version 2021-01-27
  */
 
 @SuppressWarnings("unchecked")
@@ -147,15 +147,27 @@ public final class Laws {
            final BinaryOperator operation,
            final Object identity,
            final UnaryOperator inverse,
-           final Object excluded) {
+           final java.util.Set excluded) {
     return new Predicate<Supplier> () {
       @Override
       public final boolean test (final Supplier samples) {
         final Object a = samples.get();
-        if (Sets.contains(excluded,a)) { return true; }
+        assert null != a 
+          : samples.getClass().toString() + " " + samples.toString();
+        // contains doesn't work because test needs to obey
+        // structure's definition of equivalence
+        // need excluded to be subset of Structure's elements
+        //if (Sets.contains(excluded,a)) { return true; }
+        final BiPredicate eq = elements.equivalence();
+        for (final Object x : (excluded)) {
+          if (eq.test(x,a)) { return true; } }
         assert elements.contains(a);
         assert elements.contains(identity);
         final Object ainv = inverse.apply(a);
+        assert null != ainv 
+          : "\n" + a.toString() 
+          + "\n" + excluded.toString()
+          + "\n" + inverse.getClass().toString();
         final BiPredicate equal = elements.equivalence();
         return 
           equal.test(identity,operation.apply(a,ainv))

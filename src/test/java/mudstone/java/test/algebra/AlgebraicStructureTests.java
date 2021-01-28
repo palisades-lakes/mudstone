@@ -19,7 +19,9 @@ import mudstone.java.test.sets.SetTests;
 /** Common code for testing sets. 
  *
  * @author palisades dot lakes at gmail dot com
- * @version 2019-01-22
+ * @version 2021-01-27
+ * 
+ * mvn test -Dtest=mudstone.java.test.algebra.AlgebraicStructureTests
  */
 
 @SuppressWarnings("unchecked")
