@@ -99,7 +99,7 @@ then
 %-----------------------------------------------------------------
 \levelstay{Oriented projective spaces}
 \label{sec:Oriented-projective-spaces}
-\cite{Stolfi1991opg}
+\cite{Stolfi:1991:OrientedProjectiveGeometry}
 
 %-----------------------------------------------------------------
 \levelstay{Manifolds}
@@ -178,7 +178,7 @@ $(L_{ij})$ is the matrix representation of $\Lmap$ with respect to
 the two bases\cite{halmos-1958}.
 
 It is important to note that there are many usful
-representations for linear functions other than matrices \cite{mcdonald-1989b}.
+representations for linear functions other than matrices \cite{McDonald:1989:OOPSLA}.
 Sometimes other representations are used for convenience,
 or to enforce some constraint like symmetry.
 In some cases, a non-matrix representation must be used,
@@ -258,7 +258,7 @@ An orthonormal basis for $\\linearspan\{ \v_0 \ldots \v_{m-1} \}$
 can be computed using the QR decomposition
 of the function $\Vmap = \sum_{i=0}^{m-1} \v_i \otimes \e_i$,
 (the $n \times m$ matrix whose columns are the $\v_i$)
-\cite[See][sec. 5.2 ]{golub-vanloan-2012}.
+\cite[See][sec. 5.2 ]{GolubVanLoan:2012}.
 
 The \textit{affine span} of a set of $m+1$ vectors in $\Vspace$
 is the set of affine combinations of those vectors:
@@ -324,7 +324,7 @@ such that $\Lmap(\hat{\v}) = \hat{\w}$.
 
 The pseudo-inverse of a linear function can be characterized
 by the four Moore-Penrose conditions
-\cite[See][sec. 5.5.2]{golub-vanloan-2012}:
+\cite[See][sec. 5.5.2]{GolubVanLoan:2012}:
 \begin{enumerate}
 \item $\Lmap \Lmap^{-} \Lmap = \Lmap$
 \item $\Lmap^{-} \Lmap \Lmap^{-} = \Lmap^{-}$
@@ -343,10 +343,10 @@ then a useful identity is:
 
 The pseudoinverse can be computed
 using standard matrix decompositions such as
-the QR and SVD \cite{golub-vanloan-2012}.
+the QR and SVD \cite{GolubVanLoan:2012}.
 The pseudoinverse is an example of a linear transformation
 which should {\em not} be represented by a matrix
-\cite{mcdonald-1989b}.
+\cite{McDonald:1989:OOPSLA}.
 
 If $\Amap$ is affine,
 let $\Amap = \Lmap + \t$,
